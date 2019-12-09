@@ -14,6 +14,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import thucnh.crawler.MainCrawler;
 import static thucnh.utils.AppConstant.*;
 
 /**
@@ -40,8 +41,14 @@ public class ProcessServlet extends HttpServlet {
         try {
             if (btn == null) {
                 // do nothing
-            } else if (btn.equals("crawl")) {
-                url = SERVLET_CRAWLER;
+            } else if (btn.equals("CrawlSkills")) {
+                MainCrawler.crawlSkill(getServletContext());
+            } else if (btn.equals("CrawlJobs")) {
+                MainCrawler.crawlJobs(getServletContext());
+            } else if (btn.equals("StopCrawl")) {
+                MainCrawler.stopCrawl();
+            }else if(btn.equals("Process")){
+                MainCrawler.test();
             }
 
         } catch (Exception e) {

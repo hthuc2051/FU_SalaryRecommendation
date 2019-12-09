@@ -8,7 +8,6 @@ package thucnh.entity;
 import java.io.Serializable;
 import java.util.Collection;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -19,7 +18,6 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -28,15 +26,14 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author HP
  */
 @Entity
-@Table(name = "TblSkill")
+@Table(name = "TblCluster")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "TblSkill.findAll", query = "SELECT t FROM TblSkill t")
-    , @NamedQuery(name = "TblSkill.findById", query = "SELECT t FROM TblSkill t WHERE t.id = :id")
-    , @NamedQuery(name = "TblSkill.findByName", query = "SELECT t FROM TblSkill t WHERE t.name = :name")
-    , @NamedQuery(name = "TblSkill.findByType", query = "SELECT t FROM TblSkill t WHERE t.type = :type")
-    , @NamedQuery(name = "TblSkill.findByHash", query = "SELECT t FROM TblSkill t WHERE t.hash = :hash")})
-public class TblSkill implements Serializable {
+    @NamedQuery(name = "TblCluster.findAll", query = "SELECT t FROM TblCluster t")
+    , @NamedQuery(name = "TblCluster.findById", query = "SELECT t FROM TblCluster t WHERE t.id = :id")
+    , @NamedQuery(name = "TblCluster.findByCentroid", query = "SELECT t FROM TblCluster t WHERE t.centroid = :centroid")
+    , @NamedQuery(name = "TblCluster.findByHash", query = "SELECT t FROM TblCluster t WHERE t.hash = :hash")})
+public class TblCluster implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -45,23 +42,17 @@ public class TblSkill implements Serializable {
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @Size(max = 500)
-    @Column(name = "name")
-    private String name;
-    @Size(max = 50)
-    @Column(name = "type")
-    private String type;
+    @Column(name = "centroid")
+    private Double centroid;
     @Column(name = "hash")
     private Integer hash;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "skillId")
+    @OneToMany(mappedBy = "clusterId")
     private Collection<TblJob> tblJobCollection;
-    @OneToMany(mappedBy = "skillId")
-    private Collection<TblSalaryRec> tblSalaryRecCollection;
 
-    public TblSkill() {
+    public TblCluster() {
     }
 
-    public TblSkill(Integer id) {
+    public TblCluster(Integer id) {
         this.id = id;
     }
 
@@ -73,20 +64,12 @@ public class TblSkill implements Serializable {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public Double getCentroid() {
+        return centroid;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
+    public void setCentroid(Double centroid) {
+        this.centroid = centroid;
     }
 
     public Integer getHash() {
@@ -106,15 +89,6 @@ public class TblSkill implements Serializable {
         this.tblJobCollection = tblJobCollection;
     }
 
-    @XmlTransient
-    public Collection<TblSalaryRec> getTblSalaryRecCollection() {
-        return tblSalaryRecCollection;
-    }
-
-    public void setTblSalaryRecCollection(Collection<TblSalaryRec> tblSalaryRecCollection) {
-        this.tblSalaryRecCollection = tblSalaryRecCollection;
-    }
-
     @Override
     public int hashCode() {
         int hash = 0;
@@ -125,10 +99,10 @@ public class TblSkill implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof TblSkill)) {
+        if (!(object instanceof TblCluster)) {
             return false;
         }
-        TblSkill other = (TblSkill) object;
+        TblCluster other = (TblCluster) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -137,7 +111,7 @@ public class TblSkill implements Serializable {
 
     @Override
     public String toString() {
-        return "thucnh.entity.TblSkill[ id=" + id + " ]";
+        return "thucnh.entity.TblCluster[ id=" + id + " ]";
     }
     
 }

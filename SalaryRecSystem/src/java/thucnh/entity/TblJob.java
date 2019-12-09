@@ -6,56 +6,65 @@
 package thucnh.entity;
 
 import java.io.Serializable;
-import java.util.Collection;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
  * @author HP
  */
 @Entity
-@Table(name = "tblJob")
+@Table(name = "TblJob")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "TblJob.findAll", query = "SELECT t FROM TblJob t")
+    , @NamedQuery(name = "TblJob.findDistinctJobs", query = "SELECT DISTINCT t.expLevel FROM TblJob t")
     , @NamedQuery(name = "TblJob.findById", query = "SELECT t FROM TblJob t WHERE t.id = :id")
     , @NamedQuery(name = "TblJob.findBySalary", query = "SELECT t FROM TblJob t WHERE t.salary = :salary")
     , @NamedQuery(name = "TblJob.findByExpLevel", query = "SELECT t FROM TblJob t WHERE t.expLevel = :expLevel")
     , @NamedQuery(name = "TblJob.findByLink", query = "SELECT t FROM TblJob t WHERE t.link = :link")
-    , @NamedQuery(name = "TblJob.findByHash", query = "SELECT t FROM TblJob t WHERE t.hash = :hash")})
+    , @NamedQuery(name = "TblJob.findBySkillAndExpYear", query = "SELECT t FROM TblJob t WHERE t.skillId = :skill AND t.expLevel = :expLevel")
+    , @NamedQuery(name = "TblJob.findByHash", query = "SELECT t FROM TblJob t WHERE t.hash = :hash")
+
+})
 public class TblJob implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
+    @NotNull
     @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "salary")
     private Double salary;
+    @Size(max = 150)
     @Column(name = "expLevel")
     private String expLevel;
+    @Size(max = 500)
     @Column(name = "link")
     private String link;
     @Column(name = "hash")
     private Integer hash;
+    @JoinColumn(name = "clusterId", referencedColumnName = "id")
+    @ManyToOne
+    private TblCluster clusterId;
     @JoinColumn(name = "skillId", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private TblSkill skillId;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "jobId")
-    private Collection<TblSalaryRecJob> tblSalaryRecJobCollection;
 
     public TblJob() {
     }
@@ -104,21 +113,20 @@ public class TblJob implements Serializable {
         this.hash = hash;
     }
 
+    public TblCluster getClusterId() {
+        return clusterId;
+    }
+
+    public void setClusterId(TblCluster clusterId) {
+        this.clusterId = clusterId;
+    }
+
     public TblSkill getSkillId() {
         return skillId;
     }
 
     public void setSkillId(TblSkill skillId) {
         this.skillId = skillId;
-    }
-
-    @XmlTransient
-    public Collection<TblSalaryRecJob> getTblSalaryRecJobCollection() {
-        return tblSalaryRecJobCollection;
-    }
-
-    public void setTblSalaryRecJobCollection(Collection<TblSalaryRecJob> tblSalaryRecJobCollection) {
-        this.tblSalaryRecJobCollection = tblSalaryRecJobCollection;
     }
 
     @Override
@@ -145,5 +153,5 @@ public class TblJob implements Serializable {
     public String toString() {
         return "thucnh.entity.TblJob[ id=" + id + " ]";
     }
-    
+
 }

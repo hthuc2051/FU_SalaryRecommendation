@@ -50,17 +50,16 @@ public class CareerBuilderCrawler extends BaseCrawler implements Runnable {
             if (url != null) {
                 for (TblSkill skill : skills) {
                     int totalPage = getLastPage(url + getCareerBuilderPageLink(1, skill.getName().replace(" ", "-")));
-                    if (totalPage > 6) {
-                        totalPage = 6;
-                    }
-                    for (int i = 0; i < totalPage; i++) {
-                        List<String> result = stAXParserForJobUrl(getCareerBuilderPageLink(i + 1, skill.getName().replace(" ", "-")), skill.getName().trim());
-                        for (String link : result) {
-                            Thread thread = new Thread(new CareerBuilderEachPageCrawler(link, skill, context));
-                            thread.start();
-                            synchronized (BaseThread.getInstance()) {
-                                while (BaseThread.isSuspended()) {
-                                    BaseThread.getInstance().wait();
+                    if (totalPage > 0) {
+                        for (int i = 0; i < totalPage; i++) {
+                            List<String> result = stAXParserForJobUrl(url + getCareerBuilderPageLink(i + 1, skill.getName().replace(" ", "-")), skill.getName().trim());
+                            for (String link : result) {
+                                Thread thread = new Thread(new CareerBuilderEachPageCrawler(link, skill, context));
+                                thread.start();
+                                synchronized (BaseThread.getInstance()) {
+                                    while (BaseThread.isSuspended()) {
+                                        BaseThread.getInstance().wait();
+                                    }
                                 }
                             }
                         }
@@ -88,10 +87,10 @@ public class CareerBuilderCrawler extends BaseCrawler implements Runnable {
         try {
             if (url != null) {
                 reader = getBufferedReaderForURL(url);
-                String line = "";
-                String document = "";
-                boolean isStart = false;
                 if (reader != null) {
+                    String line = "";
+                    String document = "";
+                    boolean isStart = false;
                     while ((line = reader.readLine()) != null) {
                         if (line.contains("<span class=\"col-sm-2 styled-select job-sorter-col")) {
                             break;
@@ -103,13 +102,13 @@ public class CareerBuilderCrawler extends BaseCrawler implements Runnable {
                             document += line;
                         }
                     }
-                }
 //                Check well-formed html
-                XmlSyntaxChecker checker = new XmlSyntaxChecker();
-                document = checker.checkSyntax(document);
-                return parsePagingDoc(document);
+                    XmlSyntaxChecker checker = new XmlSyntaxChecker();
+                    document = checker.checkSyntax(document);
+                    return parsePagingDoc(document);
+                }
             }
-        } catch (IOException | XMLStreamException e) {
+        } catch (IOException e) {
             Logger.getLogger(CareerBuilderCrawler.class.getName() + " - getLastPage").log(Level.SEVERE, e.getMessage(), e);
         } finally {
             if (reader != null) {
@@ -123,29 +122,34 @@ public class CareerBuilderCrawler extends BaseCrawler implements Runnable {
         return -1;
     }
 
-    private int parsePagingDoc(String document) throws UnsupportedEncodingException, XMLStreamException {
+    private int parsePagingDoc(String document) {
         document = document.trim();
-        XMLEventReader eventReader = parseStringToXMLEventReader(document);
         int lastPage = 1;
-        while (eventReader.hasNext()) {
-            XMLEvent event = (XMLEvent) eventReader.next();
-            if (event.isStartElement()) {
-                StartElement startElement = event.asStartElement();
-                String tagName = startElement.getName().getLocalPart();
-                if ("span".equals(tagName)) {
-                    event = (XMLEvent) eventReader.next();
-                    Characters textContent = event.asCharacters();
-                    if (textContent != null) {
-                        String totalItem = textContent.getData();
-                        totalItem = totalItem.replaceAll("\\D+", "");
-                        double totalItemFloat = Double.parseDouble(totalItem.trim());
-                        return (int) Math.ceil(totalItemFloat / CAREER_BUILDER_EACH_PAGE_ITEM);
+        try {
+            XMLEventReader eventReader = parseStringToXMLEventReader(document);
+            while (eventReader.hasNext()) {
+                XMLEvent event = (XMLEvent) eventReader.next();
+                if (event.isStartElement()) {
+                    StartElement startElement = event.asStartElement();
+                    String tagName = startElement.getName().getLocalPart();
+                    if ("span".equals(tagName)) {
+                        event = (XMLEvent) eventReader.next();
+                        Characters textContent = event.asCharacters();
+                        if (textContent != null) {
+                            String totalItem = textContent.getData();
+                            totalItem = totalItem.replaceAll("\\D+", "");
+                            try {
+                                double totalItemFloat = Double.parseDouble(totalItem.trim());
+                                return (int) Math.ceil(totalItemFloat / CAREER_BUILDER_EACH_PAGE_ITEM);
+                            } catch (Exception e) {
+                            }
+                        }
                     }
-
                 }
             }
+            eventReader.close();
+        } catch (Exception e) {
         }
-        eventReader.close();
         return lastPage;
     }
 
@@ -203,7 +207,7 @@ public class CareerBuilderCrawler extends BaseCrawler implements Runnable {
                                 tagName = startElement.getName().getLocalPart();
                                 if ("a".equals(tagName)) {
                                     Attribute href = startElement.getAttributeByName(new QName("href"));
-                                    link = HOST_CAREER_BUILDER + href.getValue();
+                                    link = href.getValue();
                                     event = (XMLEvent) eventReader.next();
                                     Characters textContent = event.asCharacters();
                                     if (textContent != null) {

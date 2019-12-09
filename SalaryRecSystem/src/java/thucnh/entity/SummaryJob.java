@@ -12,13 +12,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -26,16 +23,15 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author HP
  */
 @Entity
-@Table(name = "TblSalaryRec")
+@Table(name = "SummaryJob")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "TblSalaryRec.findAll", query = "SELECT t FROM TblSalaryRec t")
-    , @NamedQuery(name = "TblSalaryRec.findById", query = "SELECT t FROM TblSalaryRec t WHERE t.id = :id")
-    , @NamedQuery(name = "TblSalaryRec.checkExistedRecSalary", query = "SELECT t FROM TblSalaryRec t WHERE t.skillId = :skill AND t.expLevel = :expLevel")
-    , @NamedQuery(name = "TblSalaryRec.findByExpLevel", query = "SELECT t FROM TblSalaryRec t WHERE t.expLevel = :expLevel")
-    , @NamedQuery(name = "TblSalaryRec.findBySalaryRec", query = "SELECT t FROM TblSalaryRec t WHERE t.salaryRec = :salaryRec")})
-
-public class TblSalaryRec implements Serializable {
+    @NamedQuery(name = "SummaryJob.findAll", query = "SELECT s FROM SummaryJob s")
+    , @NamedQuery(name = "SummaryJob.findById", query = "SELECT s FROM SummaryJob s WHERE s.id = :id")
+    , @NamedQuery(name = "SummaryJob.findBySalary", query = "SELECT s FROM SummaryJob s WHERE s.salary = :salary")
+    , @NamedQuery(name = "SummaryJob.findByNoOfJobs", query = "SELECT s FROM SummaryJob s WHERE s.noOfJobs = :noOfJobs")
+    , @NamedQuery(name = "SummaryJob.findByExpSkillHash", query = "SELECT s FROM SummaryJob s WHERE s.expSkillHash = :expSkillHash")})
+public class SummaryJob implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -44,20 +40,18 @@ public class TblSalaryRec implements Serializable {
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @Size(max = 150)
-    @Column(name = "expLevel")
-    private String expLevel;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
-    @Column(name = "salaryRec")
-    private Double salaryRec;
-    @JoinColumn(name = "skillId", referencedColumnName = "id")
-    @ManyToOne
-    private TblSkill skillId;
+    @Column(name = "salary")
+    private Double salary;
+    @Column(name = "noOfJobs")
+    private Integer noOfJobs;
+    @Column(name = "expSkillHash")
+    private Integer expSkillHash;
 
-    public TblSalaryRec() {
+    public SummaryJob() {
     }
 
-    public TblSalaryRec(Integer id) {
+    public SummaryJob(Integer id) {
         this.id = id;
     }
 
@@ -69,28 +63,28 @@ public class TblSalaryRec implements Serializable {
         this.id = id;
     }
 
-    public String getExpLevel() {
-        return expLevel;
+    public Double getSalary() {
+        return salary;
     }
 
-    public void setExpLevel(String expLevel) {
-        this.expLevel = expLevel;
+    public void setSalary(Double salary) {
+        this.salary = salary;
     }
 
-    public Double getSalaryRec() {
-        return salaryRec;
+    public Integer getNoOfJobs() {
+        return noOfJobs;
     }
 
-    public void setSalaryRec(Double salaryRec) {
-        this.salaryRec = salaryRec;
+    public void setNoOfJobs(Integer noOfJobs) {
+        this.noOfJobs = noOfJobs;
     }
 
-    public TblSkill getSkillId() {
-        return skillId;
+    public Integer getExpSkillHash() {
+        return expSkillHash;
     }
 
-    public void setSkillId(TblSkill skillId) {
-        this.skillId = skillId;
+    public void setExpSkillHash(Integer expSkillHash) {
+        this.expSkillHash = expSkillHash;
     }
 
     @Override
@@ -103,10 +97,10 @@ public class TblSalaryRec implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof TblSalaryRec)) {
+        if (!(object instanceof SummaryJob)) {
             return false;
         }
-        TblSalaryRec other = (TblSalaryRec) object;
+        SummaryJob other = (SummaryJob) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -115,7 +109,7 @@ public class TblSalaryRec implements Serializable {
 
     @Override
     public String toString() {
-        return "thucnh.entity.TblSalaryRec[ id=" + id + " ]";
+        return "thucnh.entity.SummaryJob[ id=" + id + " ]";
     }
-
+    
 }

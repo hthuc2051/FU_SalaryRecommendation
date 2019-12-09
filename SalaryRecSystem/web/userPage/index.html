@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Isndex</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+        integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <link rel='stylesheet' type='text/css' media='screen' href='./style.css'>
+
+    <script>
+        function on() {
+            document.getElementById("overlay").style.display = "block";
+        }
+
+        function off() {
+            document.getElementById("overlay").style.display = "none";
+        }
+    </script>
+    <script>
+        window.onload = function () {
+
+            var chart = new CanvasJS.Chart("chartContainer", {
+                animationEnabled: true,
+                theme: "light2", // "light1", "light2", "dark1", "dark2"
+                title: {
+                    text: "Java's salary recommend : 16.M"
+                },
+                axisY: {
+                    title: "Number of company"
+                },
+                data: [{
+                    type: "column",
+                    showInLegend: true,
+                    legendText: "Java's salary - Company summary",
+                    legendMarkerColor: "grey",
+                    dataPoints: [
+                        { y: 10, label: "10.M" },
+                        { y: 30, label: "12.M" },
+                        { y: 35, label: "14.M" },
+                        { y: 36, label: "15.M" },
+                        { y: 40, label: "20.M" },
+                        { y: 42, label: "25.M" },
+                        { y: 45, label: "26.M" },
+                        { y: 15, label: "29.M" },
+                        { y: 32, label: "13.M" },
+                        { y: 36, label: "13.2M" },
+                        { y: 49, label: "20.2M" },
+
+                    ]
+                }]
+            });
+            chart.render();
+
+        }
+    </script>
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <div class="nav-back"><img class="icon-back" src="./assets/left-arrow.png"><span class="nav-caption">EXIT</span>
+        </div>
+        <div class="nav-center">
+            <img class="nav-logo" src="./assets/logo2.png" />
+            <h3 class="text">Salary recommendation system</h3>
+        </div>
+        <div class="nav-title col-2 col-sm-3">
+            <div class="title">
+                <h2 class="text">Welcome, Glad to see you</h2>
+                <h3 class="text">Nguyen Huy Thuc</h3>
+            </div>
+    </nav>
+    <!-- Loading -->
+    <div id="overlay" onclick="off()">
+        <div class="lds-dual-ring">
+            <div></div>
+            <div></div>
+        </div>
+        <div class="loading-text">Calculating</div>
+    </div>
+    <div id="container">
+        <ul id="menu-bar">
+            <li style="padding-left:8px;" onClick="loadContent(1);">
+                <img src="./assets/choices.png" class="icon">
+            </li>
+            <li style="padding-left:8px;" onclick="loadContent(2);">
+                <img src="./assets/edit.png" class="icon">
+            </li>
+            <li onclick="loadContent(3);">
+                <img src="./assets/analysis.png" class="icon">
+            </li>
+        </ul>
+        <div class="content">
+            <ul class="insinde-content">
+                <li>
+                    <p class="title">Select your skills</p>
+                    <div class="container-skills-selected">
+                        <span class="autocomplete-select">
+                            <div class="selected-stage">
+                                <div id="selected-skills"
+                                    class="select-pure__select select-pure__select--multiple select-pure__select--opened">
+                                    <span id="select-pure__label">
+
+                                    </span>
+                                    <span class="clickable" onclick="openSkillsBox();"></span>
+                                    <div class="select-pure__options" style="top: 52px;">
+                                        <input class="select-pure__autocomplete" placeholder="Search your skills "
+                                            type="text" onkeyup="onSearch(this.value);">
+                                        <div class="select-pure__option" data-value="Angular"
+                                            onclick="selectSkill('Angular');">Angular
+                                        </div>
+                                        <div class="select-pure__option " data-value="Nodejs"
+                                            onclick="selectSkill('Nodejs');">Node JS
+                                        </div>
+                                        <div class="select-pure__option" data-value="ReactJS"
+                                            onclick="selectSkill('ReactJS');">React Js
+                                        </div>
+                                        <div class="select-pure__option" data-value="MongoDB"
+                                            onclick="selectSkill('MongoDB');">MongoDB
+                                        </div>
+                                        <div class="select-pure__option " data-value="Java"
+                                            onclick="selectSkill('Java');">Java</div>
+                                    </div>
+                                    <i id="btn-dropdown" class="fa fa-arrow-down"></i>
+
+                                </div>
+
+                            </div>
+                        </span>
+
+                    </div>
+                    <button class="btn next-btn" onclick="loadContent(2);">
+                        <span>Next step</span>
+                    </button>
+                </li>
+                <li>
+                    <p class="title">Select your skill's year of experience</p>
+                    <div class="input-stage">
+                        <!-- <div class="app-cover">
+                            <input type="checkbox" class="options-view-button">
+                            <div class="select-button brd">
+                                <div class="selected-label" id="selected-React">
+                                    <span class="selected-value" dropdown-id="React">React - Select of experience</span>
+                                </div>
+                                <div class="chevrons">
+                                    <i class="fa fa-angle-up"></i>
+                                    <i class="fa fa-angle-down"></i>
+                                </div>
+                            </div>
+                            <div id="options">
+                                <div class="option" data-value="0.5" onclick="selectYearExp('React',0.5);">
+                                    <input class="s-c top" type="radio" name="platform" value="codepen">
+                                    <input class="s-c bottom" type="radio" name="platform" value="codepen">
+                                    <img src="./assets/quality.png"></img>
+                                    <span class="label">0.5 year</span>
+                                </div>
+                                <div class="option" onclick="selectYearExp('React',1);">
+                                    <input class="s-c top" type="radio" name="platform" value="dribbble">
+                                    <input class="s-c bottom" type="radio" name="platform" value="dribbble">
+                                    <img src="./assets/quality.png"></img>
+                                    <span class="label">1 year</span>
+                                </div>
+                                <div class="option" data-value="1.5" onclick="selectYearExp('React',1.5);">
+                                    <input class="s-c top" type="radio" name="platform" value="behance">
+                                    <input class="s-c bottom" type="radio" name="platform" value="behance">
+                                    <img src="./assets/quality.png"></img>
+                                    <span class="label">1.5 years</span>
+                                </div>
+                                <div class="option" data-value="2" onclick="selectYearExp('React',2);">
+                                    <input class="s-c top" type="radio" name="platform" value="hackerrank">
+                                    <input class="s-c bottom" type="radio" name="platform" value="hackerrank">
+                                    <img src="./assets/quality.png"></img>
+                                    <span class="label">2 years</span>
+                                </div>
+                                <div class="option" data-value="2.5" onclick="selectYearExp('React',2.5);">
+                                    <input class="s-c top" type="radio" name="platform" value="stackoverflow">
+                                    <input class="s-c bottom" type="radio" name="platform" value="stackoverflow">
+                                    <img src="./assets/quality.png"></img>
+                                    <span class="label">2.5 years</span>
+                                </div>
+                                <div class="option" data-value="3" onclick="selectYearExp('React',3);">
+                                    <input class="s-c top" type="radio" name="platform" value="freecodecamp">
+                                    <input class="s-c bottom" type="radio" name="platform" value="freecodecamp">
+                                    <img src="./assets/quality.png"></img>
+                                    <span class="label">3 years</span>
+                                </div>
+                            </div>
+                        </div> -->
+
+
+                    </div>
+                    <button class="btn cal-btn" onclick="loadContent(3);">
+                        <span>CALCULATE!</span>
+                    </button>
+                </li>
+                <!--end register-->
+                <li>
+                    <ul id="container-heroes">
+                        <div id="ngoai">
+                            <img src="assets/pre-arrow.png" onclick="pre()" class="pre" />
+                            <div id="trong">
+                                <!-- Lấy max 11  -->
+                                <!-- <div class="testDiv"></div>
+                                <div class="testDiv"></div>
+                                <div class="testDiv"></div>
+                                <div class="testDiv"></div>
+                                <div class="testDiv"></div>
+                                <div class="testDiv"></div>
+                                <div class="testDiv"></div> -->
+
+                                <div id="chartContainer" class="chart">
+                                </div>
+                                <div id="chartContainer" class="chart">
+                                </div>
+                                <div id="chartContainer" class="chart">
+                                </div>
+                                <div id="chartContainer" class="chart">
+                                </div>
+                                <div id="chartContainer" class="chart">
+                                </div>
+
+
+                            </div>
+                            <img src="assets/next-arrow.png" onclick="next()" class="next" />
+                        </div>
+
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+    </div>
+
+
+    <script src="./script.js"></script>
+    <script src="./canvasjs.min.js"></script>
+
+</body>
+
+</html>

@@ -3,13 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package thucnh.entity.controller;
+package thucnh.controller;
 
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import javax.persistence.PersistenceContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -19,33 +18,35 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import thucnh.entity.TblJob;
+import thucnh.dto.SkillDto;
+import thucnh.entity.TblSkill;
+import thucnh.mapper.SkillMapper;
 
 /**
  *
  * @author HP
  */
-@Path("jobs")
-public class TblJobFacadeREST extends AbstractFacade<TblJob> {
+@Path("skills")
+public class TblSkillFacadeREST extends AbstractFacade<TblSkill> {
 
     private EntityManagerFactory emf = Persistence.createEntityManagerFactory("SalaryRecSystemPU");
     private EntityManager em = emf.createEntityManager();
-
-    public TblJobFacadeREST() {
-        super(TblJob.class);
+    private SkillMapper mapper = new SkillMapper();
+    public TblSkillFacadeREST() {
+        super(TblSkill.class);
     }
 
     @POST
     @Override
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void create(TblJob entity) {
+    public void create(TblSkill entity) {
         super.create(entity);
     }
 
     @PUT
     @Path("{id}")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void edit(@PathParam("id") Integer id, TblJob entity) {
+    public void edit(@PathParam("id") Integer id, TblSkill entity) {
         super.edit(entity);
     }
 
@@ -58,21 +59,20 @@ public class TblJobFacadeREST extends AbstractFacade<TblJob> {
     @GET
     @Path("{id}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public TblJob find(@PathParam("id") Integer id) {
+    public TblSkill find(@PathParam("id") Integer id) {
         return super.find(id);
     }
 
     @GET
-    @Override
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<TblJob> findAll() {
-        return super.findAll();
+    public List<SkillDto> findAllSkills() {
+        return mapper.toListDto(super.findAll());
     }
 
     @GET
     @Path("{from}/{to}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<TblJob> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
+    public List<TblSkill> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
         return super.findRange(new int[]{from, to});
     }
 

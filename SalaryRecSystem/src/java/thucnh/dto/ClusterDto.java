@@ -6,7 +6,6 @@
 package thucnh.dto;
 
 import java.io.Serializable;
-import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -18,27 +17,21 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-public class SkillDto implements Serializable {
+public class ClusterDto implements Serializable {
 
     @XmlElement(name = "id")
     private Integer id;
-    @XmlElement(name = "name")
-    private String name;
-    @XmlElement(name = "type")
-    private String type;
-    @XmlElement(name = "expLevels")
-    private List<String> listExpLevel;
+    @XmlElement(name = "centroid")
+    private Double centroid;
     @XmlElement(name = "hash")
     private Integer hash;
 
-    public SkillDto() {
+    public ClusterDto() {
     }
 
-    public SkillDto(Integer id, String name, String type, List<String> listExpLevel, Integer hash) {
+    public ClusterDto(Integer id, Double centroid, Integer hash) {
         this.id = id;
-        this.name = name;
-        this.type = type;
-        this.listExpLevel = listExpLevel;
+        this.centroid = centroid;
         this.hash = hash;
     }
 
@@ -50,20 +43,12 @@ public class SkillDto implements Serializable {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public Double getCentroid() {
+        return centroid;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
+    public void setCentroid(Double centroid) {
+        this.centroid = centroid;
     }
 
     public Integer getHash() {
@@ -73,13 +58,6 @@ public class SkillDto implements Serializable {
     public void setHash(Integer hash) {
         this.hash = hash;
     }
-
-    public List<String> getListExpLevel() {
-        return listExpLevel;
-    }
-
-    public void setListExpLevel(List<String> listExpLevel) {
-        this.listExpLevel = listExpLevel;
-    }
-
+    
+    
 }

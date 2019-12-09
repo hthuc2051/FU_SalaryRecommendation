@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package thucnh.entity.controller;
+package thucnh.controller;
 
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -19,33 +19,33 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import thucnh.entity.TblSalaryRec;
+import thucnh.entity.TblCluster;
 
 /**
  *
  * @author HP
  */
-@Path("salaryRecs")
-public class TblSalaryRecFacadeREST extends AbstractFacade<TblSalaryRec> {
+@Path("Clusters")
+public class TblClusterFacadeREST extends AbstractFacade<TblCluster> {
 
     private EntityManagerFactory emf = Persistence.createEntityManagerFactory("SalaryRecSystemPU");
     private EntityManager em = emf.createEntityManager();
 
-    public TblSalaryRecFacadeREST() {
-        super(TblSalaryRec.class);
+    public TblClusterFacadeREST() {
+        super(TblCluster.class);
     }
 
     @POST
     @Override
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void create(TblSalaryRec entity) {
+    public void create(TblCluster entity) {
         super.create(entity);
     }
 
     @PUT
     @Path("{id}")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void edit(@PathParam("id") Integer id, TblSalaryRec entity) {
+    public void edit(@PathParam("id") Integer id, TblCluster entity) {
         super.edit(entity);
     }
 
@@ -58,21 +58,21 @@ public class TblSalaryRecFacadeREST extends AbstractFacade<TblSalaryRec> {
     @GET
     @Path("{id}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public TblSalaryRec find(@PathParam("id") Integer id) {
+    public TblCluster find(@PathParam("id") Integer id) {
         return super.find(id);
     }
 
     @GET
     @Override
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<TblSalaryRec> findAll() {
+    public List<TblCluster> findAll() {
         return super.findAll();
     }
 
     @GET
     @Path("{from}/{to}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<TblSalaryRec> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
+    public List<TblCluster> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
         return super.findRange(new int[]{from, to});
     }
 

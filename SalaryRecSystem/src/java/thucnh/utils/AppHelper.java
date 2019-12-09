@@ -5,6 +5,14 @@
  */
 package thucnh.utils;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
 /**
  *
  * @author HP
@@ -59,20 +67,54 @@ public class AppHelper {
         }
     }
 
-    public static double getBeautySalary(double param) {
+    public static Double getBeautySalary(Double param) {
         try {
-            double salary = param * 29000 / 12;
+            Double salary = param * 29000 / 12;
             String s = String.format("%.0f", salary);
             int length = s.length();
-            if (length < 5) {
-                return -1;
+            if (length < 4) {
+                return 0.0;
             }
             double a = Math.pow(10, (length - 2));
             return Integer.parseInt(s.substring(0, 2)) * a;
 
         } catch (NumberFormatException e) {
-            return -1;
+            return 0.0;
         }
     }
 
+    public static Double getBeautyNumber(Double num) {
+        try {
+            String s = String.format("%.0f", num);
+            int length = s.length();
+            if (length < 4) {
+                return 0.0;
+            }
+            double a = Math.pow(10, (length - 2));
+            return Integer.parseInt(s.substring(0, 2)) * a;
+
+        } catch (NumberFormatException e) {
+            return 0.0;
+        }
+    }
+
+    public static Double calculateDistance(Double num1, Double num2) {
+        if (num1 > num2) {
+            return num1 - num2;
+        } else {
+            return num2 - num1;
+        }
+    }
+
+    public static <K, V extends Comparable<? super V>> Map<K, V> sortByValue(Map<K, V> map) {
+        List<Entry<K, V>> list = new ArrayList<>(map.entrySet());
+        list.sort(Entry.comparingByValue());
+
+        Map<K, V> result = new LinkedHashMap<>();
+        for (int i = list.size() - 1; i >= 0; i--) {
+            Entry<K, V> entry = list.get(i);
+            result.put(entry.getKey(), entry.getValue());
+        }
+        return result;
+    }
 }

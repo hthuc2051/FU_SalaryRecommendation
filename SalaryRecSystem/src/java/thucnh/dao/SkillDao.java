@@ -60,9 +60,13 @@ public class SkillDao extends BaseDao<TblSkill, Integer> {
             skill.setName(name);
             skill.setType(type);
             skill.setHash(hasValue);
-            return dao.create(skill);
+            TblSkill result = dao.create(skill);
+            if (result != null) {
+                System.out.println("[INSERT] Skill : Type: " + type + "- Name :" + name);
+                return result;
+            }
         } else {
-            System.out.println("DB Skip Skill : Type: " + type + "- Name :" + name);
+            System.out.println("[SKIP] Skill : Type: " + type + "- Name :" + name);
         }
         return null;
     }

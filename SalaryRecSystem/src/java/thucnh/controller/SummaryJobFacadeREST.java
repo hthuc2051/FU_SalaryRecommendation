@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package thucnh.entity.controller;
+package thucnh.controller;
 
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -19,33 +19,34 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import thucnh.entity.TblSalaryRecJob;
+import thucnh.dao.SummaryJobDao;
+import thucnh.entity.SummaryJob;
 
 /**
  *
  * @author HP
  */
-@Path("salaryRecJobs")
-public class TblSalaryRecJobFacadeREST extends AbstractFacade<TblSalaryRecJob> {
+@Path("SummaryJobs")
+public class SummaryJobFacadeREST extends AbstractFacade<SummaryJob> {
 
     private EntityManagerFactory emf = Persistence.createEntityManagerFactory("SalaryRecSystemPU");
     private EntityManager em = emf.createEntityManager();
 
-    public TblSalaryRecJobFacadeREST() {
-        super(TblSalaryRecJob.class);
+    public SummaryJobFacadeREST() {
+        super(SummaryJob.class);
     }
 
     @POST
     @Override
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void create(TblSalaryRecJob entity) {
+    public void create(SummaryJob entity) {
         super.create(entity);
     }
 
     @PUT
     @Path("{id}")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void edit(@PathParam("id") Integer id, TblSalaryRecJob entity) {
+    public void edit(@PathParam("id") Integer id, SummaryJob entity) {
         super.edit(entity);
     }
 
@@ -58,22 +59,32 @@ public class TblSalaryRecJobFacadeREST extends AbstractFacade<TblSalaryRecJob> {
     @GET
     @Path("{id}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public TblSalaryRecJob find(@PathParam("id") Integer id) {
+    public SummaryJob find(@PathParam("id") Integer id) {
         return super.find(id);
     }
 
     @GET
     @Override
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<TblSalaryRecJob> findAll() {
+    public List<SummaryJob> findAll() {
         return super.findAll();
     }
 
+//    @GET
+//    @Path("{from}/{to}")
+//    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+//    public List<SummaryJob> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
+//        return super.findRange(new int[]{from, to});
+//    }
+
     @GET
-    @Path("{from}/{to}")
+    @Path("{expSkillHash}/{salary}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<TblSalaryRecJob> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
-        return super.findRange(new int[]{from, to});
+    public List<SummaryJob> findTop10Chart(
+            @PathParam("expSkillHash") Integer expSkillHash,
+            @PathParam("salary") Double salary) {
+        SummaryJobDao dao = SummaryJobDao.getInstance();
+        return dao.findTop10ForChart(salary, expSkillHash);
     }
 
     @GET
@@ -87,5 +98,5 @@ public class TblSalaryRecJobFacadeREST extends AbstractFacade<TblSalaryRecJob> {
     protected EntityManager getEntityManager() {
         return em;
     }
-    
+
 }

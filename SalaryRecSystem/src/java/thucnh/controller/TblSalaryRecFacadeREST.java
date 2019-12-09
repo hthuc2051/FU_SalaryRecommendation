@@ -3,13 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package thucnh.entity.controller;
+package thucnh.controller;
 
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import javax.persistence.PersistenceContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -19,33 +18,35 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import thucnh.entity.TblSkill;
+import thucnh.dto.SalaryRecDto;
+import thucnh.entity.TblSalaryRec;
+import thucnh.mapper.SalaryRectMapper;
 
 /**
  *
  * @author HP
  */
-@Path("skills")
-public class TblSkillFacadeREST extends AbstractFacade<TblSkill> {
+@Path("salaryRecs")
+public class TblSalaryRecFacadeREST extends AbstractFacade<TblSalaryRec> {
 
     private EntityManagerFactory emf = Persistence.createEntityManagerFactory("SalaryRecSystemPU");
     private EntityManager em = emf.createEntityManager();
-
-    public TblSkillFacadeREST() {
-        super(TblSkill.class);
+    private SalaryRectMapper mapper = new SalaryRectMapper();
+    public TblSalaryRecFacadeREST() {
+        super(TblSalaryRec.class);
     }
 
     @POST
     @Override
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void create(TblSkill entity) {
+    public void create(TblSalaryRec entity) {
         super.create(entity);
     }
 
     @PUT
     @Path("{id}")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void edit(@PathParam("id") Integer id, TblSkill entity) {
+    public void edit(@PathParam("id") Integer id, TblSalaryRec entity) {
         super.edit(entity);
     }
 
@@ -58,21 +59,27 @@ public class TblSkillFacadeREST extends AbstractFacade<TblSkill> {
     @GET
     @Path("{id}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public TblSkill find(@PathParam("id") Integer id) {
+    public TblSalaryRec find(@PathParam("id") Integer id) {
         return super.find(id);
     }
 
+//    @GET
+//    @Override
+//    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+//    public List<TblSalaryRec> findAll() {
+//        return super.findAll();
+//    }
+
     @GET
-    @Override
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<TblSkill> findAll() {
-        return super.findAll();
+    public List<SalaryRecDto> findAllSalaryRec() {
+        return mapper.toListDto(super.findAll());
     }
 
     @GET
     @Path("{from}/{to}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<TblSkill> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
+    public List<TblSalaryRec> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
         return super.findRange(new int[]{from, to});
     }
 
@@ -87,5 +94,5 @@ public class TblSkillFacadeREST extends AbstractFacade<TblSkill> {
     protected EntityManager getEntityManager() {
         return em;
     }
-    
+
 }

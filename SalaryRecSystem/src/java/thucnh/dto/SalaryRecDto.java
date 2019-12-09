@@ -6,24 +6,37 @@
 package thucnh.dto;
 
 import java.io.Serializable;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
  * @author HP
  */
-public class SalaryRecDto implements Serializable{
-    
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
+public class SalaryRecDto implements Serializable {
+
+    @XmlElement(name = "id")
     private int id;
+    @XmlElement(name = "skillId")
     private int skillId;
+    @XmlElement(name = "skillName")
+    private String skillName;
+    @XmlElement(name = "expLevel")
     private String expLevel;
+    @XmlElement(name = "salaryRec")
     private double salaryRec;
 
     public SalaryRecDto() {
     }
 
-    public SalaryRecDto(int id, int skillId, String expLevel, double salaryRec) {
+    public SalaryRecDto(int id, int skillId, String skillName, String expLevel, double salaryRec) {
         this.id = id;
         this.skillId = skillId;
+        this.skillName = skillName;
         this.expLevel = expLevel;
         this.salaryRec = salaryRec;
     }
@@ -34,6 +47,14 @@ public class SalaryRecDto implements Serializable{
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getSkillName() {
+        return skillName;
+    }
+
+    public void setSkillName(String skillName) {
+        this.skillName = skillName;
     }
 
     public int getSkillId() {
@@ -59,6 +80,5 @@ public class SalaryRecDto implements Serializable{
     public void setSalaryRec(double salaryRec) {
         this.salaryRec = salaryRec;
     }
-    
-    
+
 }

@@ -22,7 +22,7 @@ public class DBUtils {
         synchronized (LOCK) {
             if (manager == null) {
                 try {
-                    manager = Persistence.createEntityManagerFactory("SalaryRecommendationSystemPU");
+                    manager = Persistence.createEntityManagerFactory("SalaryRecSystemPU");
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }

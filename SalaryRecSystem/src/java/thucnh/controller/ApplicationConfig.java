@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package thucnh.entity.controller;
+package thucnh.controller;
 
 import java.util.Set;
 import javax.ws.rs.core.Application;
@@ -29,10 +29,11 @@ public class ApplicationConfig extends Application {
      * If required, comment out calling this method in getClasses().
      */
     private void addRestResourceClasses(Set<Class<?>> resources) {
-        resources.add(thucnh.entity.controller.TblJobFacadeREST.class);
-        resources.add(thucnh.entity.controller.TblSalaryRecFacadeREST.class);
-        resources.add(thucnh.entity.controller.TblSalaryRecJobFacadeREST.class);
-        resources.add(thucnh.entity.controller.TblSkillFacadeREST.class);
+        resources.add(thucnh.controller.SummaryJobFacadeREST.class);
+        resources.add(thucnh.controller.TblClusterFacadeREST.class);
+        resources.add(thucnh.controller.TblJobFacadeREST.class);
+        resources.add(thucnh.controller.TblSalaryRecFacadeREST.class);
+        resources.add(thucnh.controller.TblSkillFacadeREST.class);
     }
     
 }

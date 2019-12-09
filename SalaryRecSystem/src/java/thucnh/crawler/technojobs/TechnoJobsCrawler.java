@@ -56,17 +56,21 @@ public class TechnoJobsCrawler extends BaseCrawler implements Runnable {
             try {
                 for (TblSkill skill : skills) {
                     int totalPage = getLastPage(url + getTechnoJobsSearchPageLink(1, skill.getName().replace(" ", "-")));
-                    if (totalPage > 6) {
-                        totalPage = 6;
+                    if (totalPage > 10) {
+                        totalPage = 10;
                     }
-                    for (int i = 0; i < totalPage; i++) {
-                        List<String> result = getListJobUrl(url + getTechnoJobsSearchPageLink((i + 1), skill.getName().replace(" ", "-")), skill.getName().trim());
-                        for (String s : result) {
-                            Thread thread = new Thread(new TechnoJobsEachPageCrawler(s, skill, context));
-                            thread.start();
-                            synchronized (BaseThread.getInstance()) {
-                                while (BaseThread.isSuspended()) {
-                                    BaseThread.getInstance().wait();
+                    if (totalPage > 0) {
+                        for (int i = 0; i < totalPage; i++) {
+                            List<String> result = getListJobUrl(url + getTechnoJobsSearchPageLink((i + 1), skill.getName().replace(" ", "-")), skill.getName().trim());
+                            if (result != null && result.size() > 0) {
+                                for (String s : result) {
+                                    Thread thread = new Thread(new TechnoJobsEachPageCrawler(s, skill, context));
+                                    thread.start();
+                                    synchronized (BaseThread.getInstance()) {
+                                        while (BaseThread.isSuspended()) {
+                                            BaseThread.getInstance().wait();
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -89,7 +93,7 @@ public class TechnoJobsCrawler extends BaseCrawler implements Runnable {
         BufferedReader reader = null;
         try {
             if (url != null) {
-                reader = getBufferedReaderForURL("https://www.technojobs.co.uk/search.phtml/Amazon-Web-Services/searchfield/location/radius25/salary0/sortby5");
+                reader = getBufferedReaderForURL(url);
                 String line = "";
                 String document = "<document><div>";
                 boolean isStart = false;
@@ -111,7 +115,6 @@ public class TechnoJobsCrawler extends BaseCrawler implements Runnable {
 //                Check well-formed html
                 XmlSyntaxChecker checker = new XmlSyntaxChecker();
                 document = checker.checkSyntax(document);
-                System.out.println(document);
                 // transform to xml
                 String realPath = this.getContext().getRealPath("/");
                 String xslFile = realPath + XSL_TECHNO_JOB_ITEMS;
@@ -166,29 +169,33 @@ public class TechnoJobsCrawler extends BaseCrawler implements Runnable {
         return result;
     }
 
-    private int parsePagingDoc(String document) throws UnsupportedEncodingException, XMLStreamException {
+    private int parsePagingDoc(String document) {
         document = document.trim();
-        XMLEventReader eventReader = parseStringToXMLEventReader(document);
         int lastPage = 1;
-        while (eventReader.hasNext()) {
-            XMLEvent event = (XMLEvent) eventReader.next();
-            if (event.isStartElement()) {
-                StartElement startElement = event.asStartElement();
-                String tagName = startElement.getName().getLocalPart();
-                if ("strong".equals(tagName)) {
-                    event = (XMLEvent) eventReader.next();
-                    Characters textContent = event.asCharacters();
-                    String s = textContent.getData();
-                    if (s != null) {
-                        String[] arr = s.split("of");
-                        if (arr.length > 1) {
-                            return Integer.parseInt(arr[1].trim());
+        try {
+            XMLEventReader eventReader = parseStringToXMLEventReader(document);
+            while (eventReader.hasNext()) {
+                XMLEvent event = (XMLEvent) eventReader.next();
+                if (event.isStartElement()) {
+                    StartElement startElement = event.asStartElement();
+                    String tagName = startElement.getName().getLocalPart();
+                    if ("strong".equals(tagName)) {
+                        event = (XMLEvent) eventReader.next();
+                        Characters textContent = event.asCharacters();
+                        String s = textContent.getData();
+                        if (s != null) {
+                            String[] arr = s.split("of");
+                            if (arr.length > 1) {
+                                return Integer.parseInt(arr[1].trim());
+                            }
                         }
                     }
                 }
             }
+            eventReader.close();
+        } catch (Exception e) {
+            // Mai mốt nhớ remove
         }
-        eventReader.close();
         return lastPage;
     }
 
