@@ -48,6 +48,7 @@ h1, h2, h3, h4, h5, h6 {
     -webkit-box-align: center;
     display: flex;
     cursor: pointer;
+    text-decoration: none;
 }
 .icon-back{
     transition: all .2s;
@@ -799,7 +800,7 @@ input[type="radio"]
 
 /*Pdf link*/
 
-.pdfLink{
+#pdfLink{
     z-index: 9999;
     bottom: 20px;
     /* height: 50px; */
@@ -829,10 +830,10 @@ input[type="radio"]
     cursor: pointer;
     transition: all .5s;
 }
-.pdfLink:hover{
+#pdfLink:hover{
     background: #e2e8f0;
 }
-.pdfLink a {
+#pdfLink a {
     background: #ffffff;
     display: inline-block;
     height: 25px;
@@ -842,21 +843,21 @@ input[type="radio"]
     text-align: center;
     vertical-align: middle;
     width: 25px;
-    background-image: url("./assets/pdf.png");
+    background-image: url("/SalaryRecSystem/userPage/assets/pdf.png");
     background-size: cover;
 
 }
-.pdfLink span {
+#pdfLink span {
     align-items: center;
     -webkit-box-align: center;
     display: flex;
 }
 
-.pdfLink a:hover:before,
-.pdfLink a:hover:after {
+#pdfLink a:hover:before,
+#pdfLink a:hover:after {
     background: #e2e8f0;
 }
 
-.pdfLink a:before {
+#pdfLink a:before {
     margin: -23px 0 0 -5px;
 }

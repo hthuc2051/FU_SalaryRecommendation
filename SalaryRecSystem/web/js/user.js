@@ -7,14 +7,15 @@
         xmlSalaryRecs: null,
         isFinished: false,
 
-        chartArr: [],
+        arrChart: [],
         selectedArr: [],
+        selectedRecsArr: [],
     };
     var homeView = {
         init: function () {
             // init 
             function initData(callback) {
-                octopus.getSkillsData(); // get Skills Data
+                octopus.getSkillsData();
                 octopus.getSalaryRecsData();
                 callback();
             }
@@ -30,6 +31,12 @@
             let btnSkillChoice = document.getElementById("btn-skill-choice");
             btnSkillChoice.addEventListener('click', function () {
                 homeView.resetPage();
+            });
+
+            let btnPdf = document.getElementById("pdfLink");
+            btnPdf.addEventListener('click', function () {
+                let selectedArr = homeModel.selectedArr;
+                octopus.getPdf();
             });
 
         },
@@ -77,7 +84,6 @@
                 }
                 callBackMethod(index, arr);
             });
-//            let xmlDocs = octopus.getXmlSummaryChart(); Upgrade sequence
         },
         renderSkills: function () {
             if (document.implementation && document.implementation.createDocument) {
@@ -124,7 +130,7 @@
                     let obj = homeModel.salaryRecArr.find(item =>
                         ((item.skillId === homeModel.selectedArr[i].id) && (item.expLevel === homeModel.selectedArr[i].expLevel)));
                     if (obj !== null) {
-                        homeModel.chartArr.push(obj);
+                        homeModel.arrChart.push(obj);
                     }
                 }
             }
@@ -285,7 +291,6 @@
                         let key = labelElement.getAttribute('data-value');
                         if (key === id) {
                             // remove from list
-                            
                             selected_label.removeChild(arrLabel[j]);
                         }
                     }
@@ -304,7 +309,6 @@
 //            else {
 //                homeModel.selectedArr.push(homeModel.selectedArr[0]);
 //            }
-            console.log(homeModel.selectedArr);
 
         },
         selectExpLevel: function (key, name, expLevel) {
@@ -331,13 +335,16 @@
             }
         },
         renderChart: function () {
-            var arrChart = homeModel.chartArr;
+            var arrChart = homeModel.arrChart;
             if (arrChart.length > 0) {
                 let chartTab = document.getElementById("trong");
                 for (var i = 0; i < arrChart.length; i++) {
                     let hashValue = hasingString(arrChart[i].expLevel + arrChart[i].skillId);
                     homeView.getArrSummaryPoint(arrChart[i].salary, hashValue, i, function (index, dataPoints) {
-                        let obj = dataPoints;
+
+                        // For PDF
+                        homeModel.selectedRecsArr.push(arrChart[index].salary + "~" + hashValue);
+
                         let data = [{
                                 type: "column",
                                 showInLegend: true,
@@ -436,8 +443,14 @@
                 callBackMethod(xmlDoc);
             });
         },
-        getXmlSkills: function () {
-            return homeModel.xmlSkills;
+        getPdf: function () {
+            var url = "/SalaryRecSystem/PdfServlet";
+            var param = {
+                skillSelectedArr: homeModel.selectedRecsArr
+            };
+            sendGetRequest(url, param, function (response) {
+                window.open(response.responseURL);
+            });
         },
         getXmlSkills: function () {
             return homeModel.xmlSkills;

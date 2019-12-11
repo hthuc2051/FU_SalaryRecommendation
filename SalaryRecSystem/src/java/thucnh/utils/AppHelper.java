@@ -47,6 +47,26 @@ public class AppHelper {
         return level;
     }
 
+    public static String getFullLevelStr(String shortStr) {
+        String level = "";
+        switch (shortStr) {
+            case "SA":
+                return "Software architecture";
+            case "TL":
+                return "Technical lead";
+            case "Senior":
+                return "Senior developer";
+            case "Dev":
+                return "Developer";
+            case "Junior":
+                return "Junior developer";
+            case "Fresher":
+                return "Fresher developer";
+        }
+       
+        return level;
+    }
+
     public static double convertRangeToNum(String s) {
         double mutipleValue = 1;
         if (s.contains("USD")) {

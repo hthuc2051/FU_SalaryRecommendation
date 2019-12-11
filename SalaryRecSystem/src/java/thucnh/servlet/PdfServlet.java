@@ -11,6 +11,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -47,47 +48,55 @@ public class PdfServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try {
             String realPath = request.getServletContext().getRealPath("/");
-            String salary = request.getParameter("txtSalary");
-            String expSkillHash = request.getParameter("txtExpSkillHash");
+            String[] skillSelectedArr = request.getParameterValues("skillSelectedArr");
+            if (skillSelectedArr != null && skillSelectedArr.length > 0) {
+                List<JobDto> top10Jobs = new ArrayList<>();
+                for (int i = 0; i < skillSelectedArr.length; i++) {
+                    String[] arr = skillSelectedArr[i].split("~");
+                    JobDao dao = JobDao.getInstance();
+                    List<JobDto> temp = dao.getTopTenRelatedJob(Double.parseDouble(arr[0]), Integer.parseInt(arr[1]));
+                    if (temp != null) {
+                        top10Jobs.addAll(temp);
+                    }
+                }
+                if (top10Jobs.size() > 0) {
+                    PdfJobsObj pdfObj = new PdfJobsObj(top10Jobs);
+                    JAXBUtils.createXMLString(pdfObj, realPath);
+                    String xslPath = realPath + AppConstant.JAXB_XSL_FOR_PDF;
+                    String xmlPath = realPath + AppConstant.JAXB_XML_FOR_PDF;
+                    String foPath = realPath + AppConstant.JAXB_FO_FOR_PDF;
 
-            JobDao dao = JobDao.getInstance();
-//            List<JobDto> top10Jobs = dao.getTopTenRelatedJob(
-//                    Double.parseDouble(salary),
-//                    Integer.parseInt(expSkillHash));
-            List<JobDto> top10Jobs = dao.getTopTenRelatedJob(120000000.0, 293227331);
-            PdfJobsObj pdfObj = new PdfJobsObj(top10Jobs);
-            JAXBUtils.createXMLString(pdfObj, realPath);
-            String xslPath = realPath + AppConstant.JAXB_XSL_FOR_PDF;
-            String xmlPath = realPath + AppConstant.JAXB_XML_FOR_PDF;
-            String foPath = realPath + AppConstant.JAXB_FO_FOR_PDF;
-            
-            methodTrAX(xslPath, xmlPath, foPath, realPath);
-            File file = new File(foPath);
-            FileInputStream input = new FileInputStream(file);
+                    methodTrAX(xslPath, xmlPath, foPath, realPath);
+                    File file = new File(foPath);
+                    FileInputStream input = new FileInputStream(file);
 
-            ByteArrayOutputStream out = new ByteArrayOutputStream();
-            response.setContentType("application/pdf");
+                    ByteArrayOutputStream out = new ByteArrayOutputStream();
+                    response.setContentType("application/pdf");
 
-            FopFactory ff = FopFactory.newInstance(new File(AppConstant.FOP_FAC_PATH));
-            FOUserAgent fua = ff.newFOUserAgent();
+                    FopFactory ff = FopFactory.newInstance(new File(AppConstant.FOP_FAC_PATH));
+                    FOUserAgent fua = ff.newFOUserAgent();
 
-            Fop fop = ff.newFop(MimeConstants.MIME_PDF, fua, out);
+                    Fop fop = ff.newFop(MimeConstants.MIME_PDF, fua, out);
 
-            TransformerFactory tff = TransformerFactory.newInstance();
-            Transformer trans = tff.newTransformer();
-            trans.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
-            File fo = new File(foPath);
-            Source src = new StreamSource(fo);
-            Result result = new SAXResult(fop.getDefaultHandler());
-            trans.transform(src, result);
+                    TransformerFactory tff = TransformerFactory.newInstance();
+                    Transformer trans = tff.newTransformer();
+                    trans.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+                    File fo = new File(foPath);
+                    Source src = new StreamSource(fo);
+                    Result result = new SAXResult(fop.getDefaultHandler());
+                    trans.transform(src, result);
 
-            byte[] content = out.toByteArray();
-            response.setContentLength(content.length);
-            response.getOutputStream().write(content);
-            response.getOutputStream().flush();
+                    byte[] content = out.toByteArray();
+                    response.setContentLength(content.length);
+                    response.getOutputStream().write(content);
+                    response.getOutputStream().flush();
+                }
+
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
-        } 
+        }
     }
 
     private void methodTrAX(String xslPath, String xmlPath, String output, String path) throws FileNotFoundException, TransformerException {
@@ -95,7 +104,7 @@ public class PdfServlet extends HttpServlet {
             TransformerFactory tf = TransformerFactory.newInstance();
             StreamSource xslFile = new StreamSource(xslPath);
             Transformer trans = tf.newTransformer(xslFile);
-            
+
             StreamSource xmlFile = new StreamSource(xmlPath);
             StreamResult htmlFile = new StreamResult(new FileOutputStream(output));
             trans.transform(xmlFile, htmlFile);

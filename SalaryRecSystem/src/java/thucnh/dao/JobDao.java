@@ -165,10 +165,6 @@ public class JobDao extends BaseDao<TblJob, Integer> {
                     top10JobsForPdfMap.put(job, job.getSalary());
                 } else {
                     Map<TblJob, Double> comparedMap = AppHelper.sortByValue(top10JobsForPdfMap);
-                    System.out.println("Sorted MAP");
-                    for (Map.Entry<TblJob, Double> entry : comparedMap.entrySet()) {
-                        System.out.println(entry.getKey().getSalary() + "- Distance" + entry.getValue());
-                    }
                     for (Map.Entry<TblJob, Double> entry : comparedMap.entrySet()) {
                         if (entry.getValue() >= distance) {
                             top10JobsForPdfMap.remove(entry.getKey());
@@ -181,13 +177,9 @@ public class JobDao extends BaseDao<TblJob, Integer> {
             if (top10JobsForPdfMap.size() > 0) {
                 result = new ArrayList<>();
                 for (Map.Entry<TblJob, Double> entry : top10JobsForPdfMap.entrySet()) {
-                    result.add(mapper.marshal(entry.getKey()));
-                }
-                System.out.println("RESULT");
-
-                for (JobDto dto : result) {
-                    System.out.println(dto.getExpLevel() + " - " + dto.getSkillName() + ": " + dto.getSalary());
-                    System.out.println(dto.getLink());
+                    JobDto dto = mapper.marshal(entry.getKey());
+                    dto.setExpLevel(AppHelper.getFullLevelStr(dto.getExpLevel()));
+                    result.add(dto);
                 }
             }
         }

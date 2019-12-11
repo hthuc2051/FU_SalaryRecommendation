@@ -14,16 +14,16 @@
         <meta name='viewport' content='width=device-width, initial-scale=1'>
         <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
               integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
-        <link rel='stylesheet' type='text/css' media='screen' href='./style.css'>
+        <link rel='stylesheet' type='text/css' media='screen' href='/SalaryRecSystem/userPage/style.css'>
 
 
     </head>
     <body>
         <nav class="navbar">
-            <div class="nav-back"><img class="icon-back" src="./assets/left-arrow.png"><span class="nav-caption">EXIT</span>
-            </div>
+            <a href="/SalaryRecSystem/homePage/home.jsp" class="nav-back"><img class="icon-back" src="./assets/left-arrow.png"><span class="nav-caption">EXIT</span>
+            </a>
             <div class="nav-center">
-                <img class="nav-logo" src="./assets/logo2.png" />
+                <img class="nav-logo" src="/SalaryRecSystem/userPage/assets/logo2.png" />
                 <h3 class="text">Salary recommendation system</h3>
             </div>
             <div class="nav-title col-2 col-sm-3">
@@ -96,7 +96,7 @@
                                 <div id="trong">
 
                                 </div>
-                                <div class="pdfLink">
+                                <div id="pdfLink">
                                     <a href="#"></a>
                                     <span>Click to download jobs that are suitable for you</span>
                                 </div>
@@ -110,10 +110,10 @@
 
         </div>
 
-        <script src="../js/utils.js"></script>
-        <script src="./script.js"></script>
-        <script src="./canvasjs.min.js"></script>
-        <script src="../js/user.js"></script>
+        <script src="/SalaryRecSystem/js/utils.js"></script>
+        <script src="/SalaryRecSystem/js/script.js"></script>
+        <script src="/SalaryRecSystem/js/canvasjs.min.js"></script>
+        <script src="/SalaryRecSystem/js/user.js"></script>
 
     </body>
 </html>

@@ -11,7 +11,7 @@
     <head>
         <meta charset="utf-8">
         <title>Welcome page</title>
-        <link href="homePage/style.css" rel="stylesheet" type="text/css">
+        <link href="/SalaryRecSystem/homePage/style.css" rel="stylesheet" type="text/css">
 
     </head>
 
@@ -20,10 +20,10 @@
         <div id="container">
             <ul id="menu-bar">
                 <li onclick="loadContent(1);">
-                    <img src="images/home.png" class="icon" style="filter: opacity(100%);">
+                    <img src="/SalaryRecSystem/images/home.png" class="icon" style="filter: opacity(100%);">
                 </li>
                 <li style="margin-right: 7px;" onclick="loadContent(2);">
-                    <img src="images/login-button.png" class="icon" style="filter: opacity(50%);">
+                    <img src="/SalaryRecSystem/images/login-button.png" class="icon" style="filter: opacity(50%);">
                 </li>
             </ul>
             <div class="content">
@@ -34,7 +34,7 @@
                         <div id="dot"></div>
                         <p class="line2"></p>
                         <div id="msg-1">" Our product give you suitable salary based on experience in each skill "</div>
-                        <a href="userPage/user.jsp" id="viewProduct">View our product !</a>
+                        <a href="/SalaryRecSystem/userPage/user.jsp" id="viewProduct">View our product !</a>
 
                         <a onclick="loadContent(2);" id="login">Admin Login!</a>
                     </li>
@@ -46,7 +46,7 @@
                                     <li id="author">_Thuc Nguyen Huy</li>
                                 </ul>
                             </div>
-                            <form id="login-form" action="ProcessServlet" method="POST">
+                            <form id="login-form" action="/SalaryRecSystem/ProcessServlet" method="POST">
                                 <p class="form-title">Log In</p>
                                 <input class="form-attribute" type="text" name="txtUsername" 
                                        placeholder="Username"><br>
