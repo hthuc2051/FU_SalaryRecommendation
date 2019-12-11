@@ -5,7 +5,10 @@
  */
 package thucnh.dao;
 
+import java.util.List;
+import javax.persistence.EntityManager;
 import thucnh.entity.TblCluster;
+import thucnh.utils.DBUtils;
 
 /**
  *
@@ -26,5 +29,24 @@ public class ClusterDao extends BaseDao<TblCluster, Integer> {
             }
         }
         return instance;
+    }
+    
+     public List<TblCluster> findClustersByHash(Integer hashValue) {
+        EntityManager manager = DBUtils.getEntityManager();
+        List<TblCluster> result = null;
+        try {
+            result = manager.createNamedQuery("TblCluster.findByHash", TblCluster.class)
+                    .setParameter("hash", hashValue)
+                    .getResultList();
+
+            if (result != null && result.size() > 0) {
+                return result;
+            }
+        } finally {
+            if (manager != null) {
+                manager.close();
+            }
+        }
+        return null;
     }
 }

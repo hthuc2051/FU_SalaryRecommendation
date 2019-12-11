@@ -97,5 +97,6 @@ function hasingString(s) {
         for (let i = 0; i < s.length; i++) {
             hasValue =  ((hasValue * base +  s.charCodeAt(i)) % mod);
         }
+        console.log(hasValue);
         return hasValue;
     }

@@ -35,13 +35,13 @@ public class KMean {
     }
 
     public void init() {
-        System.out.println("----------------------------------------------------------------");
-        System.out.println("SKILL : " + skillId + "EXP-LEVEL : " + expLevel);
-        System.out.println("MIN : " + min + "   ----   MAX : " + max);
+//        System.out.println("----------------------------------------------------------------");
+//        System.out.println("SKILL : " + skillId + "EXP-LEVEL : " + expLevel);
+//        System.out.println("MIN : " + min + "   ----   MAX : " + max);
 
         if (data.size() < 5) {
             TblCluster cluster = new TblCluster();
-            int hasValue = AppHelper.hasingString(skillId + expLevel);
+            int hasValue = AppHelper.hasingString(expLevel + skillId);
             cluster.setHash(hasValue);
             cluster.setCentroid(AppHelper.getBeautyNumber(data.get(0).getSalary()));
             ClusterDao clusterDao = ClusterDao.getInstance();
@@ -76,7 +76,7 @@ public class KMean {
         // đệ quy lại để set centroids mới lấy đc vào thành centroid mới
         centroid[0] = centroid[1];
         centroid[1] = new Double[]{0.0, 0.0, 0.0};
-        System.out.println("========== Starting to get new centroid =========");
+//        System.out.println("========== Starting to get new centroid =========");
 
         for (int i = 0; i < noOfClusters; i++) {
             for (int j = 0; j < data.size(); j++) {
@@ -85,7 +85,7 @@ public class KMean {
 //                System.out.print(distance[i][j] + " ,");
                 //System.out.println("Centroid: "+centroid[0][i]);
             }
-            System.out.println();
+//            System.out.println();
         }
 
         for (int j = 0; j < data.size(); j++) {
@@ -113,22 +113,22 @@ public class KMean {
 //
 //        System.out.println("======================================== ");
 //
-        System.out.println("New clusters are ");
+//        System.out.println("New clusters are ");
         // cluster[]= { 0  1   0  1  0  2  2  1}
         // data[]={2,4,-10,12,3,20,30,11};
         for (int i = 0; i < noOfClusters; i++) {
 //            System.out.print("C" + (i + 1) + ": ");
-            System.out.println("Centroids : " + centroid[1][i]);
+//            System.out.println("Centroids : " + centroid[1][i]);
             for (int l = 0; l < data.size(); l++) {
                 if (indexClusterHasMinDistance[l] == i) {
-                    System.out.print(data.get(l).getSalary() + " ,");
+//                    System.out.print(data.get(l).getSalary() + " ,");
                 }
             }
-            System.out.println();
+//            System.out.println();
         }
 //        System.out.println("======================================== ");
 //
-        System.out.println("New centroid is ");
+//        System.out.println("New centroid is ");
 
         // Set lại centroids mới ở trên vào centroid cũ
         for (int j = 0; j < noOfClusters; j++) {
@@ -136,7 +136,7 @@ public class KMean {
             Double value = centroid[1][j];
             if (value.isNaN()) {
                 TblCluster cluster = new TblCluster();
-                int hasValue = AppHelper.hasingString(skillId + expLevel);
+                int hasValue = AppHelper.hasingString(expLevel + skillId);
                 cluster.setHash(hasValue);
                 cluster.setCentroid(AppHelper.getBeautyNumber(data.get(0).getSalary()));
                 ClusterDao clusterDao = ClusterDao.getInstance();
@@ -148,7 +148,7 @@ public class KMean {
                 return null;
             }
         }
-        System.out.println();
+//        System.out.println();
 //
         boolean isAchived = true;
         for (int j = 0; j < noOfClusters; j++) {
@@ -165,12 +165,12 @@ public class KMean {
         }
 //
         if (isAchived) {
-            System.out.println("======================================== ");
-            System.out.println(" Final Cluster is ");
+//            System.out.println("======================================== ");
+//            System.out.println(" Final Cluster is ");
 
             for (int i = 0; i < noOfClusters; i++) {
                 TblCluster cluster = new TblCluster();
-                int hasValue = AppHelper.hasingString(skillId + expLevel);
+                int hasValue = AppHelper.hasingString(expLevel + skillId);
                 cluster.setHash(hasValue);
                 cluster.setCentroid(AppHelper.getBeautyNumber(centroid[1][i]));
                 ClusterDao dao = ClusterDao.getInstance();
@@ -184,7 +184,7 @@ public class KMean {
                     }
                 }
 
-                System.out.println();
+//                System.out.println();
             }
         }
 

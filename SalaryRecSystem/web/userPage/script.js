@@ -169,43 +169,44 @@ function openSkillsBox() {
 //    }
 //    return options;
 //}
-function removeSelectedSkill(id) {
-    console.log(id);
-    let arr = document.getElementsByClassName('select-pure__option');
-    let selected_label = document.getElementById('select-pure__label');
-    let arrBtn = document.getElementsByClassName('removeBtn');
-    let arrLabel = document.getElementsByClassName('select-pure__selected-label');
-    let input_stage = document.getElementsByClassName('input-stage')[0];
-    let yearExp_dropdown = document.getElementById(id);
-    if (yearExp_dropdown) {
-        input_stage.removeChild(yearExp_dropdown);
-    }
-    for (let i = 0; i < arr.length; i++) {
-        let element = arr[i];
-        let key = element.getAttribute('data-value');
-        if (key === id) {
-            // disable selected
-            element.classList.remove('select-pure__option--selected');
-            for (let j = 0; j < arrBtn.length; j++) {
-                let labelElement = arrBtn[j];
-                let key = labelElement.getAttribute('data-value');
-                if (key === id) {
-                    // remove from list
-                    selected_label.removeChild(arrLabel[j]);
-                }
-            }
-        }
-    }
-    if (selectedArr.length > 0) {
-        for (var i = 0; i < selectedArr.length; i++) {
-            if (selectedArr[i].id === id) {
-                selectedArr.pop(selectedArr[i]);
-            }
-        }
-    } else {
-        selectedArr.push(selectedArr[0]);
-    }
-}
+//function removeSelectedSkill(id) {
+//    console.log(id);
+//    let arr = document.getElementsByClassName('select-pure__option');
+//    let selected_label = document.getElementById('select-pure__label');
+//    let arrBtn = document.getElementsByClassName('removeBtn');
+//    let arrLabel = document.getElementsByClassName('select-pure__selected-label');
+//    let input_stage = document.getElementsByClassName('input-stage')[0];
+//    let yearExp_dropdown = document.getElementById(id);
+//    if (yearExp_dropdown) {
+//        input_stage.removeChild(yearExp_dropdown);
+//    }
+//    for (let i = 0; i < arr.length; i++) {
+//        let element = arr[i];
+//        let key = element.getAttribute('data-value');
+//        if (key === id) {
+//            // disable selected
+//            element.classList.remove('select-pure__option--selected');
+//            for (let j = 0; j < arrBtn.length; j++) {
+//                let labelElement = arrBtn[j];
+//                let key = labelElement.getAttribute('data-value');
+//                if (key === id) {
+//                    // remove from list
+//                    selected_label.removeChild(arrLabel[j]);
+//                }
+//            }
+//        }
+//    }
+//    if (selectedArr.length > 0) {
+//        for (var i = 0; i < selectedArr.length; i++) {
+//            if (selectedArr[i].id === id) {
+//                selectedArr.pop(selectedArr[i]);
+//            }
+//        }
+//    } else {
+//        selectedArr.push(selectedArr[0]);
+//    }
+//}
+
 function onSearch(searchValue) {
     let arr = document.getElementsByClassName('select-pure__option');
     for (let i = 0; i < arr.length; i++) {

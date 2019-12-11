@@ -8,6 +8,7 @@
     <class>thucnh.entity.TblSkill</class>
     <class>thucnh.entity.SummaryJob</class>
     <class>thucnh.entity.TblCluster</class>
+    <class>thucnh.entity.TblUser</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:sqlserver://localhost:1433;databaseName=fu_salaryRec"/>

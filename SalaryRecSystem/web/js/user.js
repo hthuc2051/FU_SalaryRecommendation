@@ -264,7 +264,7 @@
             return options;
         },
         removeSelectedSkill: function (id) {
-            console.log(id);
+            console.log(homeModel.selectedArr);
             let arr = document.getElementsByClassName('select-pure__option');
             let selected_label = document.getElementById('select-pure__label');
             let arrBtn = document.getElementsByClassName('removeBtn');
@@ -285,28 +285,31 @@
                         let key = labelElement.getAttribute('data-value');
                         if (key === id) {
                             // remove from list
+                            
                             selected_label.removeChild(arrLabel[j]);
                         }
                     }
                 }
             }
-            console.log(homeModel.selectedArr.length);
             if (homeModel.selectedArr.length > 0) {
                 for (var i = 0; i < homeModel.selectedArr.length; i++) {
                     let obj = homeModel.selectedArr[i];
                     if (typeof obj !== 'undefined') {
                         if (obj.id === id) {
-                            homeModel.selectedArr.pop(homeModel.selectedArr[i]);
+                            homeModel.selectedArr.splice(i, 1);
                         }
                     }
                 }
-            } else {
-                homeModel.selectedArr.push(homeModel.selectedArr[0]);
             }
-            console.log(homeModel.selectedArr.length);
+//            else {
+//                homeModel.selectedArr.push(homeModel.selectedArr[0]);
+//            }
+            console.log(homeModel.selectedArr);
 
         },
         selectExpLevel: function (key, name, expLevel) {
+            console.log(homeModel.selectedArr);
+
             let options = document.getElementById('options');
             let selected_label = document.getElementById('selected-' + key);
             selected_label.firstElementChild.innerHTML = name + " - " + homeView.getExpLevelLabel(expLevel);

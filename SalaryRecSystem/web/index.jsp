@@ -58,5 +58,11 @@
         <form action="ProcessServlet" method="POST">
             Process <br/><input class="btn" type="submit" value="Process" name="btnAction" />
         </form>
+         <form action="ProcessServlet" method="POST">
+            Test <br/><input class="btn" type="submit" value="Test" name="btnAction" />
+        </form>
+        <form action="PdfServlet" method="POST">
+            Test <br/><input class="btn" type="submit" value="GeneratePDF" name="btnAction" />
+        </form>
     </body>
 </html>

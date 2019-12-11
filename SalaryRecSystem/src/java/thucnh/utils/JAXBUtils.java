@@ -18,6 +18,8 @@ import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
 import org.xml.sax.SAXException;
+import thucnh.dto.JobDto;
+import thucnh.dto.PdfJobsObj;
 import thucnh.entity.TblJob;
 
 /**
@@ -25,13 +27,14 @@ import thucnh.entity.TblJob;
  * @author HP
  */
 public class JAXBUtils {
+
     public static boolean validateXml(String filePath, TblJob job) {
         try {
             synchronized (job) {
                 JAXBContext context = JAXBContext.newInstance(TblJob.class);
                 Unmarshaller unmarshaller = context.createUnmarshaller();
                 Marshaller marshaller = context.createMarshaller();
-                
+
                 SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
                 Schema schema = factory.newSchema(new File(filePath));
                 XmlValidatorHandler handler = new XmlValidatorHandler();
@@ -54,6 +57,18 @@ public class JAXBUtils {
             return false;
         } catch (IOException ex) {
             return false;
+        }
+    }
+
+    public static void createXMLString(PdfJobsObj dto, String realPath) {
+        try {
+            JAXBContext ctx = JAXBContext.newInstance(PdfJobsObj.class);
+            Marshaller mar = ctx.createMarshaller();
+            mar.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
+            mar.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+            mar.marshal(dto, new File(realPath + AppConstant.JAXB_XML_FOR_PDF));
+        } catch (JAXBException e) {
+            e.printStackTrace();
         }
     }
 }

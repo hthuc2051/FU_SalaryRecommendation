@@ -16,7 +16,7 @@
               integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
         <link rel='stylesheet' type='text/css' media='screen' href='./style.css'>
 
-     
+
     </head>
     <body>
         <nav class="navbar">
@@ -29,7 +29,7 @@
             <div class="nav-title col-2 col-sm-3">
                 <div class="title">
                     <h2 class="text">Welcome, Glad to see you</h2>
-                    <h3 class="text">Nguyen Huy Thuc</h3>
+                    <h3 class="text"><3</h3>
                 </div>
         </nav>
         <!-- Loading -->
@@ -68,20 +68,6 @@
                                         <div class="select-pure__options" style="top: 52px;">
                                             <input class="select-pure__autocomplete" placeholder="Search your skills "
                                                    type="text" onkeyup="onSearch(this.value);">
-                                            <!--                                            <div class="select-pure__option" data-value="Angular"
-                                                                                             onclick="selectSkill('Angular');">Angular
-                                                                                        </div>
-                                                                                        <div class="select-pure__option " data-value="Nodejs"
-                                                                                             onclick="selectSkill('Nodejs');">Node JS
-                                                                                        </div>
-                                                                                        <div class="select-pure__option" data-value="ReactJS"
-                                                                                             onclick="selectSkill('ReactJS');">React Js
-                                                                                        </div>
-                                                                                        <div class="select-pure__option" data-value="MongoDB"
-                                                                                             onclick="selectSkill('MongoDB');">MongoDB
-                                                                                        </div>
-                                                                                        <div class="select-pure__option " data-value="Java"
-                                                                                             onclick="selectSkill('Java');">Java</div>-->
                                         </div>
                                         <i id="btn-dropdown" class="fa fa-arrow-down"></i>
 
@@ -108,17 +94,11 @@
                             <div id="ngoai">
                                 <img src="assets/pre-arrow.png" onclick="pre()" class="pre" />
                                 <div id="trong">
-                                    <!-- Lấy max 11  -->
-                                    <!-- <div class="testDiv"></div>
-                                    <div class="testDiv"></div>
-                                    <div class="testDiv"></div>
-                                    <div class="testDiv"></div>
-                                    <div class="testDiv"></div>
-                                    <div class="testDiv"></div>
-                                    <div class="testDiv"></div> -->
 
-<!--                                    <div id="chartContainer" class="chart">
-                                    </div>-->
+                                </div>
+                                <div class="pdfLink">
+                                    <a href="#"></a>
+                                    <span>Click to download jobs that are suitable for you</span>
                                 </div>
                                 <img src="assets/next-arrow.png" onclick="next()" class="next" />
                             </div>

@@ -34,6 +34,7 @@ public class ApplicationConfig extends Application {
         resources.add(thucnh.controller.TblJobFacadeREST.class);
         resources.add(thucnh.controller.TblSalaryRecFacadeREST.class);
         resources.add(thucnh.controller.TblSkillFacadeREST.class);
+        resources.add(thucnh.controller.TblUserFacadeREST.class);
     }
     
 }

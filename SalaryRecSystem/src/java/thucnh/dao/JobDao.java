@@ -5,10 +5,18 @@
  */
 package thucnh.dao;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.persistence.EntityManager;
+import thucnh.dto.JobDto;
+import thucnh.entity.TblCluster;
 import thucnh.entity.TblJob;
 import thucnh.entity.TblSkill;
+import thucnh.mapper.JobMapper;
+import thucnh.utils.AppHelper;
 import thucnh.utils.DBUtils;
 
 /**
@@ -16,6 +24,8 @@ import thucnh.utils.DBUtils;
  * @author HP
  */
 public class JobDao extends BaseDao<TblJob, Integer> {
+
+    JobMapper mapper = new JobMapper();
 
     public JobDao() {
     }
@@ -82,7 +92,6 @@ public class JobDao extends BaseDao<TblJob, Integer> {
 //        }
 //        return null;
 //    }
-
     public Double[] getArrSalaryBySkillAndExpLevel(List<TblJob> jobs) {
         Double[] arr = null;
         if (jobs != null && jobs.size() > 0) {
@@ -131,7 +140,58 @@ public class JobDao extends BaseDao<TblJob, Integer> {
         }
         return null;
     }
-//        public List<TblJob> getTopTenRelatedJob(double salary){
-//            List<TblJob> data = getAll("TblJob.findAll");
-//        }
+ 
+    public List<JobDto> getTopTenRelatedJob(Double salaryRec, Integer expSkillHash) {
+        List<JobDto> result = null;
+        ClusterDao clusterDao = ClusterDao.getInstance();
+        Double minDistanceCentroid = 0.0;
+        Map<TblJob, Double> top10JobsForPdfMap = new HashMap<>();
+        List<TblCluster> clusters = clusterDao.findClustersByHash(expSkillHash);
+        int index = 0;
+        if (clusters != null && clusters.size() > 0) {
+            result = new ArrayList<>();
+            minDistanceCentroid = AppHelper.calculateDistance(clusters.get(0).getCentroid(), salaryRec);;
+            for (int i = 1; i < clusters.size(); i++) {
+                Double distance = AppHelper.calculateDistance(clusters.get(i).getCentroid(), salaryRec);
+                if (distance <= minDistanceCentroid) {
+                    minDistanceCentroid = distance;
+                    index = i;
+                }
+            }
+            List<TblJob> jobsByCentroid = clusters.get(index).geTblJobsList();
+            for (TblJob job : jobsByCentroid) {
+                Double distance = AppHelper.calculateDistance(job.getSalary(), salaryRec);
+                if (top10JobsForPdfMap.size() < 10) {
+                    top10JobsForPdfMap.put(job, job.getSalary());
+                } else {
+                    Map<TblJob, Double> comparedMap = AppHelper.sortByValue(top10JobsForPdfMap);
+                    System.out.println("Sorted MAP");
+                    for (Map.Entry<TblJob, Double> entry : comparedMap.entrySet()) {
+                        System.out.println(entry.getKey().getSalary() + "- Distance" + entry.getValue());
+                    }
+                    for (Map.Entry<TblJob, Double> entry : comparedMap.entrySet()) {
+                        if (entry.getValue() >= distance) {
+                            top10JobsForPdfMap.remove(entry.getKey());
+                            top10JobsForPdfMap.put(job, distance);
+                            break;
+                        }
+                    }
+                }
+            }
+            if (top10JobsForPdfMap.size() > 0) {
+                result = new ArrayList<>();
+                for (Map.Entry<TblJob, Double> entry : top10JobsForPdfMap.entrySet()) {
+                    result.add(mapper.marshal(entry.getKey()));
+                }
+                System.out.println("RESULT");
+
+                for (JobDto dto : result) {
+                    System.out.println(dto.getExpLevel() + " - " + dto.getSkillName() + ": " + dto.getSalary());
+                    System.out.println(dto.getLink());
+                }
+            }
+        }
+        return result;
+    }
+
 }

@@ -7,6 +7,7 @@ package thucnh.entity;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -47,7 +48,7 @@ public class TblCluster implements Serializable {
     @Column(name = "hash")
     private Integer hash;
     @OneToMany(mappedBy = "clusterId")
-    private Collection<TblJob> tblJobCollection;
+    private List<TblJob> listJobs;
 
     public TblCluster() {
     }
@@ -81,12 +82,12 @@ public class TblCluster implements Serializable {
     }
 
     @XmlTransient
-    public Collection<TblJob> getTblJobCollection() {
-        return tblJobCollection;
+    public List<TblJob> geTblJobsList() {
+        return listJobs;
     }
 
-    public void setTblJobCollection(Collection<TblJob> tblJobCollection) {
-        this.tblJobCollection = tblJobCollection;
+    public void setTblJobsList(List<TblJob> list) {
+        this.listJobs = list;
     }
 
     @Override

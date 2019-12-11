@@ -36,8 +36,12 @@ public class MainCrawler {
     static long startTime = System.nanoTime();
 
     public static void test() {
-        SummaryJobDao dao = new SummaryJobDao();
-        dao.findTop10ForChart(140000000.0, 293227331);
+//        SummaryJobDao dao = new SummaryJobDao();
+//        dao.findTop10ForChart(140000000.0, 293227331);
+        JobDao dao = JobDao.getInstance();
+        dao.getTopTenRelatedJob(120000000.0, 293227331);
+//        ClusterDao dao = ClusterDao.getInstance();
+//        List<TblCluster> result = dao.findClustersByHash(293227331);
     }
 
     public static void crawlSkill(ServletContext context) {
@@ -78,7 +82,7 @@ public class MainCrawler {
     // Implement Kmean, Meadian, Chart summary
     public static void processCreateData() {
         JobDao jobDao = JobDao.getInstance();
-//        SalaryRecDao salaryRecDao = SalaryRecDao.getInstance();
+        SalaryRecDao salaryRecDao = SalaryRecDao.getInstance();
 
         List<TblSkill> skills = getAllSkills();
         List<String> expLevels = jobDao.getDistinctExpLevel();
@@ -92,10 +96,10 @@ public class MainCrawler {
                         if (jobs != null && jobs.size() > 0) {
                             Double[] salaryArr = jobDao.getArrSalaryBySkillAndExpLevel(jobs);
                             Arrays.sort(salaryArr);
-//                            KMean kmean = new KMean(skill.getId(), expLevel, jobs, salaryArr[0], salaryArr[salaryArr.length - 1]);
+                            KMean kmean = new KMean(skill.getId(), expLevel, jobs, salaryArr[0], salaryArr[salaryArr.length - 1]);
 
 //                             Implements Kmean
-//                            kmean.init();
+                            kmean.init();
 //                            / Prepare data for summary chart
                             if (salaryArr != null) {
                                 for (int i = 0; i < salaryArr.length; i++) {
@@ -115,7 +119,7 @@ public class MainCrawler {
                                     }
                                 }
                                 // Insert salary rec 
-//                                salaryRecDao.insertSalaryRec(salaryArr, skill, expLevel);
+                                salaryRecDao.insertSalaryRec(salaryArr, skill, expLevel);
                             }
                         }
                     }

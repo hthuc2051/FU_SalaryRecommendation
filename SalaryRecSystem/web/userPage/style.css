@@ -6,32 +6,32 @@ body {
     font-weight: 400;
     font-style: normal;
 }
- h3 {
+h3 {
     font-size: 18px;
 }
- h2 {
+h2 {
     font-size: 20px;
 }
 h1, h2, h3, h4, h5, h6 {
-  color: white;
-  margin: 2px;
-  font-weight: 600;
+    color: white;
+    margin: 2px;
+    font-weight: 600;
 
 }
 .title{
-  font-weight: 600;
-  font-size: 22px;
+    font-weight: 600;
+    font-size: 22px;
 }
 .clickable{
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  z-index: 1;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
 }
 #select-pure__label{
-  z-index: 999;
+    z-index: 999;
 }
-  .navbar {
+.navbar {
     background-color: #ff4d63;
     -webkit-box-pack: justify;
     -ms-flex-pack: justify;
@@ -97,8 +97,8 @@ h1, h2, h3, h4, h5, h6 {
 
 .chart{
     height: 370px;
-     width: 920px;
-     margin: 0px 360px 0px 70px;
+    width: 920px;
+    margin: -50px 360px 0px 70px;
     float: left; 
 }
 
@@ -197,13 +197,13 @@ h1, h2, h3, h4, h5, h6 {
     margin: auto;
 }
 
-  .select-wrapper {
+.select-wrapper {
     margin: auto;
     max-width: 600px;
     width: calc(100% - 40px);
-  }
+}
 
-  .select-pure__select {
+.select-pure__select {
     align-items: center;
     background: #f9f9f8;
     border-radius: 4px;
@@ -221,9 +221,9 @@ h1, h2, h3, h4, h5, h6 {
     position: relative;
     transition: 0.2s;
     width: 100%;
-  }
+}
 
-  .select-pure__options {
+.select-pure__options {
     border-radius: 4px;
     border: 1px solid rgba(0, 0, 0, 0.15);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
@@ -237,32 +237,32 @@ h1, h2, h3, h4, h5, h6 {
     top: 50px;
     width: 100%;
     z-index: 5;
-  }
+}
 
-  .select-pure__select--opened .select-pure__options {
+.select-pure__select--opened .select-pure__options {
     display: block;
-  }
+}
 
-  .select-pure__option {
+.select-pure__option {
     background: #fff;
     border-bottom: 1px solid #e4e4e4;
     box-sizing: border-box;
     height: 44px;
     line-height: 25px;
     padding: 10px;
-  }
+}
 
-  .select-pure__option--selected {
+.select-pure__option--selected {
     color: #e4e4e4;
     cursor: initial;
     pointer-events: none;
-  }
+}
 
-  .select-pure__option--hidden {
+.select-pure__option--hidden {
     display: none;
-  }
+}
 
-  .select-pure__selected-label {
+.select-pure__selected-label {
     background: #5e6264;
     border-radius: 4px;
     color: #fff;
@@ -270,23 +270,23 @@ h1, h2, h3, h4, h5, h6 {
     display: inline-block;
     margin: 5px 10px 5px 0;
     padding: 3px 7px;
-  }
+}
 
-  .select-pure__selected-label:last-of-type {
+.select-pure__selected-label:last-of-type {
     margin-right: 0;
-  }
+}
 
-  .select-pure__selected-label i {
+.select-pure__selected-label i {
     cursor: pointer;
     display: inline-block;
     margin-left: 7px;
-  }
+}
 
-  .select-pure__selected-label i:hover {
+.select-pure__selected-label i:hover {
     color: #e4e4e4;
-  }
+}
 
-  .select-pure__autocomplete {
+.select-pure__autocomplete {
     background: #f9f9f8;
     border-bottom: 1px solid #e4e4e4;
     border-left: none;
@@ -297,31 +297,31 @@ h1, h2, h3, h4, h5, h6 {
     outline: none;
     padding: 10px;
     width: 100%;
-  }
+}
 
-  .fa-arrow-down{
+.fa-arrow-down{
     right: 10px;
     position: absolute;
     transform: rotate(180deg);
-  }
+}
 
-  .skill-label{
+.skill-label{
     float: left;
     font-size: 18px;
     margin: 10px auto;
     width: 50%;
 
-  
-  }
-  .container-skills-selected{
+
+}
+.container-skills-selected{
     margin: 10px auto;
     width: 80%;
     padding: 20px 10px;
 
-  }
+}
 
-  
- .btn{
+
+.btn{
     position: relative;
     outline: none;
     text-decoration: none;
@@ -336,15 +336,15 @@ h1, h2, h3, h4, h5, h6 {
     opacity: 1;
     background-color: #ffffff;
     border: 1px solid rgba(22, 76, 167, 0.6);
- }
- 
- .btn:hover{
+}
+
+.btn:hover{
     animation:  storm 0.7s ease-in-out;
- }
- .btn:hover span{
+}
+.btn:hover span{
     animation:  rotate 0.7s ease-in-out;
- }
- .btn span{
+}
+.btn span{
     color: #164ca7;
     font-size: 12px;
     font-weight: 500;
@@ -361,32 +361,32 @@ h1, h2, h3, h4, h5, h6 {
 @keyframes rotate {
     0% { transform: rotate(0deg) translate3d(0, 0, 0) }
     25% { transform: rotate(3deg) translate3d(0, 0, 0) }
-     50% { transform: rotate(-3deg) translate3d(0, 0, 0) }
-     75% {  transform: rotate(1deg) translate3d(0, 0, 0) }
+    50% { transform: rotate(-3deg) translate3d(0, 0, 0) }
+    75% {  transform: rotate(1deg) translate3d(0, 0, 0) }
     100% {  transform: rotate(0deg) translate3d(0, 0, 0) }
-  }
+}
 
 @keyframes storm {
     0% { transform: translate3d( 0, 0, 0) translateZ(0) }
     25% { transform: translate3d( 4px, 0, 0) translateZ(0) }
-     50% { transform: translate3d( -3px, 0, 0) translateZ(0) }
-     75% {  transform: translate3d( 2px, 0, 0) translateZ(0) }
+    50% { transform: translate3d( -3px, 0, 0) translateZ(0) }
+    75% {  transform: translate3d( 2px, 0, 0) translateZ(0) }
     100% {  transform: translate3d( 0, 0, 0) translateZ(0) }
-  }
+}
 
-  .next-btn {
+.next-btn {
     margin: 250px auto 0px auto;
-  }
-  /* Dropdown */
+}
+/* Dropdown */
 
-  *
+*
 {
     user-select: none;
 }
 
 
 .input-item{
-  position: relative;
+    position: relative;
 }
 .input-stage{
     padding-left: 250px;
@@ -425,7 +425,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .app-cover
 {
- 
+
     width: 600px;
     height: 52px;
     position: relative;
@@ -548,7 +548,7 @@ h1, h2, h3, h4, h5, h6 {
 .options-view-button:checked ~ #options .option img
 {
     display: block;
-    
+
 }
 
 .label
@@ -562,7 +562,7 @@ h1, h2, h3, h4, h5, h6 {
 {
     display: block;
     padding: 12px 20px;   
-     
+
 }
 .s-c:checked ~ #options .label
 {
@@ -717,7 +717,7 @@ input[type="radio"]
     font-weight: 500;
     letter-spacing: 0.7px;
     text-transform: uppercase;
-    
+
 }
 #overlay {
     position: fixed;
@@ -731,17 +731,17 @@ input[type="radio"]
     background-color: rgba(0,0,0,0.5);
     z-index: 999;
     cursor: pointer;
-  }
+}
 
 
-  .lds-dual-ring {
+.lds-dual-ring {
     position: relative;
     width: 100px;
     height: 100px;
     top: 35%;
     left: 45%;
-  }
-  .lds-dual-ring:after {
+}
+.lds-dual-ring:after {
     content: " ";
     display: block;
     width: 84px;
@@ -751,23 +751,24 @@ input[type="radio"]
     border: 6px solid #fff;
     border-color: #fff transparent #fff transparent;
     animation: lds-dual-ring 1.2s linear infinite;
-  }
-  @keyframes lds-dual-ring {
+}
+@keyframes lds-dual-ring {
     0% {
-      transform: rotate(0deg);
+        transform: rotate(0deg);
     }
     100% {
-      transform: rotate(360deg);
+        transform: rotate(360deg);
     }
-  }
-  
-  /* Summary tab */
+}
 
-  #ngoai {
+/* Summary tab */
+
+#ngoai {
     position: relative;
     width: 1100px;
     overflow: hidden;
     margin-top: 30px;
+    min-height: 500px;
 }
 #trong {
     width: 8100px;
@@ -794,4 +795,68 @@ input[type="radio"]
 }
 .pre:hover,.next:hover{
     opacity: 1;
+}
+
+/*Pdf link*/
+
+.pdfLink{
+    z-index: 9999;
+    bottom: 20px;
+    /* height: 50px; */
+    left: 25%;
+    position: absolute;
+    text-align: center;
+    /* float: left; */
+    /* margin-top: 500px; */
+
+    background: #ffffff;
+    border: solid 1px #e6e6e6;
+    border-radius: 2px;
+    height: 42px;
+    vertical-align: middle;
+    width: 50%;
+    padding-left: 75px;
+    box-sizing: border-box;
+    font-size: 13px;
+    font-weight: 500;
+    text-transform: uppercase;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    display: flex;
+    flex-wrap: wrap;
+    -webkit-box-align: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all .5s;
+}
+.pdfLink:hover{
+    background: #e2e8f0;
+}
+.pdfLink a {
+    background: #ffffff;
+    display: inline-block;
+    height: 25px;
+    line-height: 100px;
+    margin: 5px;
+    position: relative;
+    text-align: center;
+    vertical-align: middle;
+    width: 25px;
+    background-image: url("./assets/pdf.png");
+    background-size: cover;
+
+}
+.pdfLink span {
+    align-items: center;
+    -webkit-box-align: center;
+    display: flex;
+}
+
+.pdfLink a:hover:before,
+.pdfLink a:hover:after {
+    background: #e2e8f0;
+}
+
+.pdfLink a:before {
+    margin: -23px 0 0 -5px;
 }

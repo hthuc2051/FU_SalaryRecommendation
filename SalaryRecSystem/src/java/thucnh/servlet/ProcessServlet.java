@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import thucnh.crawler.MainCrawler;
+import thucnh.dao.UserDao;
 import static thucnh.utils.AppConstant.*;
 
 /**
@@ -23,15 +24,8 @@ import static thucnh.utils.AppConstant.*;
  */
 public class ProcessServlet extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+  
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -41,13 +35,23 @@ public class ProcessServlet extends HttpServlet {
         try {
             if (btn == null) {
                 // do nothing
+            } else if (btn.equals("Login")) {
+                String username = request.getParameter("txtUsername");
+                String password = request.getParameter("txtPassword");
+                UserDao dao = UserDao.getInstance();
+                String role = dao.checkLogin(username, password);
+                if (role.equals("admin")) {
+                    url = ADMIN;
+                }
             } else if (btn.equals("CrawlSkills")) {
                 MainCrawler.crawlSkill(getServletContext());
             } else if (btn.equals("CrawlJobs")) {
                 MainCrawler.crawlJobs(getServletContext());
             } else if (btn.equals("StopCrawl")) {
                 MainCrawler.stopCrawl();
-            }else if(btn.equals("Process")){
+            } else if (btn.equals("Process")) {
+                MainCrawler.processCreateData();
+            } else if (btn.equals("Test")) {
                 MainCrawler.test();
             }
 
