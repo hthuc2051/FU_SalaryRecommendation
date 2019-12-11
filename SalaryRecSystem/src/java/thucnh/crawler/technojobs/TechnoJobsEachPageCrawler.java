@@ -28,6 +28,7 @@ import thucnh.entity.TblSkill;
 import static thucnh.utils.AppConstant.*;
 import thucnh.utils.AppHelper;
 import static thucnh.utils.AppHelper.hasingString;
+import thucnh.utils.JAXBUtils;
 import thucnh.utils.TrAXUtils;
 import thucnh.xmlchecker.XmlSyntaxChecker;
 
@@ -35,7 +36,7 @@ import thucnh.xmlchecker.XmlSyntaxChecker;
  *
  * @author HP
  */
-public class TechnoJobsEachPageCrawler extends BaseCrawler implements Runnable{
+public class TechnoJobsEachPageCrawler extends BaseCrawler implements Runnable {
 
     private String url;
     private TblSkill skill;
@@ -97,14 +98,12 @@ public class TechnoJobsEachPageCrawler extends BaseCrawler implements Runnable{
                 exp = "/jobs/jobSalary";
                 String jobSalary = (String) xPath.evaluate(exp, domTree, XPathConstants.STRING);
 
-//                exp = "/jobs/jobDetails";
-//                String jobDetails = (String) xPath.evaluate(exp, domTree, XPathConstants.STRING);
-
+//               
                 String jobLevel = AppHelper.generateLevel(jobName, 0);
                 double temp = AppHelper.convertRangeToNum(jobSalary);
                 double salary = AppHelper.getBeautySalary(temp);
-                if (salary > 0 
-                        && jobName.toLowerCase().contains(skill.getName().toLowerCase()) 
+                if (salary > 0
+                        && jobName.toLowerCase().contains(skill.getName().toLowerCase())
                         && !jobLevel.equals("")) {
                     TblJob job = new TblJob();
                     int hashValue = hasingString(url);
@@ -114,9 +113,14 @@ public class TechnoJobsEachPageCrawler extends BaseCrawler implements Runnable{
                     job.setSalary(salary);
                     job.setHash(hashValue);
 
-                    // Validate later
-                    JobDao dao = JobDao.getInstance();
-                    dao.insertJob(job);
+                    // Validate 
+                    String xsdFilePath = realPath + XSD_JOB;
+                    boolean isValidate = JAXBUtils.validateJobXml(xsdFilePath, job);
+                    if (isValidate) {
+                        JobDao dao = JobDao.getInstance();
+                        dao.insertJob(job);
+                    }
+
                 }
 
             }

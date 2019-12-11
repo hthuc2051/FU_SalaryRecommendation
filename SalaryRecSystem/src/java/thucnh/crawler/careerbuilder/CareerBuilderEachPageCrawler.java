@@ -19,15 +19,17 @@ import thucnh.crawler.BaseCrawler;
 import thucnh.dao.JobDao;
 import thucnh.entity.TblJob;
 import thucnh.entity.TblSkill;
+import static thucnh.utils.AppConstant.*;
 import thucnh.utils.AppHelper;
 import static thucnh.utils.AppHelper.hasingString;
+import thucnh.utils.JAXBUtils;
 import thucnh.xmlchecker.XmlSyntaxChecker;
 
 /**
  *
  * @author HP
  */
-public class CareerBuilderEachPageCrawler extends BaseCrawler implements Runnable{
+public class CareerBuilderEachPageCrawler extends BaseCrawler implements Runnable {
 
     private String url;
     private TblSkill skill;
@@ -134,6 +136,7 @@ public class CareerBuilderEachPageCrawler extends BaseCrawler implements Runnabl
 
         if (!jobLevel.equals("") && jobSalary > 0) {
             TblJob job = new TblJob();
+
             int hashValue = hasingString(url);
             job.setLink(url);
             job.setSkillId(skill);
@@ -141,9 +144,14 @@ public class CareerBuilderEachPageCrawler extends BaseCrawler implements Runnabl
             job.setSalary(jobSalary);
             job.setHash(hashValue);
 
-            // Validate later
-            JobDao dao = JobDao.getInstance();
-            dao.insertJob(job);
+            // Validate 
+            String realPath = this.getContext().getRealPath("/");
+            String xsdFilePath = realPath + XSD_JOB;
+            boolean isValidate = JAXBUtils.validateJobXml(xsdFilePath, job);
+            if (isValidate) {
+                JobDao dao = JobDao.getInstance();
+                dao.insertJob(job);
+            }
         }
 
     }

@@ -14,7 +14,8 @@ import javax.servlet.ServletContext;
 import thucnh.crawler.BaseCrawler;
 import thucnh.dao.SkillDao;
 import thucnh.entity.TblSkill;
-import thucnh.utils.AppHelper;
+import static thucnh.utils.AppConstant.*;
+import thucnh.utils.JAXBUtils;
 
 /**
  *
@@ -42,7 +43,11 @@ public class TopITWorksCrawler extends BaseCrawler {
                         String skillName = arr[0];
                         String skillType = arr[1];
                         SkillDao dao = SkillDao.getInstance();
-                        TblSkill skill = dao.insertSkill(skillType, skillName);
+                        
+                        // Validate later
+                        String realPath = this.getContext().getRealPath("/");
+                        String xsdFilePath = realPath + XSD_SKILL;
+                        TblSkill skill = dao.insertSkill(skillType, skillName, xsdFilePath);
                         if (skill != null) {
                             result.add(skill);
                         }
@@ -55,7 +60,5 @@ public class TopITWorksCrawler extends BaseCrawler {
         }
         return result;
     }
-
-    
 
 }

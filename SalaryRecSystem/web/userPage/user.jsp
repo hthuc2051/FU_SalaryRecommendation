@@ -45,10 +45,10 @@
                 <li id="btn-skill-choice" style="padding-left:8px;" onClick="loadContent(1);">
                     <img src="./assets/choices.png" class="icon">
                 </li>
-                <li style="padding-left:8px;" onclick="loadContent(2);">
+                <li id="img-nextStep" style="padding-left:8px;" >
                     <img src="./assets/edit.png" class="icon">
                 </li>
-                <li onclick="loadContent(3);">
+                <li id="img-cal" >
                     <img src="./assets/analysis.png" class="icon">
                 </li>
             </ul>
@@ -77,14 +77,14 @@
                             </span>
 
                         </div>
-                        <button class="btn next-btn" onclick="loadContent(2);">
+                        <button class="btn next-btn" id="btn-nextStep">
                             <span>Next step</span>
                         </button>
                     </li>
                     <li>
                         <p class="title">Select your skill's year of experience</p>
                         <div class="input-stage"></div>
-                        <button class="btn cal-btn" onclick="loadContent(3);">
+                        <button class="btn cal-btn" id="btn-cal">
                             <span>CALCULATE!</span>
                         </button>
                     </li>

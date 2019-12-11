@@ -32,13 +32,6 @@ public class AppConstant {
 
     public static final String HOST_TECHNO_JOBS = "https://www.technojobs.co.uk";
 
-    public static String getTechnoJobsSearchPageLink(int page, String skill) {
-        return "/search.phtml?page=" + page + "&row_offset=10&keywords=" + skill + "&salary=0&jobtype=all&postedwithin=all&radius=25";
-    }
-
-    public static String getCareerBuilderPageLink(int page, String skill) {
-        return "/jobs/" + skill + "-kc1-page-" + page + "-en.html";
-    }
     // RECORDS PER PAGE
     public static final int CAREER_BUILDER_EACH_PAGE_ITEM = 50;
 
@@ -46,9 +39,21 @@ public class AppConstant {
     public static final String XSL_TECHNO_JOB_ITEMS = "WEB-INF/documents/technoJobItems.xsl";
     public static final String XSL_TECHNO_JOB_DETAILS = "WEB-INF/documents/jobDetails.xsl";
 
+    //    XSD
+    public static final String XSD_JOB = "WEB-INF/documents/job.xsd";
+    public static final String XSD_SKILL = "WEB-INF/documents/skill.xsd";
+
     // PDF
     public static final String JAXB_XML_FOR_PDF = "WEB-INF/documents/jobs.xml";
     public static final String JAXB_XSL_FOR_PDF = "WEB-INF/documents/jobs.xsl";
     public static final String JAXB_FO_FOR_PDF = "WEB-INF/documents/job.fo";
     public static final String FOP_FAC_PATH = "E:/CN8/XML/FU_SalaryRecommendation/PDF/fop.xconf";
+
+    public static String getTechnoJobsSearchPageLink(int page, String skill) {
+        return "/search.phtml?page=" + page + "&row_offset=10&keywords=" + skill + "&salary=0&jobtype=all&postedwithin=all&radius=25";
+    }
+
+    public static String getCareerBuilderPageLink(int page, String skill) {
+        return "/jobs/" + skill + "-kc1-page-" + page + "-en.html";
+    }
 }

@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+
+<xs:schema version="1.0"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           elementFormDefault="qualified">
+    <xsd:element name="TblJob">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element type="xsd:double" name="salary"/>
+                <xsd:element type="xsd:string" name="expLevel"/>
+                <xsd:element type="xsd:string" name="link"/>
+                <xsd:element type="xsd:integer" name="hash"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+</xs:schema>

@@ -5,7 +5,7 @@
         salaryRecArr: [],
         xmlSkills: null,
         xmlSalaryRecs: null,
-        isFinished: false,
+        doneStep: 0,
 
         arrChart: [],
         selectedArr: [],
@@ -23,11 +23,6 @@
                 document.getElementById("overlay").style.display = "none";
             });
 
-            let calculateBtn = document.getElementsByClassName('cal-btn')[0];
-            calculateBtn.addEventListener('click', function () {
-                homeView.calculateSalaryRec();
-            });
-
             let btnSkillChoice = document.getElementById("btn-skill-choice");
             btnSkillChoice.addEventListener('click', function () {
                 homeView.resetPage();
@@ -37,6 +32,36 @@
             btnPdf.addEventListener('click', function () {
                 let selectedArr = homeModel.selectedArr;
                 octopus.getPdf();
+            });
+
+//            Trigger not move next step
+            let btnNext = document.getElementById("btn-nextStep");
+            btnNext.addEventListener('click', function () {
+                if (homeModel.doneStep >= 1) {
+                    loadContent(2);
+                }
+            });
+            let imgNext = document.getElementById("img-nextStep");
+            imgNext.addEventListener('click', function () {
+                if (homeModel.doneStep >= 1) {
+                    loadContent(2);
+                }
+            });
+            let imgCal = document.getElementById("img-cal");
+            imgCal.addEventListener('click', function () {
+                if (homeModel.doneStep >= 2) {
+                    homeView.calculateSalaryRec();
+                    loadContent(3);
+                }
+            });
+
+            let btnCal = document.getElementById("btn-cal");
+            btnCal.addEventListener('click', function () {
+                console.log(homeModel.doneStep);
+                if (homeModel.doneStep >= 2) {
+                    loadContent(3);
+                    homeView.calculateSalaryRec();
+                }
             });
 
         },
@@ -123,7 +148,7 @@
             }
         },
         calculateSalaryRec: async function () {
-
+            
             if (homeModel.selectedArr.length > 0) {
                 for (var i = 0; i < homeModel.selectedArr.length; i++) {
                     // TODO:Check thêm cả expYear nữa
@@ -134,6 +159,7 @@
                     }
                 }
             }
+            homeModel.doneStep = 3;
 //            await homeView.onLoading();
             await homeView.renderChart();
         },
@@ -222,6 +248,7 @@
                         dropdown_element.appendChild(select_button);
                         dropdown_element.appendChild(options);
                         input_stage.appendChild(dropdown_element);
+                        homeModel.doneStep = 1;
                     }
                 }
             }
@@ -305,6 +332,8 @@
                         }
                     }
                 }
+            } else {
+                homeModel.doneStep = 0;
             }
 //            else {
 //                homeModel.selectedArr.push(homeModel.selectedArr[0]);
@@ -312,9 +341,7 @@
 
         },
         selectExpLevel: function (key, name, expLevel) {
-            console.log(homeModel.selectedArr);
-
-            let options = document.getElementById('options');
+            console.log('here');
             let selected_label = document.getElementById('selected-' + key);
             selected_label.firstElementChild.innerHTML = name + " - " + homeView.getExpLevelLabel(expLevel);
             let obj = {
@@ -333,6 +360,7 @@
             } else {
                 homeModel.selectedArr.push(obj);
             }
+            homeModel.doneStep = 2;
         },
         renderChart: function () {
             var arrChart = homeModel.arrChart;
@@ -371,16 +399,15 @@
                     });
                 }
             }
-            homeModel.isFinished = true;
 //            await homeView.resetPage;
         },
         onLoading: async function () {
             document.getElementById("overlay").style.display = "block";
         },
         resetPage: async function () {
-            if (homeModel.isFinished) {
+            if (homeModel.doneStep >= 3) {
+                homeModel.doneStep = 0;
                 location.reload(true);
-
             }
         },
         formatVietnameseCurrency: function (price)

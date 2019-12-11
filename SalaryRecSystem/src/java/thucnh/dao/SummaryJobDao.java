@@ -65,10 +65,7 @@ public class SummaryJobDao extends BaseDao<SummaryJob, Integer> {
                 summaryMap.put(summaryJob, distance);
             } else {
                 Map<SummaryJob, Double> comparedMap = AppHelper.sortByValue(summaryMap);
-                System.out.println("Sorted MAP");
-                for (Map.Entry<SummaryJob, Double> entry : comparedMap.entrySet()) {
-                    System.out.println(entry.getKey().getSalary() + "- Distance" + entry.getValue());
-                }
+
                 for (Map.Entry<SummaryJob, Double> entry : comparedMap.entrySet()) {
                     if (entry.getValue() >= distance) {
                         summaryMap.remove(entry.getKey());
@@ -81,7 +78,6 @@ public class SummaryJobDao extends BaseDao<SummaryJob, Integer> {
         if (summaryMap.size() > 0) {
             result = new ArrayList<>();
             for (Map.Entry<SummaryJob, Double> entry : summaryMap.entrySet()) {
-                System.out.println(entry.getKey().getSalary());
                 result.add(entry.getKey());
             }
         }
