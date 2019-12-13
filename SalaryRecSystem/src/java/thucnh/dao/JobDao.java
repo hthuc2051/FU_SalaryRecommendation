@@ -59,7 +59,7 @@ public class JobDao extends BaseDao<TblJob, Integer> {
         return null;
     }
 
-    public void insertJob(TblJob job) {
+    public synchronized void insertJob(TblJob job) {
         JobDao dao = getInstance();
         // create new category if category does not exist
         if (dao.create(job) != null) {
@@ -124,6 +124,26 @@ public class JobDao extends BaseDao<TblJob, Integer> {
         return null;
     }
 
+     public List<TblJob> findBySalaryRange(Double from, Double to) {
+        EntityManager manager = DBUtils.getEntityManager();
+        List<TblJob> result = null;
+        try {
+            result = manager.createNamedQuery("TblJob.findBySalaryRange", TblJob.class)
+                    .setParameter("from", from)
+                    .setParameter("to", to)
+                    .getResultList();
+
+            if (result != null && result.size() > 20) {
+                return result.subList(0, 20);
+            }
+        } finally {
+            if (manager != null) {
+                manager.close();
+            }
+        }
+        return result;
+    }
+     
     public List<String> getDistinctExpLevel() {
         EntityManager manager = DBUtils.getEntityManager();
         try {

@@ -8,7 +8,7 @@ package thucnh.dao;
 import java.util.List;
 import javax.persistence.EntityManager;
 import thucnh.entity.TblSkill;
-import static thucnh.utils.AppConstant.XSD_JOB;
+import thucnh.mapper.SkillValidateMapper;
 import thucnh.utils.AppHelper;
 import thucnh.utils.DBUtils;
 import thucnh.utils.JAXBUtils;
@@ -18,6 +18,8 @@ import thucnh.utils.JAXBUtils;
  * @author HP
  */
 public class SkillDao extends BaseDao<TblSkill, Integer> {
+
+    SkillValidateMapper mapper = new SkillValidateMapper();
 
     public SkillDao() {
     }
@@ -51,29 +53,35 @@ public class SkillDao extends BaseDao<TblSkill, Integer> {
         return null;
     }
 
-    public TblSkill insertSkill(String type, String name,String xsdFilePath) {
-        TblSkill skill;
-        SkillDao dao = getInstance();
-        int hasValue = AppHelper.hasingString(name);
-        skill = checkExistedSkill(hasValue);
-        // create new category if category does not exist
-        if (skill == null) {
-            skill = new TblSkill();
-            skill.setName(name);
-            skill.setType(type);
-            skill.setHash(hasValue);
-            boolean isValidate = JAXBUtils.validateSkillXml(xsdFilePath, skill);
-            if (isValidate) {
-                TblSkill result = dao.create(skill);
-                if (result != null) {
-                    System.out.println("[INSERT] Skill : Type: " + type + "- Name :" + name);
-                    return result;
+    public synchronized TblSkill insertSkill(String type, String name, String xsdFilePath) {
+        synchronized (LOCK) {
+            TblSkill skill;
+            SkillDao dao = getInstance();
+            int hasValue = AppHelper.hasingString(name);
+            skill = checkExistedSkill(hasValue);
+            // create new category if category does not exist
+            if (skill == null) {
+                skill = new TblSkill();
+                skill.setName(name);
+                skill.setType(type);
+                skill.setHash(hasValue);
+                try {
+                    boolean isValidate = JAXBUtils.validateSkillXml(xsdFilePath, mapper.marshal(skill));
+                    if (isValidate) {
+                        TblSkill result = dao.create(skill);
+                        if (result != null) {
+                            System.out.println("[INSERT] Skill : Type: " + type + "- Name :" + name);
+                            return result;
+                        }
+                    }
+                } catch (Exception e) {
                 }
+
+            } else {
+                System.out.println("[SKIP] Skill : Type: " + type + "- Name :" + name);
             }
-        } else {
-            System.out.println("[SKIP] Skill : Type: " + type + "- Name :" + name);
+            return null;
         }
-        return null;
     }
 
 }

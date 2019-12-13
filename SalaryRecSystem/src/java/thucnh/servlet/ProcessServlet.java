@@ -30,7 +30,7 @@ public class ProcessServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
-        String url = HOME;
+        String url = ADMIN;
         String btn = request.getParameter("btnAction");
         try {
             if (btn == null) {
@@ -51,8 +51,10 @@ public class ProcessServlet extends HttpServlet {
                 MainCrawler.stopCrawl();
             } else if (btn.equals("Process")) {
                 MainCrawler.processCreateData();
+                request.setAttribute("DONE", "All processes is done !");
             } else if (btn.equals("Test")) {
-                MainCrawler.test();
+                MainCrawler.test(getServletContext());
+                 url = ADMIN;
             }
 
         } catch (Exception e) {

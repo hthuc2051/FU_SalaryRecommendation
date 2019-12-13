@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+
+
+<root>
+    <details>
+        <break>&#60;div class&#61;&#34;job&#45;listing&#45;actions&#45;bottom</break>
+        <isStart>&#60;div class&#61;&#34;job&#45;listing</isStart>
+        <isFound>&#60;div class&#61;&#34;job&#45;view</isFound>
+        <jobNameXpath>&#47;jobs&#47;jobName</jobNameXpath>
+        <jobSalaryXpath>&#47;jobs&#47;jobSalary</jobSalaryXpath>
+    </details>
+</root>

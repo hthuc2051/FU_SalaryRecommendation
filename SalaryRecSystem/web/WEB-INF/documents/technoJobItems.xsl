@@ -21,7 +21,7 @@
                     <xsl:value-of select="@href"/>
                 </xsl:element>
                 <xsl:element name="jobName">
-                    <xsl:value-of select="text()"/>
+                    <xsl:value-of select="current()"/>
                 </xsl:element>
             </xsl:for-each>
         </xsl:element>

@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletContext;
@@ -33,6 +34,7 @@ import thucnh.thread.BaseThread;
 import static thucnh.utils.AppConstant.*;
 import static thucnh.utils.AppHelper.hasingString;
 import thucnh.utils.TrAXUtils;
+import thucnh.utils.XMLUtils;
 import thucnh.xmlchecker.XmlSyntaxChecker;
 
 /**
@@ -43,6 +45,7 @@ public class TechnoJobsCrawler extends BaseCrawler implements Runnable {
 
     private String url;
     private List<TblSkill> skills;
+    private static final Map<String, String> tagsMap = XMLUtils.getSignTagOfCrawler(XML_TAG_TECHNOJOB, ARR_TECHNOJOB_TAG);
 
     public TechnoJobsCrawler(String url, List<TblSkill> skills, ServletContext context) {
         super(context);
@@ -55,9 +58,11 @@ public class TechnoJobsCrawler extends BaseCrawler implements Runnable {
         if (url != null) {
             try {
                 for (TblSkill skill : skills) {
+//                    SkillDao dao = SkillDao.getInstance();
+//                    TblSkill skill = dao.findByID(40);
                     int totalPage = getLastPage(url + getTechnoJobsSearchPageLink(1, skill.getName().replace(" ", "-")));
-                    if (totalPage > 10) {
-                        totalPage = 10;
+                    if (totalPage > 15) {
+                        totalPage = 15;
                     }
                     if (totalPage > 0) {
                         for (int i = 0; i < totalPage; i++) {
@@ -85,10 +90,7 @@ public class TechnoJobsCrawler extends BaseCrawler implements Runnable {
 
     }
 
-//    private List<String> getListJobUrl(String url) {
-//      Using stAX and compare performance later
-//    }
-    private List<String> getListJobUrl(String url, String skillName) {
+    public List<String> getListJobUrl(String url, String skillName) {
         List<String> result = null;
         BufferedReader reader = null;
         try {
@@ -99,13 +101,13 @@ public class TechnoJobsCrawler extends BaseCrawler implements Runnable {
                 boolean isStart = false;
                 if (reader != null) {
                     while ((line = reader.readLine()) != null) {
-                        if (isStart && line.contains("<div class=\"content")) {
+                        if (isStart && line.contains(tagsMap.get("break"))) {
                             break;
                         }
                         if (isStart) {
                             document += line.trim();
                         }
-                        if (line.contains("<div class=\"jobs-list anon")) {
+                        if (line.contains(tagsMap.get("isStart"))) {
                             isStart = true;
                         }
                     }
@@ -115,6 +117,7 @@ public class TechnoJobsCrawler extends BaseCrawler implements Runnable {
 //                Check well-formed html
                 XmlSyntaxChecker checker = new XmlSyntaxChecker();
                 document = checker.checkSyntax(document);
+                document = document.replace(":--", "a");
                 // transform to xml
                 String realPath = this.getContext().getRealPath("/");
                 String xslFile = realPath + XSL_TECHNO_JOB_ITEMS;
@@ -128,10 +131,10 @@ public class TechnoJobsCrawler extends BaseCrawler implements Runnable {
                 XPathFactory factory = XPathFactory.newInstance();
                 XPath xPath = factory.newXPath();
 
-                String exp = "//link";
+                String exp = tagsMap.get("linkXpath");
                 NodeList nodeLinkList = (NodeList) xPath.evaluate(exp, domTree, XPathConstants.NODESET);
 
-                exp = "//jobName";
+                exp = tagsMap.get("jobNameXpath");
                 NodeList nodeNameList = (NodeList) xPath.evaluate(exp, domTree, XPathConstants.NODESET);
 
                 result = new ArrayList<>();
@@ -141,8 +144,8 @@ public class TechnoJobsCrawler extends BaseCrawler implements Runnable {
                     tmpLink = itemLink.getTextContent();
 
                     Node itemName = nodeNameList.item(i);
-                    tmpName = itemName.getTextContent();
-                    if (tmpName.contains(skillName)) {
+                    tmpName = itemName.getTextContent().toLowerCase();
+                    if (tmpName.contains(skillName.toLowerCase())) {
                         //Check existed
                         JobDao dao = JobDao.getInstance();
                         String link = HOST_TECHNO_JOBS + tmpLink;
@@ -175,18 +178,24 @@ public class TechnoJobsCrawler extends BaseCrawler implements Runnable {
         try {
             XMLEventReader eventReader = parseStringToXMLEventReader(document);
             while (eventReader.hasNext()) {
-                XMLEvent event = (XMLEvent) eventReader.next();
-                if (event.isStartElement()) {
-                    StartElement startElement = event.asStartElement();
-                    String tagName = startElement.getName().getLocalPart();
-                    if ("strong".equals(tagName)) {
-                        event = (XMLEvent) eventReader.next();
-                        Characters textContent = event.asCharacters();
-                        String s = textContent.getData();
-                        if (s != null) {
-                            String[] arr = s.split("of");
-                            if (arr.length > 1) {
-                                return Integer.parseInt(arr[1].trim());
+                XMLEvent event = null;
+                try {
+                    event = (XMLEvent) eventReader.next();
+                } catch (Exception e) {
+                }
+                if (event != null) {
+                    if (event.isStartElement()) {
+                        StartElement startElement = event.asStartElement();
+                        String tagName = startElement.getName().getLocalPart();
+                        if (tagsMap.get("tagLastPageValue").equals(tagName)) {
+                            event = (XMLEvent) eventReader.next();
+                            Characters textContent = event.asCharacters();
+                            String s = textContent.getData();
+                            if (s != null) {
+                                String[] arr = s.split("of");
+                                if (arr.length > 1) {
+                                    return Integer.parseInt(arr[1].trim());
+                                }
                             }
                         }
                     }
@@ -194,7 +203,6 @@ public class TechnoJobsCrawler extends BaseCrawler implements Runnable {
             }
             eventReader.close();
         } catch (Exception e) {
-            // Mai mốt nhớ remove
         }
         return lastPage;
     }
@@ -208,7 +216,7 @@ public class TechnoJobsCrawler extends BaseCrawler implements Runnable {
                 String document = "";
                 if (reader != null) {
                     while ((line = reader.readLine()) != null) {
-                        if (line.contains("<span class=\"page-ident\">")) {
+                        if (line.contains(tagsMap.get("lastPageXML"))) {
                             document += line.trim();
                             break;
                         }

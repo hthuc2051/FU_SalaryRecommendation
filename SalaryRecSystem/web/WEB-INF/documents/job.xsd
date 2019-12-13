@@ -4,11 +4,10 @@ To change this license header, choose License Headers in Project Properties.
 To change this template file, choose Tools | Templates
 and open the template in the editor.
 -->
-
-<xs:schema version="1.0"
-           xmlns:xs="http://www.w3.org/2001/XMLSchema"
-           elementFormDefault="qualified">
-    <xsd:element name="TblJob">
+<xsd:schema version="1.0"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            elementFormDefault="qualified">
+    <xsd:element name="JobValidateObj">
         <xsd:complexType>
             <xsd:sequence>
                 <xsd:element type="xsd:double" name="salary"/>
@@ -18,4 +17,4 @@ and open the template in the editor.
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>
-</xs:schema>
+</xsd:schema>

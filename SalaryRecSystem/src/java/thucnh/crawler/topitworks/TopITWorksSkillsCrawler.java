@@ -91,60 +91,65 @@ public class TopITWorksSkillsCrawler extends BaseCrawler {
         String skillType = "";
         String link = "";
         while (eventReader.hasNext()) {
-            XMLEvent event = (XMLEvent) eventReader.next();
-            if (event.isStartElement()) {
-                StartElement startElement = event.asStartElement();
-                String tagName = startElement.getName().getLocalPart();
-                String skillName = "";
+            XMLEvent event = null;
+            try {
+                event = (XMLEvent) eventReader.next();
+            } catch (Exception e) {
+            }
+            if (event != null) {
+                if (event.isStartElement()) {
+                    StartElement startElement = event.asStartElement();
+                    String tagName = startElement.getName().getLocalPart();
+                    String skillName = "";
 
-                if (tagName.equals("h")) {
-                    event = (XMLEvent) eventReader.next();
-                    Characters content = event.asCharacters();
-                    if (content != null) {
-                        skillType = content.getData();
+                    if (tagName.equals("h")) {
+                        event = (XMLEvent) eventReader.next();
+                        Characters content = event.asCharacters();
+                        if (content != null) {
+                            skillType = content.getData();
+                        }
+                    }
+                    if (tagName.equals("a")) {
+                        Attribute href = startElement.getAttributeByName(new QName("href"));
+                        link = href.getValue();
+                        event = (XMLEvent) eventReader.next();
+                        Characters content = event.asCharacters();
+                        if (content != null) {
+                            skillName = content.getData();
+                        }
+                    }
+                    if (!skillName.equalsIgnoreCase("") && !skillType.equalsIgnoreCase("")) {
+                        if (skillType.contains("Front End")) {
+                            skillType = "FrontEnd";
+                        } else if (skillType.contains("Back End")) {
+                            skillType = "BackEnd";
+                        } else if (skillType.contains("Software") && !skillType.contains("Testing")) {
+                            skillType = "Software";
+                        } else if (skillType.contains("Mobile")) {
+                            skillType = "Mobile";
+                        } else if (skillType.contains("Window")) {
+                            skillType = "Window";
+                        } else if (skillType.contains("Testing")) {
+                            skillType = "Testing";
+                        }
+                        String temp = skillName.toLowerCase();
+                        if (temp.contains(".net")) {
+                            skillName = ".NET";
+                        } else if (temp.contains("test")) {
+                            skillName = "Test";
+                        } else if (temp.contains("windows")) {
+                            skillName = "Windows";
+                        } else if (temp.contains("node")) {
+                            skillName = "NodeJS";
+                        } else if (temp.contains("react")) {
+                            skillName = "ReactJS";
+                        }
+                        String key = skillName + "=" + skillType;
+                        if (!result.containsKey(key)) {
+                            result.put(key, link);
+                        }
                     }
                 }
-                if (tagName.equals("a")) {
-                    Attribute href = startElement.getAttributeByName(new QName("href"));
-                    link = href.getValue();
-                    event = (XMLEvent) eventReader.next();
-                    Characters content = event.asCharacters();
-                    if (content != null) {
-                        skillName = content.getData();
-                    }
-                }
-                if (!skillName.equalsIgnoreCase("") && !skillType.equalsIgnoreCase("")) {
-                    if (skillType.contains("Front End")) {
-                        skillType = "FrontEnd";
-                    } else if (skillType.contains("Back End")) {
-                        skillType = "BackEnd";
-                    } else if (skillType.contains("Software") && !skillType.contains("Testing")) {
-                        skillType = "Software";
-                    } else if (skillType.contains("Mobile")) {
-                        skillType = "Mobile";
-                    } else if (skillType.contains("Window")) {
-                        skillType = "Window";
-                    } else if (skillType.contains("Testing")) {
-                        skillType = "Testing";
-                    }
-                    String temp = skillName.toLowerCase();
-                    if (temp.contains(".net")) {
-                        skillName = ".NET";
-                    } else if (temp.contains("test")) {
-                        skillName = "Test";
-                    } else if (temp.contains("windows")) {
-                        skillName = "Windows";
-                    } else if (temp.contains("node")) {
-                        skillName = "NodeJS";
-                    }else if(temp.contains("react")){
-                        skillName = "ReactJS";
-                    }
-                    String key = skillName + "=" + skillType;
-                    if (!result.containsKey(key)) {
-                        result.put(key, link);
-                    }
-                }
-
             }
         }
         return result;

@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletContext;
@@ -22,10 +23,12 @@ import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 import thucnh.crawler.BaseCrawler;
 import thucnh.dao.JobDao;
+import thucnh.dao.SkillDao;
 import thucnh.entity.TblSkill;
 import thucnh.thread.BaseThread;
 import static thucnh.utils.AppConstant.*;
 import static thucnh.utils.AppHelper.hasingString;
+import thucnh.utils.XMLUtils;
 import thucnh.xmlchecker.XmlSyntaxChecker;
 
 /**
@@ -36,6 +39,7 @@ public class CareerBuilderCrawler extends BaseCrawler implements Runnable {
 
     private String url;
     private List<TblSkill> skills;
+    private static final Map<String, String> tagsMap = XMLUtils.getSignTagOfCrawler(XML_TAG_CARRER_BUILDER, ARR_CARRER_BUILDER);
 
     public CareerBuilderCrawler(String url, List<TblSkill> skills, ServletContext context) {
         super(context);
@@ -49,7 +53,12 @@ public class CareerBuilderCrawler extends BaseCrawler implements Runnable {
         try {
             if (url != null) {
                 for (TblSkill skill : skills) {
-                    int totalPage = getLastPage(url + getCareerBuilderPageLink(1, skill.getName().replace(" ", "-")));
+                    System.out.println("SKILL CRAWL"+skill.getName());
+                    String urlPlus = getCareerBuilderPageLink(1, skill.getName().replace(" ", "-"));
+                    int totalPage = getLastPage(url + urlPlus);
+                    if (totalPage > 10) {
+                        totalPage = 10;
+                    }
                     if (totalPage > 0) {
                         for (int i = 0; i < totalPage; i++) {
                             List<String> result = stAXParserForJobUrl(url + getCareerBuilderPageLink(i + 1, skill.getName().replace(" ", "-")), skill.getName().trim());
@@ -92,10 +101,10 @@ public class CareerBuilderCrawler extends BaseCrawler implements Runnable {
                     String document = "";
                     boolean isStart = false;
                     while ((line = reader.readLine()) != null) {
-                        if (line.contains("<span class=\"col-sm-2 styled-select job-sorter-col")) {
+                        if (line.contains(tagsMap.get("breakLastPage"))) {
                             break;
                         }
-                        if (line.contains("<div class=\"ais-stats")) {
+                        if (line.contains(tagsMap.get("isStartLastPage"))) {
                             isStart = true;
                         }
                         if (isStart) {
@@ -128,20 +137,27 @@ public class CareerBuilderCrawler extends BaseCrawler implements Runnable {
         try {
             XMLEventReader eventReader = parseStringToXMLEventReader(document);
             while (eventReader.hasNext()) {
-                XMLEvent event = (XMLEvent) eventReader.next();
-                if (event.isStartElement()) {
-                    StartElement startElement = event.asStartElement();
-                    String tagName = startElement.getName().getLocalPart();
-                    if ("span".equals(tagName)) {
-                        event = (XMLEvent) eventReader.next();
-                        Characters textContent = event.asCharacters();
-                        if (textContent != null) {
-                            String totalItem = textContent.getData();
-                            totalItem = totalItem.replaceAll("\\D+", "");
-                            try {
-                                double totalItemFloat = Double.parseDouble(totalItem.trim());
-                                return (int) Math.ceil(totalItemFloat / CAREER_BUILDER_EACH_PAGE_ITEM);
-                            } catch (Exception e) {
+                XMLEvent event = null;
+                try {
+                    event = (XMLEvent) eventReader.next();
+                } catch (Exception e) {
+                }
+                if (event != null) {
+                    if (event.isStartElement()) {
+                        StartElement startElement = event.asStartElement();
+                        String tagName = startElement.getName().getLocalPart();
+                        if (tagsMap.get("pagingValue").equals(tagName)) {
+                            event = (XMLEvent) eventReader.next();
+                            Characters textContent = event.asCharacters();
+                            if (textContent != null) {
+                                String totalItem = textContent.getData();
+                                totalItem = totalItem.replaceAll("\\D+", "");
+                                try {
+                                    double totalItemFloat = Double.parseDouble(totalItem.trim());
+                                    return (int) Math.ceil(totalItemFloat / CAREER_BUILDER_EACH_PAGE_ITEM);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
                             }
                         }
                     }
@@ -149,11 +165,12 @@ public class CareerBuilderCrawler extends BaseCrawler implements Runnable {
             }
             eventReader.close();
         } catch (Exception e) {
+            e.printStackTrace();
         }
         return lastPage;
     }
 
-    public List<String> stAXParserForJobUrl(String url, String skillName) throws UnsupportedEncodingException, XMLStreamException {
+    public List<String> stAXParserForJobUrl(String url, String skillName) {
         BufferedReader reader = null;
         List<String> result = new ArrayList<>();
 
@@ -165,13 +182,13 @@ public class CareerBuilderCrawler extends BaseCrawler implements Runnable {
                 boolean isStart = false;
                 if (reader != null) {
                     while ((line = reader.readLine()) != null) {
-                        if (isStart && line.contains("<div class=\"paginationTwoStatus")) {
+                        if (isStart && line.contains(tagsMap.get("breakUrl"))) {
                             break;
                         }
                         if (isStart) {
                             document += line.trim();
                         }
-                        if (line.contains("<div class=\"col-sm-12 col-md-9 col-ListJobCate")) {
+                        if (line.contains(tagsMap.get("isStartListUrl"))) {
                             isStart = true;
                         }
                     }
@@ -181,46 +198,44 @@ public class CareerBuilderCrawler extends BaseCrawler implements Runnable {
 //                  Check well-formed html
                 XmlSyntaxChecker checker = new XmlSyntaxChecker();
                 document = checker.checkSyntax(document);
-                document = document.trim();
+                document = document.trim().replace("alt", "data");
                 XMLEventReader eventReader = parseStringToXMLEventReader(document);
                 String link = "";
                 while (eventReader.hasNext()) {
-                    XMLEvent event = (XMLEvent) eventReader.next();
-                    if (event.isStartElement()) {
-                        StartElement startElement = event.asStartElement();
-                        String tagName = startElement.getName().getLocalPart();
-                        // Check deeper
-//                if (tagName.equals("span")) {
-//                    Attribute attrClass = startElement.getAttributeByName(new QName("class"));
-//                    if (attrClass != null && attrClass.getValue().contains("jobtitle")) {
-//                        event = (XMLEvent) eventReader.next();
-//                        startElement = event.asStartElement();
-//                        tagName = startElement.getName().getLocalPart();
-//                        
-//                    }
-//                }
-                        if (tagName.equals("h")) {
-                            Attribute attrClass = startElement.getAttributeByName(new QName("class"));
-                            if (attrClass != null && attrClass.getValue().contains("job")) {
-                                event = (XMLEvent) eventReader.next();
-                                startElement = event.asStartElement();
-                                tagName = startElement.getName().getLocalPart();
-                                if ("a".equals(tagName)) {
-                                    Attribute href = startElement.getAttributeByName(new QName("href"));
-                                    link = href.getValue();
+                    XMLEvent event = null;
+                    try {
+                        event = (XMLEvent) eventReader.next();
+                    } catch (Exception e) {
+                    }
+                    if (event != null) {
+                        if (event.isStartElement()) {
+                            StartElement startElement = event.asStartElement();
+                            String tagName = startElement.getName().getLocalPart();
+                            if (tagName.equals(tagsMap.get("urlItemClassCheck"))) {
+                                Attribute attrClass = startElement.getAttributeByName(new QName("class"));
+                                if (attrClass != null && attrClass.getValue().contains(tagsMap.get("classOfItemCheck"))) {
                                     event = (XMLEvent) eventReader.next();
-                                    Characters textContent = event.asCharacters();
-                                    if (textContent != null) {
-                                        String s = textContent.getData();
-                                        if (s.toLowerCase().contains(skillName.toLowerCase())) {
-                                            if (link != null) {
-                                                JobDao dao = JobDao.getInstance();
-                                                int hashValue = hasingString(link);
-                                                if (dao.checkExistedJob(hashValue) == null) {
-                                                    result.add(link);
-                                                } else {
-                                                    System.out.println("[SKIP] Job Link : " + link);
+                                    startElement = event.asStartElement();
+                                    tagName = startElement.getName().getLocalPart();
+                                    if (tagsMap.get("ItemHref").equals(tagName)) {
+                                        Attribute href = startElement.getAttributeByName(new QName("href"));
+                                        link = href.getValue();
+                                        event = (XMLEvent) eventReader.next();
+                                        Characters textContent = event.asCharacters();
+                                        if (textContent != null) {
+                                            String s = textContent.getData();
+                                            if (s.toLowerCase().contains(skillName.toLowerCase())) {
+                                                if (link != null) {
+                                                    JobDao dao = JobDao.getInstance();
+                                                    int hashValue = hasingString(link);
+                                                    if (dao.checkExistedJob(hashValue) == null) {
+                                                        result.add(link);
+                                                    } else {
+                                                        System.out.println("[SKIP] Job Link : " + link);
+                                                    }
                                                 }
+                                            }else{
+                                                System.out.println("[SKIP] Job Link : " + link);
                                             }
                                         }
                                     }

@@ -66,7 +66,7 @@ public class PdfServlet extends HttpServlet {
                     String xmlPath = realPath + AppConstant.JAXB_XML_FOR_PDF;
                     String foPath = realPath + AppConstant.JAXB_FO_FOR_PDF;
 
-                    methodTrAX(xslPath, xmlPath, foPath, realPath);
+                    methodTrAX(xslPath, xmlPath, foPath);
                     File file = new File(foPath);
                     FileInputStream input = new FileInputStream(file);
 
@@ -99,7 +99,7 @@ public class PdfServlet extends HttpServlet {
         }
     }
 
-    private void methodTrAX(String xslPath, String xmlPath, String output, String path) throws FileNotFoundException, TransformerException {
+    private void methodTrAX(String xslPath, String xmlPath, String output) throws FileNotFoundException, TransformerException {
         try {
             TransformerFactory tf = TransformerFactory.newInstance();
             StreamSource xslFile = new StreamSource(xslPath);

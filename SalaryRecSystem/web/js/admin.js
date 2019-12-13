@@ -1,77 +1,65 @@
 (function () {
 
-    var homeModel = {
+    var adminModel = {
         skillArr: [],
         salaryRecArr: [],
+
         xmlSkills: null,
         xmlSalaryRecs: null,
-        doneStep: 0,
-        jobsArr: [],
+        xmlJobs: null,
 
-        arrChart: [],
-        selectedArr: [],
-        selectedRecsArr: [],
     };
-    var homeView = {
+    var adminView = {
         init: function () {
             // init 
-            function initData(callback) {
-                octopus.getSkillsData();
-                octopus.getSalaryRecsData();
-                callback();
-            }
-            initData(function () {
-                document.getElementById("overlay").style.display = "none";
-            });
+            octopus.getSkillsData();
+            octopus.getSalaryRecsData();
+            octopus.getJobsData();
+
+
+
 
             let btnSkillChoice = document.getElementById("btn-skill-choice");
             btnSkillChoice.addEventListener('click', function () {
-                homeView.resetPage();
+                adminView.resetPage();
             });
 
             let btnPdf = document.getElementById("pdfLink");
             btnPdf.addEventListener('click', function () {
-                let selectedArr = homeModel.selectedArr;
+                let selectedArr = adminModel.selectedArr;
                 octopus.getPdf();
             });
 
 //            Trigger not move next step
             let btnNext = document.getElementById("btn-nextStep");
             btnNext.addEventListener('click', function () {
-                if (homeModel.doneStep >= 1) {
+                if (adminModel.doneStep >= 1) {
                     loadContent(2);
-
-                    homeView.resetChart();
                 }
             });
             let imgNext = document.getElementById("img-nextStep");
             imgNext.addEventListener('click', function () {
-                if (homeModel.doneStep >= 1) {
+                if (adminModel.doneStep >= 1) {
                     loadContent(2);
-                    homeView.resetChart();
                 }
             });
             let imgCal = document.getElementById("img-cal");
             imgCal.addEventListener('click', function () {
-                if (homeModel.doneStep >= 2) {
-                    homeView.calculateSalaryRec();
+                if (adminModel.doneStep >= 2) {
+                    adminView.calculateSalaryRec();
                     loadContent(3);
                 }
             });
 
             let btnCal = document.getElementById("btn-cal");
             btnCal.addEventListener('click', function () {
-                if (homeModel.doneStep >= 2) {
+                console.log(adminModel.doneStep);
+                if (adminModel.doneStep >= 2) {
                     loadContent(3);
-                    homeView.calculateSalaryRec();
+                    adminView.calculateSalaryRec();
                 }
             });
-            let btnSearchSalary = document.getElementsByClassName("btnSearchSalary")[0];
-            let dataTag = document.getElementById("data");
-            btnSearchSalary.addEventListener('click', function () {
-                dataTag.innerHTML = "";
-                homeView.getTop20JobBySalary();
-            });
+
         },
         parsingXmlSalary: function () {
             let element = document.getElementsByClassName("loading-text");
@@ -93,7 +81,7 @@
                             expLevel: expLevel,
                             salary: salary
                         };
-                        homeModel.salaryRecArr.push(salaryRec);
+                        adminModel.salaryRecArr.push(salaryRec);
                     }
                 }
             }
@@ -107,19 +95,14 @@
                         let item = summaryJobs.children[i];
                         let noOfJobs = item.getElementsByTagName("noOfJobs")[0].textContent.toString();
                         let salary = item.getElementsByTagName("salary")[0].textContent.toString();
+                        formatMilionNum();
                         let salaryRec = {
                             y: parseInt(noOfJobs),
-                            label: parseFloat(salary)
+                            label: formatMilionNum(parseFloat(salary))
                         };
                         arr.push(salaryRec);
                     }
                 }
-                arr.sort(function (a, b) {
-                    return a.label - b.label;
-                });
-                arr.forEach(function (item) {
-                    item.label = formatMilionNum(item.label);
-                });
                 callBackMethod(index, arr);
             });
         },
@@ -145,7 +128,7 @@
                             name: name,
                             arrExpLevel: arrExpLevel
                         };
-                        homeModel.skillArr.push(skillObj);
+                        adminModel.skillArr.push(skillObj);
                         // Create element
                         let item = document.createElement('div');
                         item.innerHTML = name;
@@ -153,29 +136,28 @@
                         item.setAttribute('data-value', id);
                         item.onclick = function () {
                             var paramId = id;
-                            homeView.selectSkill(id);
+                            adminView.selectSkill(id);
                         };
                         select_pure_options[0].appendChild(item);
                     }
                 }
             }
         },
-        calculateSalaryRec: function () {
+        calculateSalaryRec: async function () {
 
-            if (homeModel.selectedArr.length > 0) {
-                console.log(homeModel.selectedArr);
-                for (var i = 0; i < homeModel.selectedArr.length; i++) {
+            if (adminModel.selectedArr.length > 0) {
+                for (var i = 0; i < adminModel.selectedArr.length; i++) {
                     // TODO:Check thêm cả expYear nữa
-                    let obj = homeModel.salaryRecArr.find(item =>
-                        ((item.skillId === homeModel.selectedArr[i].id) && (item.expLevel === homeModel.selectedArr[i].expLevel)));
+                    let obj = adminModel.salaryRecArr.find(item =>
+                        ((item.skillId === adminModel.selectedArr[i].id) && (item.expLevel === adminModel.selectedArr[i].expLevel)));
                     if (obj !== null) {
-                        homeModel.arrChart.push(obj);
+                        adminModel.arrChart.push(obj);
                     }
                 }
             }
-            homeModel.doneStep = 3;
-//            await homeView.onLoading();
-            homeView.renderChart();
+            adminModel.doneStep = 3;
+//            await adminView.onLoading();
+            await adminView.renderChart();
         },
         selectSkill: function (id) {
             let arr = document.getElementsByClassName('select-pure__option');
@@ -203,8 +185,8 @@
                         removeBtn.classList.add('removeBtn');
                         removeBtn.setAttribute('data-value', id);
                         removeBtn.onclick = function () {
-                            var paramId = id; // 
-                            homeView.removeSelectedSkill(id);
+                            var paramId = id; // Méo biết vì sao mà truyền id vô k đc mà tạo mới lại đc ! Câu hỏi cần giải đáp :(
+                            adminView.removeSelectedSkill(id);
                         };
                         newSkillAppend.appendChild(removeBtn);
 
@@ -256,13 +238,13 @@
                         select_button.appendChild(icon_div);
                         // Add options
 
-                        let options = homeView.generateOptions(id, value);
+                        let options = adminView.generateOptions(id, value);
 //
                         dropdown_element.appendChild(checkBox);
                         dropdown_element.appendChild(select_button);
                         dropdown_element.appendChild(options);
                         input_stage.appendChild(dropdown_element);
-                        homeModel.doneStep = 1;
+                        adminModel.doneStep = 1;
                     }
                 }
             }
@@ -271,7 +253,7 @@
             let options = document.createElement('div');
             options.setAttribute('id', 'options');
             let arrExpLevel = [];
-            homeModel.skillArr.forEach(function (item) {
+            adminModel.skillArr.forEach(function (item) {
                 if (item.id === key) {
                     arrExpLevel = item.arrExpLevel;
                 }
@@ -280,7 +262,7 @@
                 let option = document.createElement('div');
                 option.classList.add('option');
                 option.onclick = function () {
-                    homeView.selectExpLevel(key, name, arrExpLevel[i]);
+                    adminView.selectExpLevel(key, name, arrExpLevel[i]);
                 };
                 let radio_1 = document.createElement('input');
                 radio_1.setAttribute('type', 'radio');
@@ -299,7 +281,7 @@
 
                 let option_label = document.createElement('span');
                 option_label.classList.add('label');
-                option_label.innerHTML = homeView.getExpLevelLabel(arrExpLevel[i]);
+                option_label.innerHTML = adminView.getExpLevelLabel(arrExpLevel[i]);
 
                 option.appendChild(radio_1);
                 option.appendChild(radio_2);
@@ -311,7 +293,7 @@
             return options;
         },
         removeSelectedSkill: function (id) {
-            console.log(homeModel.selectedArr);
+            console.log(adminModel.selectedArr);
             let arr = document.getElementsByClassName('select-pure__option');
             let selected_label = document.getElementById('select-pure__label');
             let arrBtn = document.getElementsByClassName('removeBtn');
@@ -337,55 +319,55 @@
                     }
                 }
             }
-            if (homeModel.selectedArr.length > 0) {
-                for (var i = 0; i < homeModel.selectedArr.length; i++) {
-                    let obj = homeModel.selectedArr[i];
+            if (adminModel.selectedArr.length > 0) {
+                for (var i = 0; i < adminModel.selectedArr.length; i++) {
+                    let obj = adminModel.selectedArr[i];
                     if (typeof obj !== 'undefined') {
                         if (obj.id === id) {
-                            homeModel.selectedArr.splice(i, 1);
+                            adminModel.selectedArr.splice(i, 1);
                         }
                     }
                 }
             } else {
-                homeModel.doneStep = 0;
+                adminModel.doneStep = 0;
             }
 //            else {
-//                homeModel.selectedArr.push(homeModel.selectedArr[0]);
+//                adminModel.selectedArr.push(adminModel.selectedArr[0]);
 //            }
 
         },
         selectExpLevel: function (key, name, expLevel) {
+            console.log('here');
             let selected_label = document.getElementById('selected-' + key);
-            selected_label.firstElementChild.innerHTML = name + " - " + homeView.getExpLevelLabel(expLevel);
+            selected_label.firstElementChild.innerHTML = name + " - " + adminView.getExpLevelLabel(expLevel);
             let obj = {
                 id: key,
                 skill: name,
                 expLevel: expLevel,
             };
 
-            if (homeModel.selectedArr.length > 0) {
-                let expLevelItem = homeModel.selectedArr.find(item => (item.id === key));
+            if (adminModel.selectedArr.length > 0) {
+                let expLevelItem = adminModel.selectedArr.find(item => (item.id === key));
                 if (typeof expLevelItem === 'undefined') {
-                    homeModel.selectedArr.push(obj);
+                    adminModel.selectedArr.push(obj);
                 } else {
                     expLevelItem.expLevel = expLevel;
-                    console.log('Update explevel');
                 }
             } else {
-                homeModel.selectedArr.push(obj);
+                adminModel.selectedArr.push(obj);
             }
-            homeModel.doneStep = 2;
+            adminModel.doneStep = 2;
         },
         renderChart: function () {
-            var arrChart = homeModel.arrChart;
+            var arrChart = adminModel.arrChart;
             if (arrChart.length > 0) {
                 let chartTab = document.getElementById("trong");
                 for (var i = 0; i < arrChart.length; i++) {
                     let hashValue = hasingString(arrChart[i].expLevel + arrChart[i].skillId);
-                    homeView.getArrSummaryPoint(arrChart[i].salary, hashValue, i, function (index, dataPoints) {
+                    adminView.getArrSummaryPoint(arrChart[i].salary, hashValue, i, function (index, dataPoints) {
 
                         // For PDF
-                        homeModel.selectedRecsArr.push(arrChart[index].salary + "~" + hashValue);
+                        adminModel.selectedRecsArr.push(arrChart[index].salary + "~" + hashValue);
 
                         let data = [{
                                 type: "column",
@@ -402,7 +384,7 @@
                             animationEnabled: true,
                             theme: "light2", // "light1", "light2", "dark1", "dark2"
                             title: {
-                                text: arrChart[index].name + " salary recommend :" + homeView.formatVietnameseCurrency(parseFloat(arrChart[index].salary)) + "đ"
+                                text: arrChart[index].name + " salary recommend :" + adminView.formatVietnameseCurrency(parseFloat(arrChart[index].salary)) + "đ"
                             },
                             axisY: {
                                 title: "Number of company"
@@ -413,75 +395,14 @@
                     });
                 }
             }
+//            await adminView.resetPage;
         },
-        getTop20JobBySalary: function () {
-            let from = parseFloat(document.getElementById("salary-from").value);
-            let to = parseFloat(document.getElementById("salary-to").value);
-
-
-            if (from > 0 && from < to) {
-                octopus.getSalaryRange(from, to, function (xmlDocs) {
-                    let jobs = xmlDocs.childNodes[0];
-                    for (let i = 0; i < jobs.children.length; i++) {
-                        let job = jobs.children[i];
-                        let skillName = job.getElementsByTagName("skillName")[0].textContent.toString();
-                        let salary = job.getElementsByTagName("salary")[0].textContent.toString();
-                        let expLevel = job.getElementsByTagName("expLevel")[0].textContent.toString();
-                        let link = job.getElementsByTagName("link")[0].textContent.toString();
-
-                        let obj = {
-                            skillName: skillName,
-                            salary: salary,
-                            expLevel: expLevel,
-                            link: link
-                        };
-                        homeModel.jobsArr.push(obj);
-                    }
-                    homeView.renderListTop20Jobs();
-                });
-            } else {
-                alert("Salary 1 must less than salary 2 !");
-            }
-        },
-        renderListTop20Jobs: function () {
-            let arr = homeModel.jobsArr;
-            for (let i = 0; i < arr.length; i++) {
-                var row = document.createElement("tr");
-                var count = document.createElement("td");
-                var skillName = document.createElement("td");
-                var salary = document.createElement("td");
-                var expLevel = document.createElement("td");
-                var link = document.createElement("td");
-                var a = document.createElement("a");
-
-                count.innerHTML = (i+1);
-                skillName.innerHTML = arr[i].skillName;
-                salary.innerHTML = homeView.formatVietnameseCurrency(parseFloat(arr[i].salary));
-                expLevel.innerHTML = arr[i].expLevel;
-
-                a.innerHTML = arr[i].link;
-                a.setAttribute('href', arr[i].link);
-
-                link.appendChild(a);
-                row.appendChild(count);
-                row.appendChild(skillName);
-                row.appendChild(expLevel);
-                row.appendChild(salary);
-                row.appendChild(link);
-                document.getElementById("data").appendChild(row);
-            }
-        },
-        resetChart: function () {
-            let chartStage = document.getElementById('trong');
-            chartStage.innerHTML = '';
-            homeModel.arrChart = [];
-        },
-        onLoading: function () {
+        onLoading: async function () {
             document.getElementById("overlay").style.display = "block";
         },
         resetPage: async function () {
-            if (homeModel.doneStep >= 3) {
-                homeModel.doneStep = 0;
+            if (adminModel.doneStep >= 3) {
+                adminModel.doneStep = 0;
                 location.reload(true);
             }
         },
@@ -505,6 +426,8 @@
                 case 'Fresher':
                     return ' Fresher developer [ 0-0.5 year expericence ]';
                 default:
+
+
             }
             return new Intl.NumberFormat().format(price)
         },
@@ -512,22 +435,28 @@
 
     var octopus = {
         init: async function () {
-            await homeView.init();
+            //            octopus.getXsl();
+            await adminView.init();
+            //            octopus.initResfreshSpotlight();
         },
         getSkillsData: function () {
-            var url = "http://localhost:8084/SalaryRecSystem/webresources/skills/skillsItems";
+            var url = "http://localhost:8084/SalaryRecSystem/webresources/skills";
+            // var param = {
+            //     btAction: 'initLocation'
+            // };
             sendGetRequest(url, null, function (response) {
                 var xmlDoc = response.responseXML;
-                homeModel.xmlSkills = xmlDoc;
-                homeView.renderSkills();
+                adminModel.xmlSkills = xmlDoc;
+                // render list location
+                adminView.renderSkills();
             });
         },
         getSalaryRecsData: function () {
             var url = "http://localhost:8084/SalaryRecSystem/webresources/salaryRecs";
             sendGetRequest(url, null, function (response) {
                 var xmlDoc = response.responseXML;
-                homeModel.xmlSalaryRecs = xmlDoc;
-                homeView.parsingXmlSalary();
+                adminModel.xmlSalaryRecs = xmlDoc;
+                adminView.parsingXmlSalary();
             });
         },
         getSummaryJob: function (salaryJob, hash, callBackMethod) {
@@ -540,24 +469,17 @@
         getPdf: function () {
             var url = "/SalaryRecSystem/PdfServlet";
             var param = {
-                skillSelectedArr: homeModel.selectedRecsArr
+                skillSelectedArr: adminModel.selectedRecsArr
             };
             sendGetRequest(url, param, function (response) {
                 window.open(response.responseURL);
             });
         },
-        getSalaryRange: function (from, to, callBackMethod) {
-            var url = "http://localhost:8084/SalaryRecSystem/webresources/Jobs/salary/" + from + "/" + to;
-            sendGetRequest(url, null, function (response) {
-                var xmlDoc = response.responseXML;
-                callBackMethod(xmlDoc);
-            });
-        },
         getXmlSkills: function () {
-            return homeModel.xmlSkills;
+            return adminModel.xmlSkills;
         },
         getXmlSalaryRecs: function () {
-            return homeModel.xmlSalaryRecs;
+            return adminModel.xmlSalaryRecs;
         },
     };
 

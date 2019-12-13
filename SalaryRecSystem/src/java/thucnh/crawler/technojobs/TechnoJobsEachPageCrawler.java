@@ -10,6 +10,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletContext;
@@ -25,11 +26,14 @@ import thucnh.crawler.BaseCrawler;
 import thucnh.dao.JobDao;
 import thucnh.entity.TblJob;
 import thucnh.entity.TblSkill;
+import thucnh.mapper.JobValidateMapper;
+import thucnh.thread.BaseThread;
 import static thucnh.utils.AppConstant.*;
 import thucnh.utils.AppHelper;
 import static thucnh.utils.AppHelper.hasingString;
 import thucnh.utils.JAXBUtils;
 import thucnh.utils.TrAXUtils;
+import thucnh.utils.XMLUtils;
 import thucnh.xmlchecker.XmlSyntaxChecker;
 
 /**
@@ -40,6 +44,8 @@ public class TechnoJobsEachPageCrawler extends BaseCrawler implements Runnable {
 
     private String url;
     private TblSkill skill;
+    private static final Map<String, String> tagsMap = XMLUtils.getSignTagOfCrawler(XML_TAG_TECHNOJOB_EACH_PAGE, ARR_TECHNOJOB_TAG_EACH_PAGE);
+    private JobValidateMapper mapper = new JobValidateMapper();
 
     public TechnoJobsEachPageCrawler(String url, TblSkill skill, ServletContext context) {
         super(context);
@@ -59,16 +65,16 @@ public class TechnoJobsEachPageCrawler extends BaseCrawler implements Runnable {
                 boolean isFound = false;
                 if (reader != null) {
                     while ((line = reader.readLine()) != null) {
-                        if (isStart && line.contains("<div class=\"job-listing-actions-bottom")) {
+                        if (isStart && line.contains(tagsMap.get("break"))) {
                             break;
                         }
                         if (isStart) {
                             document += line.trim();
                         }
-                        if (isFound && line.contains("<div class=\"job-listing")) {
+                        if (isFound && line.contains(tagsMap.get("isStart"))) {
                             isStart = true;
                         }
-                        if (line.contains("<div class=\"job-view")) {
+                        if (line.contains(tagsMap.get("isFound"))) {
                             isFound = true;
                         }
                     }
@@ -92,10 +98,10 @@ public class TechnoJobsEachPageCrawler extends BaseCrawler implements Runnable {
                 XPathFactory factory = XPathFactory.newInstance();
                 XPath xPath = factory.newXPath();
 
-                String exp = "/jobs/jobName";
+                String exp = tagsMap.get("jobNameXpath");
                 String jobName = (String) xPath.evaluate(exp, domTree, XPathConstants.STRING);
 
-                exp = "/jobs/jobSalary";
+                exp = tagsMap.get("jobSalaryXpath");
                 String jobSalary = (String) xPath.evaluate(exp, domTree, XPathConstants.STRING);
 
 //               
@@ -115,10 +121,13 @@ public class TechnoJobsEachPageCrawler extends BaseCrawler implements Runnable {
 
                     // Validate 
                     String xsdFilePath = realPath + XSD_JOB;
-                    boolean isValidate = JAXBUtils.validateJobXml(xsdFilePath, job);
+                    boolean isValidate = JAXBUtils.validateJobXml(xsdFilePath, mapper.marshal(job));
                     if (isValidate) {
-                        JobDao dao = JobDao.getInstance();
-                        dao.insertJob(job);
+                        synchronized (job) {
+                            JobDao dao = JobDao.getInstance();
+                            dao.insertJob(job);
+                        }
+
                     }
 
                 }

@@ -3,11 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/E:/CN8/XML/FU_SalaryRecommendation/SalaryRecSystem/web/WEB-INF/documents/jobs.xsl</file>
-            <file>file:/E:/CN8/XML/FU_SalaryRecommendation/SalaryRecSystem/build/web/WEB-INF/documents/job.fo</file>
-            <file>file:/E:/CN8/XML/FU_SalaryRecommendation/SalaryRecSystem/src/java/thucnh/utils/AppConstant.java</file>
-            <file>file:/E:/CN8/XML/FU_SalaryRecommendation/SalaryRecSystem/src/java/thucnh/servlet/PdfServlet.java</file>
-            <file>file:/E:/CN8/XML/FU_SalaryRecommendation/SalaryRecSystem/src/java/thucnh/utils/JAXBUtils.java</file>
+            <file>file:/E:/CN8/XML/FU_SalaryRecommendation/SalaryRecSystem/web/userPage/style.css</file>
+            <file>file:/E:/CN8/XML/FU_SalaryRecommendation/SalaryRecSystem/web/js/user.js</file>
+            <file>file:/E:/CN8/XML/FU_SalaryRecommendation/SalaryRecSystem/web/adminPage/jobs.jsp</file>
+            <file>file:/E:/CN8/XML/FU_SalaryRecommendation/SalaryRecSystem/web/adminPage/admin.jsp</file>
+            <file>file:/E:/CN8/XML/FU_SalaryRecommendation/SalaryRecSystem/web/userPage/user.jsp</file>
         </group>
     </open-files>
 </project-private>

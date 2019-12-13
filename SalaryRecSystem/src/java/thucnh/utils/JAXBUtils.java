@@ -18,10 +18,9 @@ import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
 import org.xml.sax.SAXException;
-import thucnh.dto.JobDto;
+import thucnh.dto.JobValidateObj;
 import thucnh.dto.PdfJobsObj;
-import thucnh.entity.TblJob;
-import thucnh.entity.TblSkill;
+import thucnh.dto.SkillValidateObj;
 
 /**
  *
@@ -29,10 +28,10 @@ import thucnh.entity.TblSkill;
  */
 public class JAXBUtils {
 
-    public static boolean validateJobXml(String filePath, TblJob job) {
+    public static boolean validateJobXml(String filePath, JobValidateObj job) {
         try {
             synchronized (job) {
-                JAXBContext context = JAXBContext.newInstance(TblJob.class);
+                JAXBContext context = JAXBContext.newInstance(JobValidateObj.class);
                 Unmarshaller unmarshaller = context.createUnmarshaller();
                 Marshaller marshaller = context.createMarshaller();
 
@@ -52,19 +51,15 @@ public class JAXBUtils {
                 validator.validate(new JAXBSource(marshaller, job));
                 return true;
             }
-        } catch (JAXBException ex) {
-            return false;
-        } catch (SAXException ex) {
-            return false;
-        } catch (IOException ex) {
+        } catch (JAXBException | SAXException | IOException ex) {
             return false;
         }
     }
 
-    public static boolean validateSkillXml(String filePath, TblSkill skill) {
+    public static boolean validateSkillXml(String filePath, SkillValidateObj skill) {
         try {
             synchronized (skill) {
-                JAXBContext context = JAXBContext.newInstance(TblSkill.class);
+                JAXBContext context = JAXBContext.newInstance(SkillValidateObj.class);
                 Unmarshaller unmarshaller = context.createUnmarshaller();
                 Marshaller marshaller = context.createMarshaller();
 
@@ -84,11 +79,7 @@ public class JAXBUtils {
                 validator.validate(new JAXBSource(marshaller, skill));
                 return true;
             }
-        } catch (JAXBException ex) {
-            return false;
-        } catch (SAXException ex) {
-            return false;
-        } catch (IOException ex) {
+        } catch (JAXBException | SAXException | IOException ex) {
             return false;
         }
     }

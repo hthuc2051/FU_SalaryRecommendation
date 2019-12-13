@@ -64,6 +64,13 @@ public class TblSkillFacadeREST extends AbstractFacade<TblSkill> {
     }
 
     @GET
+    @Override
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public List<TblSkill> findAll() {
+        return super.findAll();
+    }
+    @GET
+    @Path("skillsItems")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public List<SkillDto> findAllSkills() {
         return mapper.toListDto(super.findAll());

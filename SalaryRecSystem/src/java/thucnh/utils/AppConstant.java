@@ -56,4 +56,30 @@ public class AppConstant {
     public static String getCareerBuilderPageLink(int page, String skill) {
         return "/jobs/" + skill + "-kc1-page-" + page + "-en.html";
     }
+
+    // FOR Crawler
+    public static final String XML_TAG_TECHNOJOB = "E:/CN8/XML/FU_SalaryRecommendation/SalaryRecSystem/web/WEB-INF/documents/"
+            + "technoJobCrawlerTag.xml";
+    public static final String[] ARR_TECHNOJOB_TAG = {"break", "isStart", "linkXpath", "jobNameXpath", "lastPageXML", "tagLastPageValue"};
+
+    public static final String XML_TAG_TECHNOJOB_EACH_PAGE = "E:/CN8/XML/FU_SalaryRecommendation/SalaryRecSystem/web/WEB-INF/documents/"
+            + "technoJobEachPageTag.xml";
+    public static final String[] ARR_TECHNOJOB_TAG_EACH_PAGE = {"break", "isStart", "isFound", "jobNameXpath", "jobSalaryXpath"};
+
+    public static final String XML_TAG_CARRER_BUILDER = "E:/CN8/XML/FU_SalaryRecommendation/SalaryRecSystem/web/WEB-INF/documents/"
+            + "careerBuilderCrawlerTag.xml";
+    public static final String[] ARR_CARRER_BUILDER = {
+        "breakLastPage",
+        "isStartLastPage",
+        "pagingValue",
+        "breakUrl",
+        "isStartListUrl",
+        "urlItemClassCheck",
+        "classOfItemCheck",
+        "ItemHref",};
+
+    public static final String XML_TAG_CARRER_BUILDER_EACH_PAGE = "E:/CN8/XML/FU_SalaryRecommendation/SalaryRecSystem/web/WEB-INF/documents/"
+            + "careerBuilderCrawlerEachPageTag.xml";
+    public static final String[] ARR_CARRER_BUILDER_TAG_EACH_PAGE = {
+        "break1", "break2", "isStart","jobTitle" ,"jobDetailsTag"};
 }

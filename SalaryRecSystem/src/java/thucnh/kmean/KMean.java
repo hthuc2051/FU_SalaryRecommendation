@@ -76,16 +76,12 @@ public class KMean {
         // đệ quy lại để set centroids mới lấy đc vào thành centroid mới
         centroid[0] = centroid[1];
         centroid[1] = new Double[]{0.0, 0.0, 0.0};
-//        System.out.println("========== Starting to get new centroid =========");
 
         for (int i = 0; i < noOfClusters; i++) {
             for (int j = 0; j < data.size(); j++) {
-                //System.out.println(distance[i][j]+"("+i+","+j+")="+data[j]+"("+j+")-"+centroid[0][i]+"="+(data[j]-centroid[0][i]));
                 distance[i][j] = Math.abs(data.get(j).getSalary() - centroid[0][i]);
-//                System.out.print(distance[i][j] + " ,");
-                //System.out.println("Centroid: "+centroid[0][i]);
+
             }
-//            System.out.println();
         }
 
         for (int j = 0; j < data.size(); j++) {
@@ -105,30 +101,10 @@ public class KMean {
 //              Từ tổng của các node trong cluster / tổng số lượng node -> ra centroid mới
             clusterNodeCount[smallerDistance] = clusterNodeCount[smallerDistance] + 1;
             indexClusterHasMinDistance[j] = smallerDistance;
-            //System.out.println("Centerid at 1:  "+centroid[1][smallerDistance]);
-            //System.out.print(cluster[j]+", ");
+
         }
-//        //for(int j=0;j<data.length;j++)
-//        //System.out.println("c at out: "+cluster[j]);
-//
-//        System.out.println("======================================== ");
-//
-//        System.out.println("New clusters are ");
-        // cluster[]= { 0  1   0  1  0  2  2  1}
-        // data[]={2,4,-10,12,3,20,30,11};
-        for (int i = 0; i < noOfClusters; i++) {
-//            System.out.print("C" + (i + 1) + ": ");
-//            System.out.println("Centroids : " + centroid[1][i]);
-            for (int l = 0; l < data.size(); l++) {
-                if (indexClusterHasMinDistance[l] == i) {
-//                    System.out.print(data.get(l).getSalary() + " ,");
-                }
-            }
-//            System.out.println();
-        }
-//        System.out.println("======================================== ");
-//
-//        System.out.println("New centroid is ");
+
+
 
         // Set lại centroids mới ở trên vào centroid cũ
         for (int j = 0; j < noOfClusters; j++) {
@@ -148,7 +124,6 @@ public class KMean {
                 return null;
             }
         }
-//        System.out.println();
 //
         boolean isAchived = true;
         for (int j = 0; j < noOfClusters; j++) {
@@ -165,9 +140,6 @@ public class KMean {
         }
 //
         if (isAchived) {
-//            System.out.println("======================================== ");
-//            System.out.println(" Final Cluster is ");
-
             for (int i = 0; i < noOfClusters; i++) {
                 TblCluster cluster = new TblCluster();
                 int hasValue = AppHelper.hasingString(expLevel + skillId);
@@ -179,7 +151,6 @@ public class KMean {
                     for (int j = 0; j < data.size(); j++) {
                         if (indexClusterHasMinDistance[j] == i) {
                             data.get(j).setClusterId(entity);
-//                            System.out.printf(data.get(j).getSalary() + ", ");
                         }
                     }
                 }

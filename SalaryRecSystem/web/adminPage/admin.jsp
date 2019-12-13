@@ -41,28 +41,58 @@
                 letter-spacing: 0.7px;
                 text-transform: uppercase;
             }
+            td:first-child{
+                margin-top: 0px;
+            }
+            td{
+                padding:0px 50px
+            }
+            form, a{
+                margin: 10px;
+            }
         </style>
     </head>
     <body>
         <h1>Welcome to Salary recommendation sytem</h1>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>View data action</th>
+                    <th>Control action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
 
-        <form action="ProcessServlet" method="POST">
-            Crawl Skill <br/><input class="btn" type="submit" value="CrawlSkills" name="btnAction" />
-        </form>
-        <form action="ProcessServlet" method="POST">
-            Crawl Jobs <br/><input class="btn" type="submit" value="CrawlJobs" name="btnAction" />
-        </form>
-        <form action="ProcessServlet" method="POST">
-            Stop Crawl <br/><input class="btn" type="submit" value="StopCrawl" name="btnAction" />
-        </form>
-        <form action="ProcessServlet" method="POST">
-            Process <br/><input class="btn" type="submit" value="Process" name="btnAction" />
-        </form>
-         <form action="ProcessServlet" method="POST">
-            Test <br/><input class="btn" type="submit" value="Test" name="btnAction" />
-        </form>
-        <form action="PdfServlet" method="POST">
-            Test <br/><input class="btn" type="submit" value="GeneratePDF" name="btnAction" />
-        </form>
+                        <a class="btn" href="/SalaryRecSystem/adminPage/skills.jsp"  >View all skills</a>
+                        <a class="btn" href="/SalaryRecSystem/homePage/home.jsp"  >Go back to home page</a>
+
+                    </td>
+                    <td>
+                        <form action="ProcessServlet" method="POST">
+                            <input class="btn" type="submit" value="CrawlSkills" name="btnAction" />
+                        </form>
+                        <form action="ProcessServlet" method="POST">
+                            <input class="btn" type="submit" value="CrawlJobs" name="btnAction" />
+                        </form>
+                        <form action="ProcessServlet" method="POST">
+                            <input class="btn" type="submit" value="StopCrawl" name="btnAction" />
+                        </form>
+                        <form action="ProcessServlet" method="POST">
+                            <input class="btn" type="submit" value="Process" name="btnAction" />
+                        </form>
+                        <form action="ProcessServlet" method="POST">
+                            <input class="btn" type="submit" value="Test" name="btnAction" />
+                        </form>
+                        <form action="PdfServlet" method="POST">
+                            <input class="btn" type="submit" value="GeneratePDF" name="btnAction" />
+                        </form></td>
+                </tr>
+
+            </tbody>
+        </table>
+
+      
     </body>
 </html>

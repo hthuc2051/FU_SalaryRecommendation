@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+
+
+<root>
+    <details>
+        <breakLastPage>&#60;span class&#61;&#34;col&#45;sm&#45;2 styled&#45;select job&#45;sorter&#45;col</breakLastPage>
+        <isStartLastPage>&#60;div class&#61;&#34;ais&#45;stats</isStartLastPage>
+        <pagingValue>span</pagingValue>
+        <breakUrl>&#60;div class&#61;&#34;paginationTwoStatus</breakUrl>
+        <isStartListUrl>&#60;div class&#61;&#34;col&#45;sm&#45;12 col&#45;md&#45;9 col&#45;ListJobCate</isStartListUrl>
+        <urlItemClassCheck>h</urlItemClassCheck>
+        <classOfItemCheck>job</classOfItemCheck>
+        <ItemHref>a</ItemHref>
+    </details>
+	
+</root>

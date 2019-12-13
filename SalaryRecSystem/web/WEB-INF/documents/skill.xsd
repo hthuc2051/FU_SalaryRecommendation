@@ -5,17 +5,16 @@ To change this template file, choose Tools | Templates
 and open the template in the editor.
 -->
 
-<xs:schema version="1.0"
-           xmlns:xs="http://www.w3.org/2001/XMLSchema"
-           elementFormDefault="qualified">
-<xsd:element name="TblSkill">
+<xsd:schema version="1.0"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            elementFormDefault="qualified">
+    <xsd:element name="SkillValidateObj">
         <xsd:complexType>
             <xsd:sequence>
                 <xsd:element type="xsd:string" name="name"/>
                 <xsd:element type="xsd:string" name="type"/>
-                <xsd:element type="xsd:string" name="link"/>
                 <xsd:element type="xsd:integer" name="hash"/>
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>
-</xs:schema>
+</xsd:schema>

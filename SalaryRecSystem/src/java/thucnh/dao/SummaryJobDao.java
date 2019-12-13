@@ -44,11 +44,14 @@ public class SummaryJobDao extends BaseDao<SummaryJob, Integer> {
                 String salary = entry.getKey();
                 Integer[] hash_quantityJob = entry.getValue();
                 if (hash_quantityJob.length > 1) {
-                    summaryItem = new SummaryJob();
-                    summaryItem.setExpSkillHash(hash_quantityJob[0]);
-                    summaryItem.setNoOfJobs(hash_quantityJob[1]);
-                    summaryItem.setSalary(Double.parseDouble(salary.split("~")[0]));
-                    dao.create(summaryItem);
+                    try {
+                        summaryItem = new SummaryJob();
+                        summaryItem.setExpSkillHash(hash_quantityJob[0]);
+                        summaryItem.setNoOfJobs(hash_quantityJob[1]);
+                        summaryItem.setSalary(Double.parseDouble(salary.split("~")[0]));
+                        dao.create(summaryItem);
+                    } catch (Exception e) {
+                    }
                 }
             }
         }

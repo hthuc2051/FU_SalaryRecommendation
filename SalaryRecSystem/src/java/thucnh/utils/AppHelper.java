@@ -37,7 +37,7 @@ public class AppHelper {
             return "TL";
         } else if (s.contains("senior") || (year > 3 && year <= 6)) {
             return "Senior";
-        } else if (s.contains("developer") || (year > 1 && year <= 3)) {
+        } else if (s.contains("developer")|| s.contains("dev")|| (year > 1 && year <= 3)) {
             return "Dev";
         } else if (s.contains("junior") || (year > 0.5 && year <= 1)) {
             return "Junior";

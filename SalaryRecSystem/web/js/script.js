@@ -23,7 +23,13 @@ function loadContent(i) {
         icon[0].style.filter = "opacity(50%)";
         icon[1].style.filter = "opacity(50%)";
         icon[2].style.filter = "opacity(100%)";
-        isFinished = true;
+    }
+    else if (i === 4) {
+        content[0].style.transform = "translateX(-3570px)";
+        icon[0].style.filter = "opacity(50%)";
+        icon[1].style.filter = "opacity(50%)";
+        icon[2].style.filter = "opacity(50%)";
+        icon[3].style.filter = "opacity(100%)";
     }
 }
 

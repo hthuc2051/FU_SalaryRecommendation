@@ -51,6 +51,9 @@
                 <li id="img-cal" >
                     <img src="./assets/analysis.png" class="icon">
                 </li>
+                <li id="img-cal" onclick="loadContent(4);" >
+                    <img style="margin-left: 5px;" src="./assets/search.png" class="icon">
+                </li>
             </ul>
             <div class="content">
                 <ul class="insinde-content">
@@ -104,6 +107,31 @@
                             </div>
 
                         </ul>
+                    </li>
+                    <li>
+                        <p class="title">Find jobs with the salary you want </p>
+                        <div class="searchBySalary">
+                            <input id="salary-from" class="select-pure__autocomplete" placeholder="Input your min salary " type="number" min="100000" max="1000000000">
+                            <input id="salary-to" class="select-pure__autocomplete" placeholder="Input your max salary " type="number" min="100000" max="1000000000">
+                            <input class="select-pure__autocomplete btnSearchSalary" placeholder="Input your max salary " type="submit">
+                        </div>
+                        <div  class="searchBySalaryResult">
+                            <table border="1">
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Skill Name</th>
+                                        <th>Experience level</th>
+                                        <th>Salary</th>
+                                        <th>Link</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="data">
+                                  
+                                </tbody>
+                            </table>
+
+                        </div>
                     </li>
                 </ul>
             </div>

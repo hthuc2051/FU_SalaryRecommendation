@@ -35,13 +35,11 @@ public class MainCrawler {
 
     static long startTime = System.nanoTime();
 
-    public static void test() {
-//        SummaryJobDao dao = new SummaryJobDao();
-//        dao.findTop10ForChart(140000000.0, 293227331);
-        JobDao dao = JobDao.getInstance();
-        dao.getTopTenRelatedJob(120000000.0, 293227331);
-//        ClusterDao dao = ClusterDao.getInstance();
-//        List<TblCluster> result = dao.findClustersByHash(293227331);
+    public static void test(ServletContext context) {
+
+//        XMLUtils.getSignTagOfCrawler(XML_TAG_TECHNOJOB, ARR_TECHNOJOB_TAG);
+        TechnoJobsCrawler crawler = new TechnoJobsCrawler("a", null, context);
+        crawler.getListJobUrl("https://www.technojobs.co.uk/search.phtml/java/searchfield/location/radius25/salary0/sortby5", "Java");
     }
 
     public static void crawlSkill(ServletContext context) {
@@ -49,28 +47,25 @@ public class MainCrawler {
         topITWorksCrawler.crawl();
     }
 
-    public static void crawlJobs(ServletContext context) {
+    public static void crawlJobs(ServletContext context) throws InterruptedException {
 
         List<TblSkill> skills = getAllSkills();
-
         if (skills != null && skills.size() > 0) {
             BaseThread.getInstance().resumeThread();
             CareerBuilderCrawler careerBuilderCrawler = new CareerBuilderCrawler(HOST_CAREER_BUILDER, skills, context);
             careerBuilderCrawler.start();
             TechnoJobsCrawler technoJobsCrawler = new TechnoJobsCrawler(HOST_TECHNO_JOBS, skills, context);
-            technoJobsCrawler.start();
+            technoJobsCrawler.start();  
             try {
                 technoJobsCrawler.join();
                 long endTime = System.nanoTime() - startTime;
                 System.out.println("Crawl time: " + TimeUnit.SECONDS.convert(endTime, TimeUnit.NANOSECONDS) + " seconds");
 
-            } catch (InterruptedException ex) {
-                Logger.getLogger(MainCrawler.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        }
 
-        long endTime = System.nanoTime() - startTime;
-        System.out.println("Crawl time: " + TimeUnit.SECONDS.convert(endTime, TimeUnit.NANOSECONDS) + " seconds");
+        }
     }
 
     public static void stopCrawl() {
