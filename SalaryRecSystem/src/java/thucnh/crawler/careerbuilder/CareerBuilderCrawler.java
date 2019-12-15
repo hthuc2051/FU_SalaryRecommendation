@@ -23,7 +23,6 @@ import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 import thucnh.crawler.BaseCrawler;
 import thucnh.dao.JobDao;
-import thucnh.dao.SkillDao;
 import thucnh.entity.TblSkill;
 import thucnh.thread.BaseThread;
 import static thucnh.utils.AppConstant.*;
@@ -253,7 +252,6 @@ public class CareerBuilderCrawler extends BaseCrawler implements Runnable {
                     reader.close();
                 } catch (IOException e) {
                     Logger.getLogger(CareerBuilderCrawler.class.getName() + " - Finally_Reader").log(Level.SEVERE, e.getMessage(), e);
-
                 }
             }
         }

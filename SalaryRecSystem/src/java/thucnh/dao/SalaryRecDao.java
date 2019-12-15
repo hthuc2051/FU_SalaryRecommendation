@@ -6,15 +6,10 @@
 package thucnh.dao;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import javax.persistence.EntityManager;
-import thucnh.entity.TblJob;
 import thucnh.entity.TblSalaryRec;
 import thucnh.entity.TblSkill;
-import thucnh.kmean.KMean;
-import thucnh.utils.AppHelper;
 import thucnh.utils.DBUtils;
 
 /**

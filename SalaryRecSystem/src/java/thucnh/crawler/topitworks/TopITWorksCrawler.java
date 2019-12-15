@@ -15,7 +15,6 @@ import thucnh.crawler.BaseCrawler;
 import thucnh.dao.SkillDao;
 import thucnh.entity.TblSkill;
 import static thucnh.utils.AppConstant.*;
-import thucnh.utils.JAXBUtils;
 
 /**
  *

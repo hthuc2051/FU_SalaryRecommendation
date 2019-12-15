@@ -23,7 +23,6 @@ import thucnh.dao.JobDao;
 import thucnh.entity.TblJob;
 import thucnh.entity.TblSkill;
 import thucnh.mapper.JobValidateMapper;
-import thucnh.thread.BaseThread;
 import static thucnh.utils.AppConstant.*;
 import thucnh.utils.AppHelper;
 import static thucnh.utils.AppHelper.hasingString;
@@ -57,7 +56,6 @@ public class CareerBuilderEachPageCrawler extends BaseCrawler implements Runnabl
             String line = "";
             String document = "<document><div>";
             boolean isStart = false;
-            boolean isFound = false;
             if (reader != null) {
                 while ((line = reader.readLine()) != null) {
                     if (isStart && line.contains(tagsMap.get("break1")) || line.contains(tagsMap.get("break2"))) {

@@ -5,7 +5,6 @@
         salaryRecArr: [],
         xmlSkills: null,
         xmlSalaryRecs: null,
-        doneStep: 0,
         jobsArr: [],
 
         arrChart: [],
@@ -38,33 +37,24 @@
 //            Trigger not move next step
             let btnNext = document.getElementById("btn-nextStep");
             btnNext.addEventListener('click', function () {
-                if (homeModel.doneStep >= 1) {
-                    loadContent(2);
-
-                    homeView.resetChart();
-                }
+                loadContent(2);
+                homeView.resetChart();
             });
             let imgNext = document.getElementById("img-nextStep");
             imgNext.addEventListener('click', function () {
-                if (homeModel.doneStep >= 1) {
-                    loadContent(2);
-                    homeView.resetChart();
-                }
+                loadContent(2);
+                homeView.resetChart();
             });
             let imgCal = document.getElementById("img-cal");
             imgCal.addEventListener('click', function () {
-                if (homeModel.doneStep >= 2) {
-                    homeView.calculateSalaryRec();
-                    loadContent(3);
-                }
+                homeView.calculateSalaryRec();
+                loadContent(3);
             });
 
             let btnCal = document.getElementById("btn-cal");
             btnCal.addEventListener('click', function () {
-                if (homeModel.doneStep >= 2) {
-                    loadContent(3);
-                    homeView.calculateSalaryRec();
-                }
+                loadContent(3);
+                homeView.calculateSalaryRec();
             });
             let btnSearchSalary = document.getElementsByClassName("btnSearchSalary")[0];
             let dataTag = document.getElementById("data");
@@ -173,7 +163,6 @@
                     }
                 }
             }
-            homeModel.doneStep = 3;
 //            await homeView.onLoading();
             homeView.renderChart();
         },
@@ -262,7 +251,6 @@
                         dropdown_element.appendChild(select_button);
                         dropdown_element.appendChild(options);
                         input_stage.appendChild(dropdown_element);
-                        homeModel.doneStep = 1;
                     }
                 }
             }
@@ -346,9 +334,8 @@
                         }
                     }
                 }
-            } else {
-                homeModel.doneStep = 0;
             }
+
 //            else {
 //                homeModel.selectedArr.push(homeModel.selectedArr[0]);
 //            }
@@ -374,11 +361,12 @@
             } else {
                 homeModel.selectedArr.push(obj);
             }
-            homeModel.doneStep = 2;
         },
         renderChart: function () {
+            let pdfLink = document.getElementById("pdfLink");
             var arrChart = homeModel.arrChart;
             if (arrChart.length > 0) {
+                pdfLink.style = "visibility: inherit;";
                 let chartTab = document.getElementById("trong");
                 for (var i = 0; i < arrChart.length; i++) {
                     let hashValue = hasingString(arrChart[i].expLevel + arrChart[i].skillId);
@@ -412,6 +400,9 @@
                         chart.render();
                     });
                 }
+            } else {
+                pdfLink.style = "visibility: hidden;";
+
             }
         },
         getTop20JobBySalary: function () {
@@ -454,7 +445,7 @@
                 var link = document.createElement("td");
                 var a = document.createElement("a");
 
-                count.innerHTML = (i+1);
+                count.innerHTML = (i + 1);
                 skillName.innerHTML = arr[i].skillName;
                 salary.innerHTML = homeView.formatVietnameseCurrency(parseFloat(arr[i].salary));
                 expLevel.innerHTML = arr[i].expLevel;
@@ -480,10 +471,7 @@
             document.getElementById("overlay").style.display = "block";
         },
         resetPage: async function () {
-            if (homeModel.doneStep >= 3) {
-                homeModel.doneStep = 0;
-                location.reload(true);
-            }
+            location.reload(true);
         },
         formatVietnameseCurrency: function (price)
         {

@@ -42,7 +42,7 @@
         </div>
         <div id="container">
             <ul id="menu-bar">
-                <li id="btn-skill-choice" style="padding-left:8px;" onClick="loadContent(1);">
+                <li id="btn-skill-choice" style="padding-left:8px;">
                     <img src="./assets/choices.png" class="icon">
                 </li>
                 <li id="img-nextStep" style="padding-left:8px;" >

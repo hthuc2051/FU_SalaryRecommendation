@@ -10,8 +10,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.ServletContext;
 import thucnh.crawler.careerbuilder.CareerBuilderCrawler;
 import thucnh.crawler.technojobs.TechnoJobsCrawler;
@@ -74,6 +72,10 @@ public class MainCrawler {
         System.out.println("Crawl time: " + TimeUnit.SECONDS.convert(endTime, TimeUnit.NANOSECONDS) + " seconds");
     }
 
+    // 
+    public static void resetData(){
+        
+    }
     // Implement Kmean, Meadian, Chart summary
     public static void processCreateData() {
         JobDao jobDao = JobDao.getInstance();

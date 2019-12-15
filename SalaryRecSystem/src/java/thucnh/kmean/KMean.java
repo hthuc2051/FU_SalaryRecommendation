@@ -21,7 +21,6 @@ public class KMean {
     private int skillId;
     private String expLevel;
     JobDao jobDao = JobDao.getInstance();
-
     List<TblJob> data;
     private double max;
     private double min;
@@ -98,7 +97,7 @@ public class KMean {
 //            centroid[1][smallerDistance] Tổng của các node khi tạo thành cluster temp mới
             centroid[1][smallerDistance] = centroid[1][smallerDistance] + data.get(j).getSalary();
 //            Tổng số lượng node
-//              Từ tổng của các node trong cluster / tổng số lượng node -> ra centroid mới
+//            Từ tổng của các node trong cluster / tổng số lượng node -> ra centroid mới
             clusterNodeCount[smallerDistance] = clusterNodeCount[smallerDistance] + 1;
             indexClusterHasMinDistance[j] = smallerDistance;
 
@@ -135,7 +134,6 @@ public class KMean {
         }
 
         if (!isAchived) {
-
             getCentroid(data, noOfClusters, centroid);
         }
 //

@@ -5,7 +5,6 @@
  */
 package thucnh.mapper;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.adapters.XmlAdapter;

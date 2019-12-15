@@ -5,13 +5,8 @@
  */
 package thucnh.mapper;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 import javax.xml.bind.annotation.adapters.XmlAdapter;
-import thucnh.dto.SkillDto;
 import thucnh.dto.SkillValidateObj;
-import thucnh.entity.TblSalaryRec;
 import thucnh.entity.TblSkill;
 
 /**

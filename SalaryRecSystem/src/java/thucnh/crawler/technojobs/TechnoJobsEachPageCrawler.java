@@ -27,7 +27,6 @@ import thucnh.dao.JobDao;
 import thucnh.entity.TblJob;
 import thucnh.entity.TblSkill;
 import thucnh.mapper.JobValidateMapper;
-import thucnh.thread.BaseThread;
 import static thucnh.utils.AppConstant.*;
 import thucnh.utils.AppHelper;
 import static thucnh.utils.AppHelper.hasingString;

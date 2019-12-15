@@ -6,8 +6,6 @@
 package thucnh.thread;
 
 import javax.servlet.ServletContext;
-import thucnh.crawler.careerbuilder.CareerBuilderCrawler;
-import static thucnh.utils.AppConstant.*;
 
 /**
  *

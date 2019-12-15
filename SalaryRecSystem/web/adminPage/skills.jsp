@@ -18,7 +18,7 @@
                 padding: 5px 20px;
             }
             tr{
-                
+
             }
             input{
                 position: fixed;
@@ -67,13 +67,25 @@
                     var id = document.createElement("td");
                     var name = document.createElement("td");
                     var type = document.createElement("td");
-   
+
+                    var updateTd = document.createElement("td");
+                    var updateBtn = document.createElement("button");
+                    updateBtn.innerHTML = "Update";
+                    updateTd.appendChild(updateBtn);
+
+                    var deleteTd = document.createElement("td");
+                    var deleteBtn = document.createElement("button");
+                    deleteBtn.innerHTML = "Delete";
+                    deleteTd.appendChild(deleteBtn);
+
                     id.innerHTML = skillsArr[i].id;
                     name.innerHTML = skillsArr[i].name;
                     type.innerHTML = skillsArr[i].type;
                     row.appendChild(id);
                     row.appendChild(name);
                     row.appendChild(type);
+                    row.appendChild(updateTd);
+                    row.appendChild(deleteTd);
                     document.getElementById("data").appendChild(row);
                 }
             }
@@ -106,6 +118,8 @@
                     <th>ID</th>
                     <th>Name</th>
                     <th>Type</th>
+                    <th>Update</th>
+                    <th>Delete</th>
                 </tr>
             </thead>
             <tbody id="data">
