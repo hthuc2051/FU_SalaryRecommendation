@@ -52,7 +52,7 @@ public class CareerBuilderCrawler extends BaseCrawler implements Runnable {
         try {
             if (url != null) {
                 for (TblSkill skill : skills) {
-                    System.out.println("SKILL CRAWL"+skill.getName());
+                    System.out.println("SKILL CRAWL" + skill.getName());
                     String urlPlus = getCareerBuilderPageLink(1, skill.getName().replace(" ", "-"));
                     int totalPage = getLastPage(url + urlPlus);
                     if (totalPage > 10) {
@@ -233,7 +233,7 @@ public class CareerBuilderCrawler extends BaseCrawler implements Runnable {
                                                         System.out.println("[SKIP] Job Link : " + link);
                                                     }
                                                 }
-                                            }else{
+                                            } else {
                                                 System.out.println("[SKIP] Job Link : " + link);
                                             }
                                         }

@@ -30,11 +30,13 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "TblSkill")
 @XmlRootElement
+
 @NamedQueries({
-    @NamedQuery(name = "TblSkill.findAll", query = "SELECT t FROM TblSkill t")
+    @NamedQuery(name = "TblSkill.findAll", query = "SELECT t FROM TblSkill t WHERE t.active = true")
     , @NamedQuery(name = "TblSkill.findById", query = "SELECT t FROM TblSkill t WHERE t.id = :id")
     , @NamedQuery(name = "TblSkill.findByName", query = "SELECT t FROM TblSkill t WHERE t.name = :name")
     , @NamedQuery(name = "TblSkill.findByType", query = "SELECT t FROM TblSkill t WHERE t.type = :type")
+    , @NamedQuery(name = "TblSkill.findByRange", query = "SELECT t FROM TblSkill t WHERE t.active = true")
     , @NamedQuery(name = "TblSkill.findByHash", query = "SELECT t FROM TblSkill t WHERE t.hash = :hash")})
 public class TblSkill implements Serializable {
 
@@ -53,6 +55,8 @@ public class TblSkill implements Serializable {
     private String type;
     @Column(name = "hash")
     private Integer hash;
+    @Column(name = "active")
+    private Boolean active;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "skillId")
     private Collection<TblJob> tblJobCollection;
     @OneToMany(mappedBy = "skillId")
@@ -97,6 +101,14 @@ public class TblSkill implements Serializable {
         this.hash = hash;
     }
 
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
+
     @XmlTransient
     public Collection<TblJob> getTblJobCollection() {
         return tblJobCollection;
@@ -139,5 +151,5 @@ public class TblSkill implements Serializable {
     public String toString() {
         return "thucnh.entity.TblSkill[ id=" + id + " ]";
     }
-    
+
 }

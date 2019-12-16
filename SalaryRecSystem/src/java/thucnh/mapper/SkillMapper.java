@@ -45,7 +45,7 @@ public class SkillMapper extends XmlAdapter<SkillDto, TblSkill> {
     public SkillDto marshal(TblSkill entity) throws Exception {
         if (entity != null) {
             Collection<TblSalaryRec> salaryRecs = entity.getTblSalaryRecCollection();
-            if (salaryRecs != null && salaryRecs.size() > 0) {
+            if (salaryRecs != null && salaryRecs.size() > 0 && entity.getActive() == true) {
                 SkillDto dto = new SkillDto();
                 List<String> listExpLevel = new ArrayList<>();
                 dto.setId(entity.getId());

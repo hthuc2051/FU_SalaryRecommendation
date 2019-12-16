@@ -8,21 +8,21 @@ package thucnh.mapper;
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.adapters.XmlAdapter;
-import thucnh.dto.JobDto;
+import thucnh.dto.JobPdf;
 import thucnh.entity.TblJob;
 
 /**
  *
  * @author HP
  */
-public class JobMapper extends XmlAdapter<JobDto, TblJob> {
+public class PdfMapper extends XmlAdapter<JobPdf, TblJob> {
 
-    public List<JobDto> toListDto(List<TblJob> listEntity) {
+    public List<JobPdf> toListDto(List<TblJob> listEntity) {
         try {
             if (listEntity != null) {
-                List<JobDto> result = new ArrayList<>();
+                List<JobPdf> result = new ArrayList<>();
                 for (TblJob entity : listEntity) {
-                    JobDto dto = marshal(entity);
+                    JobPdf dto = marshal(entity);
                     if (dto != null) {
                         result.add(dto);
                     }
@@ -35,22 +35,20 @@ public class JobMapper extends XmlAdapter<JobDto, TblJob> {
     }
 
     @Override
-    public TblJob unmarshal(JobDto v) throws Exception {
+    public TblJob unmarshal(JobPdf v) throws Exception {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public JobDto marshal(TblJob entity) {
+    public JobPdf marshal(TblJob entity) {
         try {
 
             if (entity != null) {
-                JobDto dto = new JobDto();
-                dto.setId(entity.getId());
+                JobPdf dto = new JobPdf();
                 dto.setExpLevel(entity.getExpLevel());
                 dto.setLink(entity.getLink());
                 dto.setSalary(entity.getSalary());
                 dto.setSkillName(entity.getSkillId().getName());
-                dto.setActive(entity.getActive());
                 return dto;
             }
         } catch (Exception e) {

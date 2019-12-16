@@ -6,15 +6,19 @@
 package thucnh.dao;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 import thucnh.dto.JobDto;
+import thucnh.dto.JobPdf;
 import thucnh.entity.TblCluster;
 import thucnh.entity.TblJob;
 import thucnh.entity.TblSkill;
 import thucnh.mapper.JobMapper;
+import thucnh.mapper.PdfMapper;
 import thucnh.utils.AppHelper;
 import thucnh.utils.DBUtils;
 
@@ -25,6 +29,7 @@ import thucnh.utils.DBUtils;
 public class JobDao extends BaseDao<TblJob, Integer> {
 
     JobMapper mapper = new JobMapper();
+    PdfMapper pdfMapper = new PdfMapper();
 
     public JobDao() {
     }
@@ -68,6 +73,36 @@ public class JobDao extends BaseDao<TblJob, Integer> {
         }
     }
 
+    public boolean deleteOne(Integer id) {
+        EntityManager manager = DBUtils.getEntityManager();
+        try {
+            EntityTransaction transaction = manager.getTransaction();
+            transaction.begin();
+            int check = manager.createQuery("UPDATE TblJob  SET active = false Where id = :id")
+                    .setParameter("id", id)
+                    .executeUpdate();
+            transaction.commit();
+            return check > 0;
+        } finally {
+            if (manager != null) {
+                manager.close();
+            }
+        }
+    }
+
+    public void resetClusters() {
+        EntityManager manager = DBUtils.getEntityManager();
+        try {
+            EntityTransaction transaction = manager.getTransaction();
+            transaction.begin();
+            manager.createNativeQuery("UPDATE TblJob SET clusterId = null").executeUpdate();
+            transaction.commit();
+        } finally {
+            if (manager != null) {
+                manager.close();
+            }
+        }
+    }
 //    public Double[] getArrSalaryBySkillAndExpLevel(TblSkill skill, String expLevel) {
 //        EntityManager manager = DBUtils.getEntityManager();
 //        Double[] arr = null;
@@ -91,6 +126,7 @@ public class JobDao extends BaseDao<TblJob, Integer> {
 //        }
 //        return null;
 //    }
+
     public Double[] getArrSalaryBySkillAndExpLevel(List<TblJob> jobs) {
         Double[] arr = null;
         if (jobs != null && jobs.size() > 0) {
@@ -123,7 +159,7 @@ public class JobDao extends BaseDao<TblJob, Integer> {
         return null;
     }
 
-     public List<TblJob> findBySalaryRange(Double from, Double to) {
+    public List<TblJob> findBySalaryRange(Double from, Double to) {
         EntityManager manager = DBUtils.getEntityManager();
         List<TblJob> result = null;
         try {
@@ -142,7 +178,7 @@ public class JobDao extends BaseDao<TblJob, Integer> {
         }
         return result;
     }
-     
+
     public List<String> getDistinctExpLevel() {
         EntityManager manager = DBUtils.getEntityManager();
         try {
@@ -159,9 +195,9 @@ public class JobDao extends BaseDao<TblJob, Integer> {
         }
         return null;
     }
- 
-    public List<JobDto> getTopTenRelatedJob(Double salaryRec, Integer expSkillHash) {
-        List<JobDto> result = null;
+
+    public List<JobPdf> getTopTenRelatedJob(Double salaryRec, Integer expSkillHash) {
+        List<JobPdf> result = null;
         ClusterDao clusterDao = ClusterDao.getInstance();
         Double minDistanceCentroid = 0.0;
         Map<TblJob, Double> top10JobsForPdfMap = new HashMap<>();
@@ -177,7 +213,7 @@ public class JobDao extends BaseDao<TblJob, Integer> {
                     index = i;
                 }
             }
-            List<TblJob> jobsByCentroid = clusters.get(index).geTblJobsList();
+            Collection<TblJob> jobsByCentroid = clusters.get(index).getTblJobCollection();
             for (TblJob job : jobsByCentroid) {
                 Double distance = AppHelper.calculateDistance(job.getSalary(), salaryRec);
                 if (top10JobsForPdfMap.size() < 10) {
@@ -196,7 +232,7 @@ public class JobDao extends BaseDao<TblJob, Integer> {
             if (top10JobsForPdfMap.size() > 0) {
                 result = new ArrayList<>();
                 for (Map.Entry<TblJob, Double> entry : top10JobsForPdfMap.entrySet()) {
-                    JobDto dto = mapper.marshal(entry.getKey());
+                    JobPdf dto = pdfMapper.marshal(entry.getKey());
                     dto.setExpLevel(AppHelper.getFullLevelStr(dto.getExpLevel()));
                     result.add(dto);
                 }

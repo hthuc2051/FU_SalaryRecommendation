@@ -8,6 +8,7 @@ package thucnh.dao;
 import java.util.Arrays;
 import java.util.List;
 import javax.persistence.EntityManager;
+import static thucnh.dao.SkillDao.getInstance;
 import thucnh.entity.TblSalaryRec;
 import thucnh.entity.TblSkill;
 import thucnh.utils.DBUtils;
@@ -51,7 +52,6 @@ public class SalaryRecDao extends BaseDao<TblSalaryRec, Integer> {
         return null;
     }
 
-
     public void insertSalaryRec(Double[] salaryArr, TblSkill skill, String expLevel) {
         Double salary = generateMedianSalary(salaryArr);
         TblSalaryRec salaryRec = null;
@@ -62,6 +62,7 @@ public class SalaryRecDao extends BaseDao<TblSalaryRec, Integer> {
             salaryRec.setSkillId(skill);
             salaryRec.setSalaryRec(salary);
             salaryRec.setExpLevel(expLevel);
+            salaryRec.setActive(true);
             TblSalaryRec result = salaryRecDao.create(salaryRec);
             if (result != null) {
                 System.out.println("[CREATE-SALARY-REC]: " + salaryRec.getSkillId().getName() + " - " + expLevel + " : " + salaryRec.getSalaryRec());
@@ -71,6 +72,18 @@ public class SalaryRecDao extends BaseDao<TblSalaryRec, Integer> {
             salaryRecDao.update(salaryRec);
             System.out.println("[UPDATE-SALARY-REC]: " + salaryRec.getSkillId().getName() + " - " + expLevel + " : " + salaryRec.getSalaryRec());
         }
+    }
+
+    public boolean deleteOne(Integer id) {
+        SalaryRecDao dao = getInstance();
+        TblSalaryRec entity = dao.findByID(id);
+        if (entity != null) {
+            entity.setActive(false);
+            if (dao.update(entity) != null) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public double generateMedianSalary(Double[] arr) {

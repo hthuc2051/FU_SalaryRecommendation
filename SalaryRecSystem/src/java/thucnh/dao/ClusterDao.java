@@ -7,6 +7,7 @@ package thucnh.dao;
 
 import java.util.List;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 import thucnh.entity.TblCluster;
 import thucnh.utils.DBUtils;
 
@@ -30,8 +31,8 @@ public class ClusterDao extends BaseDao<TblCluster, Integer> {
         }
         return instance;
     }
-    
-     public List<TblCluster> findClustersByHash(Integer hashValue) {
+
+    public List<TblCluster> findClustersByHash(Integer hashValue) {
         EntityManager manager = DBUtils.getEntityManager();
         List<TblCluster> result = null;
         try {
@@ -48,5 +49,20 @@ public class ClusterDao extends BaseDao<TblCluster, Integer> {
             }
         }
         return null;
+    }
+
+    public void deleteClusters() {
+        EntityManager manager = DBUtils.getEntityManager();
+        try {
+            EntityTransaction transaction = manager.getTransaction();
+            transaction.begin();
+            manager.createNativeQuery("Delete FROM TblCluster").executeUpdate();
+            transaction.commit();
+
+        } finally {
+            if (manager != null) {
+                manager.close();
+            }
+        }
     }
 }

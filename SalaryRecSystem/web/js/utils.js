@@ -25,17 +25,17 @@ function getXMLHttpObject() {
     return xmlHttp;
 }
 
-function sendGetRequest(url, param, responseCallback) {
+function sendGetRequest(method, url, param, responseCallback) {
     var xhttp = getXMLHttpObject();
     xhttp.onreadystatechange = function () {
-        if (this.readyState == 4 && this.status == 200) {
+        if (this.readyState === 4 && this.status === 200) {
             responseCallback(this);
         }
     };
     if (param !== null) {
         url = url + "?" + getParam(param);
     }
-    xhttp.open("GET", url, true);
+    xhttp.open(method, url, true);
     xhttp.send();
 }
 
@@ -72,31 +72,31 @@ function isArray(value) {
     return value && typeof value === 'object' && value.constructor === Array;
 }
 
-function formatMilionNum (num) {
+function formatMilionNum(num) {
 
     // Nine Zeroes for Billions
     return Math.abs(Number(num)) >= 1.0e+9
 
-    ? Math.abs(Number(num)) / 1.0e+9 + "B"
-    // Six Zeroes for Millions 
-    : Math.abs(Number(num)) >= 1.0e+6
+            ? Math.abs(Number(num)) / 1.0e+9 + "B"
+            // Six Zeroes for Millions 
+            : Math.abs(Number(num)) >= 1.0e+6
 
-    ? Math.abs(Number(num)) / 1.0e+6 + "M"
-    // Three Zeroes for Thousands
-    : Math.abs(Number(num)) >= 1.0e+3
+            ? Math.abs(Number(num)) / 1.0e+6 + "M"
+            // Three Zeroes for Thousands
+            : Math.abs(Number(num)) >= 1.0e+3
 
-    ? Math.abs(Number(num)) / 1.0e+3 + "K"
+            ? Math.abs(Number(num)) / 1.0e+3 + "K"
 
-    : Math.abs(Number(num));
+            : Math.abs(Number(num));
 }
 
 function hasingString(s) {
-        let mod = 1000000007;
-        let base = 30757; // random prime number
-        let hasValue = 0;
-        for (let i = 0; i < s.length; i++) {
-            hasValue =  ((hasValue * base +  s.charCodeAt(i)) % mod);
-        }
-        console.log(hasValue);
-        return hasValue;
+    let mod = 1000000007;
+    let base = 30757; // random prime number
+    let hasValue = 0;
+    for (let i = 0; i < s.length; i++) {
+        hasValue = ((hasValue * base + s.charCodeAt(i)) % mod);
     }
+    console.log(hasValue);
+    return hasValue;
+}

@@ -18,6 +18,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import thucnh.dao.SkillDao;
 import thucnh.dto.SkillDto;
 import thucnh.entity.TblSkill;
 import thucnh.mapper.SkillMapper;
@@ -52,8 +53,9 @@ public class TblSkillFacadeREST extends AbstractFacade<TblSkill> {
 
     @DELETE
     @Path("{id}")
-    public void remove(@PathParam("id") Integer id) {
-        super.remove(super.find(id));
+    public boolean remove(@PathParam("id") Integer id) {
+        SkillDao dao = SkillDao.getInstance();
+        return dao.deleteOne(id);
     }
 
     @GET

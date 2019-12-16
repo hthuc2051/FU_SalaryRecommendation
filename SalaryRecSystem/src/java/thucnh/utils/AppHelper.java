@@ -5,7 +5,9 @@
  */
 package thucnh.utils;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +18,12 @@ import java.util.Map.Entry;
  * @author HP
  */
 public class AppHelper {
+
+    public static String getCurDateTime() {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = new Date();
+        return formatter.format(date);
+    }
 
     public static int hasingString(String s) {
         int mod = 1000000007;
@@ -37,7 +45,7 @@ public class AppHelper {
             return "TL";
         } else if (s.contains("senior") || (year > 3 && year <= 6)) {
             return "Senior";
-        } else if (s.contains("developer")|| s.contains("dev")|| (year > 1 && year <= 3)) {
+        } else if (s.contains("developer") || s.contains("dev") || (year > 1 && year <= 3)) {
             return "Dev";
         } else if (s.contains("junior") || (year > 0.5 && year <= 1)) {
             return "Junior";
@@ -63,7 +71,7 @@ public class AppHelper {
             case "Fresher":
                 return "Fresher developer";
         }
-       
+
         return level;
     }
 

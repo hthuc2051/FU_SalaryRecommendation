@@ -34,7 +34,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "TblJob.findById", query = "SELECT t FROM TblJob t WHERE t.id = :id")
     , @NamedQuery(name = "TblJob.findBySalary", query = "SELECT t FROM TblJob t WHERE t.salary = :salary")
     , @NamedQuery(name = "TblJob.findBySalaryRange", query = "SELECT t FROM TblJob t WHERE t.salary >= :from AND t.salary <= :to")
-
+    , @NamedQuery(name = "TblJob.resetAllClusters", query = "UPDATE TblJob t SET t.clusterId = null")
     , @NamedQuery(name = "TblJob.findByExpLevel", query = "SELECT t FROM TblJob t WHERE t.expLevel = :expLevel")
     , @NamedQuery(name = "TblJob.findByLink", query = "SELECT t FROM TblJob t WHERE t.link = :link")
     , @NamedQuery(name = "TblJob.findBySkillAndExpYear", query = "SELECT t FROM TblJob t WHERE t.skillId = :skill AND t.expLevel = :expLevel")
@@ -61,6 +61,8 @@ public class TblJob implements Serializable {
     private String link;
     @Column(name = "hash")
     private Integer hash;
+    @Column(name = "active")
+    private Boolean active;
     @JoinColumn(name = "clusterId", referencedColumnName = "id")
     @ManyToOne
     private TblCluster clusterId;
@@ -115,6 +117,14 @@ public class TblJob implements Serializable {
         this.hash = hash;
     }
 
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
+
     public TblCluster getClusterId() {
         return clusterId;
     }
@@ -155,5 +165,5 @@ public class TblJob implements Serializable {
     public String toString() {
         return "thucnh.entity.TblJob[ id=" + id + " ]";
     }
-
+    
 }

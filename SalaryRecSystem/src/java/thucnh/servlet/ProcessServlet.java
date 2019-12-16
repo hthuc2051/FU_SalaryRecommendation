@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import thucnh.crawler.MainCrawler;
+import thucnh.crawler.MainProcessor;
 import thucnh.dao.UserDao;
 import static thucnh.utils.AppConstant.*;
 
@@ -23,8 +24,6 @@ import static thucnh.utils.AppConstant.*;
  * @author HP
  */
 public class ProcessServlet extends HttpServlet {
-
-  
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -50,11 +49,12 @@ public class ProcessServlet extends HttpServlet {
             } else if (btn.equals("StopCrawl")) {
                 MainCrawler.stopCrawl();
             } else if (btn.equals("Process")) {
-                MainCrawler.processCreateData();
+                MainProcessor.processCreateData();
                 request.setAttribute("DONE", "All processes is done !");
+                System.out.println("All processes is done !");
             } else if (btn.equals("Test")) {
                 MainCrawler.test(getServletContext());
-                 url = ADMIN;
+                url = ADMIN;
             }
 
         } catch (Exception e) {

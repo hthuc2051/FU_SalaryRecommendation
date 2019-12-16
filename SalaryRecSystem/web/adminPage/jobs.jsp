@@ -17,89 +17,67 @@
             th, td{
                 padding: 5px 20px;
             }
-            tr{
-
-            }
-            input{
+            #btnLoadMore{
                 position: fixed;
                 top:90px;
-                left: 650px;
+                left: 720px;
+            }
+            .form-update{
+                max-width: 300px;
+                position: fixed;
+                right: 150px;
+                top: 150px;
+                min-width: 300px;
+            }
+            .form-update input{
+                margin: 10px;
+            }
+            button{
+                cursor: pointer;
+            }
+            input[type=text] {
+                width: 100%;
+                padding: 12px 20px;
+                margin: 8px 0;
+                box-sizing: border-box;
+            }
+            input[type=submit] {
+                background-color: #4CAF50;
+                color: white;
+                padding: 14px 20px;
+                margin: 8px 0;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+            }
+
+            input[type=submit]:hover {
+                background-color: #45a049;
             }
         </style>
-        <script>
-            var jobsArr = [];
-            var curSize = 10;
-
-            function getSkills(from, to) {
-                var url = "http://localhost:8084/SalaryRecSystem/webresources/Jobs";
-                let newUrl = url + "/" + from + "/" + to;
-                sendGetRequest(newUrl, null, function (response) {
-                    // render list location
-                    let xmlDocs = response.responseXML;
-                    let skills = xmlDocs.childNodes[0];
-                    for (let i = 0; i < skills.children.length; i++) {
-                        let skill = skills.children[i];
-                        let id = skill.getElementsByTagName("id")[0].textContent.toString();
-                        let expLevel = skill.getElementsByTagName("expLevel")[0].textContent.toString();
-                        let link = skill.getElementsByTagName("link")[0].textContent.toString();
-                        let obj = {
-                            id: id,
-                            expLevel: expLevel,
-                            link: link,
-                        };
-                        jobsArr.push(obj);
-                    }
-                    renderSkills(curSize);
-                });
-            }
-
-
-            function renderSkills(length) {
-                for (let i = length - 10; i < length; i++) {
-                    var row = document.createElement("tr");
-                    var id = document.createElement("td");
-                    var expLevel = document.createElement("td");
-                    var link = document.createElement("td");
-
-                    var updateTd = document.createElement("td");
-                    var updateBtn = document.createElement("button");
-                    updateBtn.value = "Update";
-                    updateTd.appendChild(updateBtn);
-
-                    var deleteTd = document.createElement("td");
-                    var deleteBtn = document.createElement("button");
-                    deleteBtn.value = "Delete";
-                    deleteTd.appendChild(deleteBtn);
-
-                    id.innerHTML = jobsArr[i].id;
-                    expLevel.innerHTML = jobsArr[i].expLevel;
-                    link.innerHTML = jobsArr[i].link;
-                    row.appendChild(id);
-                    row.appendChild(expLevel);
-                    row.appendChild(link);
-                    row.appendChild(updateBtn);
-                    row.appendChild(deleteBtn);
-                    document.getElementById("data").appendChild(row);
-                }
-            }
-
-            function loadMore() {
-                renderSkills(curSize + 10);
-                if (jobsArr.length - curSize < 50) {
-                    getSkills(jobsArr.length, jobsArr.length + 50);
-                }
-            }
-        </script>
     </head>
-    <body onload="getSkills(0, 50)">
-        <h1>List Jobs</h1>
+    <body>
+        <form class="form-update" method="POST" action="/SalaryRecSystem/UpdateServlet" >
+            <input type="hidden" name="txtId">
+            <label for="fname">Job Level </label>
+            <input readonly="true"  type="text" id="fname" name="txtJobLevel">
+            <label for="flink">Job Link </label>
+            <input type="text" id="flink" name="txtJobLink">
+            <label for="lname">Job salary</label>
+            <input type="text" id="lname" name="txtJobSalary">
+            <input type="submit" name="btnAction" value="Update Job" /><br/>
+        </form>
+
+        <h1>List jobs</h1>
+        <a class="btn" href="/SalaryRecSystem/adminPage/admin.jsp"  >Back to admin control</a>
         <table border="1">
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Name</th>
-                    <th>Type</th>
-                    <th>Update</th
+                    <th>Job Level</th>
+                    <th>Job salary</th>
+                    <th>Is Active</th>
+                    <th>Update</th>
                     <th>Delete</th>
                 </tr>
             </thead>
@@ -107,7 +85,10 @@
 
             </tbody>
         </table>
-        <input  type="submit" value="Load more" onclick="loadMore()"/>
+
+        <input id="btnLoadMore" name="btnLoadMore" type="submit" value="Load more"/>
         <script src="/SalaryRecSystem/js/utils.js"></script>
+        <script src="/SalaryRecSystem/js/jobsPage.js"></script>
+
     </body>
 </html>

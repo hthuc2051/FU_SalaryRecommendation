@@ -21,20 +21,20 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class PdfJobsObj implements Serializable {
 
     @XmlElement(name = "listJobs")
-    private List<JobDto> listJobs;
+    private List<JobPdf> listJobs;
 
     public PdfJobsObj() {
     }
 
-    public PdfJobsObj(List<JobDto> listJobs) {
+    public PdfJobsObj(List<JobPdf> listJobs) {
         this.listJobs = listJobs;
     }
 
-    public List<JobDto> getListJobs() {
+    public List<JobPdf> getListJobs() {
         return listJobs;
     }
 
-    public void setListJobs(List<JobDto> listJobs) {
+    public void setListJobs(List<JobPdf> listJobs) {
         this.listJobs = listJobs;
     }
 

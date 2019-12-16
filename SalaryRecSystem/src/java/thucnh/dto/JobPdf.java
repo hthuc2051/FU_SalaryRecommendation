@@ -17,69 +17,36 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-public class JobDto implements Serializable {
-
-    @XmlElement(name = "id")
-    private Integer id;
+public class JobPdf implements Serializable {
 
     @XmlElement(name = "skillName")
-    private String skillName;
-
+    private String SkillName;
+    
     @XmlElement(name = "salary")
     private Double salary;
-
+    
     @XmlElement(name = "expLevel")
     private String expLevel;
-
+    
     @XmlElement(name = "link")
     private String link;
 
-    @XmlElement(name = "active")
-    private boolean active;
-
-    public JobDto() {
+    public JobPdf() {
     }
 
-    public JobDto(String skillName, Double salary, String expLevel, String link) {
-        this.skillName = skillName;
+    public JobPdf(String SkillName, Double salary, String expLevel, String link) {
+        this.SkillName = SkillName;
         this.salary = salary;
         this.expLevel = expLevel;
         this.link = link;
     }
-
-    public JobDto(Integer id, String skillName, Double salary, String expLevel, String link, boolean active) {
-        this.id = id;
-        this.skillName = skillName;
-        this.salary = salary;
-        this.expLevel = expLevel;
-        this.link = link;
-        this.active = active;
-    }
-
-    public boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
-    }
-
-   
 
     public String getSkillName() {
-        return skillName;
+        return SkillName;
     }
 
-    public void setSkillName(String skillName) {
-        this.skillName = skillName;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
+    public void setSkillName(String SkillName) {
+        this.SkillName = SkillName;
     }
 
     public Double getSalary() {
@@ -105,5 +72,6 @@ public class JobDto implements Serializable {
     public void setLink(String link) {
         this.link = link;
     }
-
+    
+    
 }

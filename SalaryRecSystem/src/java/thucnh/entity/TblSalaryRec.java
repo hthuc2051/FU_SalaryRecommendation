@@ -34,7 +34,6 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "TblSalaryRec.checkExistedRecSalary", query = "SELECT t FROM TblSalaryRec t WHERE t.skillId = :skill AND t.expLevel = :expLevel")
     , @NamedQuery(name = "TblSalaryRec.findByExpLevel", query = "SELECT t FROM TblSalaryRec t WHERE t.expLevel = :expLevel")
     , @NamedQuery(name = "TblSalaryRec.findBySalaryRec", query = "SELECT t FROM TblSalaryRec t WHERE t.salaryRec = :salaryRec")})
-
 public class TblSalaryRec implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -50,6 +49,8 @@ public class TblSalaryRec implements Serializable {
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "salaryRec")
     private Double salaryRec;
+    @Column(name = "active")
+    private Boolean active;
     @JoinColumn(name = "skillId", referencedColumnName = "id")
     @ManyToOne
     private TblSkill skillId;
@@ -85,6 +86,14 @@ public class TblSalaryRec implements Serializable {
         this.salaryRec = salaryRec;
     }
 
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
+
     public TblSkill getSkillId() {
         return skillId;
     }
@@ -117,5 +126,5 @@ public class TblSalaryRec implements Serializable {
     public String toString() {
         return "thucnh.entity.TblSalaryRec[ id=" + id + " ]";
     }
-
+    
 }

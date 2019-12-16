@@ -6,6 +6,7 @@
 package thucnh.entity;
 
 import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,6 +16,8 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -30,7 +33,10 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "SummaryJob.findById", query = "SELECT s FROM SummaryJob s WHERE s.id = :id")
     , @NamedQuery(name = "SummaryJob.findBySalary", query = "SELECT s FROM SummaryJob s WHERE s.salary = :salary")
     , @NamedQuery(name = "SummaryJob.findByNoOfJobs", query = "SELECT s FROM SummaryJob s WHERE s.noOfJobs = :noOfJobs")
-    , @NamedQuery(name = "SummaryJob.findByExpSkillHash", query = "SELECT s FROM SummaryJob s WHERE s.expSkillHash = :expSkillHash")})
+    , @NamedQuery(name = "SummaryJob.findByNoOfJobs", query = "SELECT s FROM SummaryJob s WHERE s.noOfJobs = :noOfJobs")
+    , @NamedQuery(name = "SummaryJob.findByExpSkillHash", query = "SELECT s FROM SummaryJob s WHERE s.expSkillHash = :expSkillHash AND s.active = true")
+    , @NamedQuery(name = "SummaryJob.findByDate", query = "SELECT s FROM SummaryJob s WHERE s.date = :date")
+    , @NamedQuery(name = "SummaryJob.findByActive", query = "SELECT s FROM SummaryJob s WHERE s.active = :active")})
 public class SummaryJob implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -47,6 +53,10 @@ public class SummaryJob implements Serializable {
     private Integer noOfJobs;
     @Column(name = "expSkillHash")
     private Integer expSkillHash;
+    @Column(name = "date")
+    private String date;
+    @Column(name = "active")
+    private Boolean active;
 
     public SummaryJob() {
     }
@@ -87,6 +97,22 @@ public class SummaryJob implements Serializable {
         this.expSkillHash = expSkillHash;
     }
 
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -111,5 +137,5 @@ public class SummaryJob implements Serializable {
     public String toString() {
         return "thucnh.entity.SummaryJob[ id=" + id + " ]";
     }
-    
+
 }

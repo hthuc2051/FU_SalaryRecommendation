@@ -23,7 +23,6 @@ public class BaseDao<T, PK extends Serializable> {
     protected Class<T> entityClass;
 
     public BaseDao() {
-
         ParameterizedType genericSuperClass = (ParameterizedType) getClass().getGenericSuperclass();
         this.entityClass = (Class<T>) genericSuperClass.getActualTypeArguments()[0];
 

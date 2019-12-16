@@ -33,6 +33,7 @@ public class TblJobFacadeREST extends AbstractFacade<TblJob> {
     private EntityManagerFactory emf = Persistence.createEntityManagerFactory("SalaryRecSystemPU");
     private EntityManager em = emf.createEntityManager();
     JobMapper mapper = new JobMapper();
+
     public TblJobFacadeREST() {
         super(TblJob.class);
     }
@@ -53,8 +54,9 @@ public class TblJobFacadeREST extends AbstractFacade<TblJob> {
 
     @DELETE
     @Path("{id}")
-    public void remove(@PathParam("id") Integer id) {
-        super.remove(super.find(id));
+    public boolean remove(@PathParam("id") Integer id) {
+        JobDao dao = JobDao.getInstance();
+        return dao.deleteOne(id);
     }
 
     @GET
@@ -74,10 +76,10 @@ public class TblJobFacadeREST extends AbstractFacade<TblJob> {
     @GET
     @Path("{from}/{to}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<TblJob> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
-        return super.findRange(new int[]{from, to});
+    public List<JobDto> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
+        return mapper.toListDto(super.findRange(new int[]{from, to}));
     }
-    
+
     @GET
     @Path("salary/{from}/{to}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -97,5 +99,5 @@ public class TblJobFacadeREST extends AbstractFacade<TblJob> {
     protected EntityManager getEntityManager() {
         return em;
     }
-    
+
 }

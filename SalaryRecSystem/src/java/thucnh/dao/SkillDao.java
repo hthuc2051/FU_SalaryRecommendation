@@ -7,6 +7,7 @@ package thucnh.dao;
 
 import java.util.List;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 import thucnh.entity.TblSkill;
 import thucnh.mapper.SkillValidateMapper;
 import thucnh.utils.AppHelper;
@@ -53,6 +54,24 @@ public class SkillDao extends BaseDao<TblSkill, Integer> {
         return null;
     }
 
+    public synchronized List<TblSkill> getInRange(int from, int to) {
+        EntityManager manager = DBUtils.getEntityManager();
+        try {
+            List<TblSkill> result = manager.createNamedQuery("TblSkill.findByRange", TblSkill.class)
+                    .setFirstResult(from)
+                    .setMaxResults(to)
+                    .getResultList();
+            if (result != null && !result.isEmpty()) {
+                return result;
+            }
+        } finally {
+            if (manager != null) {
+                manager.close();
+            }
+        }
+        return null;
+    }
+
     public synchronized TblSkill insertSkill(String type, String name, String xsdFilePath) {
         synchronized (LOCK) {
             TblSkill skill;
@@ -81,6 +100,23 @@ public class SkillDao extends BaseDao<TblSkill, Integer> {
                 System.out.println("[SKIP] Skill : Type: " + type + "- Name :" + name);
             }
             return null;
+        }
+    }
+
+    public boolean deleteOne(Integer id) {
+        EntityManager manager = DBUtils.getEntityManager();
+        try {
+            EntityTransaction transaction = manager.getTransaction();
+            transaction.begin();
+            int check = manager.createQuery("UPDATE TblSkill  SET active = false Where id = :id")
+                    .setParameter("id", id)
+                    .executeUpdate();
+            transaction.commit();
+            return check > 0;
+        } finally {
+            if (manager != null) {
+                manager.close();
+            }
         }
     }
 

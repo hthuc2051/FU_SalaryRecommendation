@@ -101,7 +101,10 @@
                                 </div>
                                 <div id="pdfLink">
                                     <a href="#"></a>
-                                    <span>Click to download jobs that are suitable for you</span>
+                                    <div id="pdf-loader"></div>
+                                    <span id="msg-pdf" >
+
+                                        Click to download jobs that are suitable for you</span>
                                 </div>
                                 <img src="assets/next-arrow.png" onclick="next()" class="next" />
                             </div>
@@ -127,7 +130,7 @@
                                     </tr>
                                 </thead>
                                 <tbody id="data">
-                                  
+
                                 </tbody>
                             </table>
 

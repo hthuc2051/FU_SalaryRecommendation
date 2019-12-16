@@ -14,12 +14,7 @@
     var homeView = {
         init: function () {
             // init 
-            function initData(callback) {
-                octopus.getSkillsData();
-                octopus.getSalaryRecsData();
-                callback();
-            }
-            initData(function () {
+            homeView.initData(function () {
                 document.getElementById("overlay").style.display = "none";
             });
 
@@ -30,8 +25,22 @@
 
             let btnPdf = document.getElementById("pdfLink");
             btnPdf.addEventListener('click', function () {
-                let selectedArr = homeModel.selectedArr;
-                octopus.getPdf();
+                let msgPdf = document.getElementById("msg-pdf");
+                if (typeof (msgPdf) !== 'undefined') {
+                    msgPdf.style = "display:none";
+                }
+                let pdfLoader = document.getElementById("pdf-loader");
+                if (typeof (pdfLoader) !== 'undefined') {
+                    pdfLoader.style = "display:inline";
+                }
+                octopus.getPdf(function () {
+                    if (typeof (pdfLoader) !== 'undefined') {
+                        pdfLoader.style = "display:none";
+                    }
+                    if (typeof (msgPdf) !== 'undefined') {
+                        msgPdf.style = "display:flex";
+                    }
+                });
             });
 
 //            Trigger not move next step
@@ -47,21 +56,35 @@
             });
             let imgCal = document.getElementById("img-cal");
             imgCal.addEventListener('click', function () {
-                homeView.calculateSalaryRec();
+                document.getElementById("overlay").style.display = "block";
                 loadContent(3);
+                homeView.calculateSalaryRec(function () {
+                    document.getElementById("overlay").style.display = "none";
+
+                });
+
             });
 
             let btnCal = document.getElementById("btn-cal");
             btnCal.addEventListener('click', function () {
+                document.getElementById("overlay").style.display = "block";
                 loadContent(3);
-                homeView.calculateSalaryRec();
+                homeView.calculateSalaryRec(function () {
+                    document.getElementById("overlay").style.display = "none";
+                });
             });
             let btnSearchSalary = document.getElementsByClassName("btnSearchSalary")[0];
             let dataTag = document.getElementById("data");
             btnSearchSalary.addEventListener('click', function () {
                 dataTag.innerHTML = "";
+                homeModel.jobsArr = [];
                 homeView.getTop20JobBySalary();
             });
+        },
+        initData: function (callBack) {
+            octopus.getSkillsData();
+            octopus.getSalaryRecsData();
+            callBack();
         },
         parsingXmlSalary: function () {
             let element = document.getElementsByClassName("loading-text");
@@ -150,8 +173,7 @@
                 }
             }
         },
-        calculateSalaryRec: function () {
-
+        calculateSalaryRec: function (callBackMethod) {
             if (homeModel.selectedArr.length > 0) {
                 console.log(homeModel.selectedArr);
                 for (var i = 0; i < homeModel.selectedArr.length; i++) {
@@ -164,7 +186,7 @@
                 }
             }
 //            await homeView.onLoading();
-            homeView.renderChart();
+            homeView.renderChart(callBackMethod);
         },
         selectSkill: function (id) {
             let arr = document.getElementsByClassName('select-pure__option');
@@ -362,7 +384,7 @@
                 homeModel.selectedArr.push(obj);
             }
         },
-        renderChart: function () {
+        renderChart: function (callBack) {
             let pdfLink = document.getElementById("pdfLink");
             var arrChart = homeModel.arrChart;
             if (arrChart.length > 0) {
@@ -404,6 +426,7 @@
                 pdfLink.style = "visibility: hidden;";
 
             }
+            callBack();
         },
         getTop20JobBySalary: function () {
             let from = parseFloat(document.getElementById("salary-from").value);
@@ -504,7 +527,7 @@
         },
         getSkillsData: function () {
             var url = "http://localhost:8084/SalaryRecSystem/webresources/skills/skillsItems";
-            sendGetRequest(url, null, function (response) {
+            sendGetRequest("GET", url, null, function (response) {
                 var xmlDoc = response.responseXML;
                 homeModel.xmlSkills = xmlDoc;
                 homeView.renderSkills();
@@ -512,7 +535,7 @@
         },
         getSalaryRecsData: function () {
             var url = "http://localhost:8084/SalaryRecSystem/webresources/salaryRecs";
-            sendGetRequest(url, null, function (response) {
+            sendGetRequest("GET", url, null, function (response) {
                 var xmlDoc = response.responseXML;
                 homeModel.xmlSalaryRecs = xmlDoc;
                 homeView.parsingXmlSalary();
@@ -520,23 +543,24 @@
         },
         getSummaryJob: function (salaryJob, hash, callBackMethod) {
             var url = "http://localhost:8084/SalaryRecSystem/webresources/SummaryJobs/" + hash + "/" + salaryJob;
-            sendGetRequest(url, null, function (response) {
+            sendGetRequest("GET", url, null, function (response) {
                 var xmlDoc = response.responseXML;
                 callBackMethod(xmlDoc);
             });
         },
-        getPdf: function () {
+        getPdf: function (callbackMethod) {
             var url = "/SalaryRecSystem/PdfServlet";
             var param = {
                 skillSelectedArr: homeModel.selectedRecsArr
             };
-            sendGetRequest(url, param, function (response) {
+            sendGetRequest("GET", url, param, function (response) {
+                callbackMethod();
                 window.open(response.responseURL);
             });
         },
         getSalaryRange: function (from, to, callBackMethod) {
             var url = "http://localhost:8084/SalaryRecSystem/webresources/Jobs/salary/" + from + "/" + to;
-            sendGetRequest(url, null, function (response) {
+            sendGetRequest("GET", url, null, function (response) {
                 var xmlDoc = response.responseXML;
                 callBackMethod(xmlDoc);
             });

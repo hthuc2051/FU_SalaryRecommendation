@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 import thucnh.entity.SummaryJob;
 import thucnh.utils.AppHelper;
 import thucnh.utils.DBUtils;
@@ -49,6 +50,8 @@ public class SummaryJobDao extends BaseDao<SummaryJob, Integer> {
                         summaryItem.setExpSkillHash(hash_quantityJob[0]);
                         summaryItem.setNoOfJobs(hash_quantityJob[1]);
                         summaryItem.setSalary(Double.parseDouble(salary.split("~")[0]));
+                        summaryItem.setActive(true);
+                        summaryItem.setDate(AppHelper.getCurDateTime());
                         dao.create(summaryItem);
                     } catch (Exception e) {
                     }
@@ -61,7 +64,7 @@ public class SummaryJobDao extends BaseDao<SummaryJob, Integer> {
         List<SummaryJob> result = null;
         Map<SummaryJob, Double> summaryMap = new HashMap<>();
         SummaryJobDao dao = getInstance();
-        List<SummaryJob> list = dao.getListByexpSkillHash(expSkillHash);
+        List<SummaryJob> list = dao.getListByExpSkillHash(expSkillHash);
         for (SummaryJob summaryJob : list) {
             Double distance = AppHelper.calculateDistance(salaryRec, summaryJob.getSalary());
             if (summaryMap.size() < 11) {
@@ -87,7 +90,7 @@ public class SummaryJobDao extends BaseDao<SummaryJob, Integer> {
         return result;
     }
 
-    private List<SummaryJob> getListByexpSkillHash(Integer hashValue) {
+    private List<SummaryJob> getListByExpSkillHash(Integer hashValue) {
         EntityManager manager = DBUtils.getEntityManager();
         try {
             List<SummaryJob> result = manager.createNamedQuery("SummaryJob.findByExpSkillHash", SummaryJob.class)
@@ -102,5 +105,31 @@ public class SummaryJobDao extends BaseDao<SummaryJob, Integer> {
             }
         }
         return null;
+    }
+
+    public void deleteAll() {
+        EntityManager manager = DBUtils.getEntityManager();
+        try {
+            EntityTransaction transaction = manager.getTransaction();
+            transaction.begin();
+            manager.createNativeQuery("UPDATE SummaryJob SET active = 0").executeUpdate();
+            transaction.commit();
+        } finally {
+            if (manager != null) {
+                manager.close();
+            }
+        }
+    }
+
+    public boolean deleteOne(Integer id) {
+        SummaryJobDao dao = getInstance();
+        SummaryJob entity = dao.findByID(id);
+        if (entity != null) {
+            entity.setActive(false);
+            if (dao.update(entity) != null) {
+                return true;
+            }
+        }
+        return false;
     }
 }

@@ -9,6 +9,8 @@ import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -30,7 +32,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "TblUser.findByUsername", query = "SELECT t FROM TblUser t WHERE t.username = :username")
     , @NamedQuery(name = "TblUser.findByPassword", query = "SELECT t FROM TblUser t WHERE t.password = :password")
     , @NamedQuery(name = "TblUser.checkLogin", query = "SELECT t FROM TblUser t WHERE t.username = :username AND t.password = :password")
-    , @NamedQuery(name = "TblUser.findByRole", query = "SELECT t FROM TblUser t WHERE t.role = :role")})
+    , @NamedQuery(name = "TblUser.findByRole", query = "SELECT t FROM TblUser t WHERE t.role = :role")
+    , @NamedQuery(name = "TblUser.findByActive", query = "SELECT t FROM TblUser t WHERE t.active = :active")})
 public class TblUser implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -38,6 +41,7 @@ public class TblUser implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @Basic(optional = false)
     @NotNull
@@ -52,6 +56,8 @@ public class TblUser implements Serializable {
     @Size(max = 50)
     @Column(name = "role")
     private String role;
+    @Column(name = "active")
+    private Boolean active;
 
     public TblUser() {
     }
@@ -98,6 +104,14 @@ public class TblUser implements Serializable {
         this.role = role;
     }
 
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -122,5 +136,5 @@ public class TblUser implements Serializable {
     public String toString() {
         return "thucnh.entity.TblUser[ id=" + id + " ]";
     }
-
+    
 }

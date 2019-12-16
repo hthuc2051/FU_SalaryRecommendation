@@ -53,6 +53,9 @@
         </style>
     </head>
     <body>
+ 
+        <p>${requestScope.DONE}</p>
+        
         <h1>Welcome to Salary recommendation sytem</h1>
         <table border="1">
             <thead>
@@ -66,26 +69,27 @@
                     <td>
 
                         <a class="btn" href="/SalaryRecSystem/adminPage/skills.jsp"  >View all skills</a>
+                        <a class="btn" href="/SalaryRecSystem/adminPage/jobs.jsp"  >View all jobs</a>
                         <a class="btn" href="/SalaryRecSystem/homePage/home.jsp"  >Go back to home page</a>
 
                     </td>
                     <td>
-                        <form action="ProcessServlet" method="POST">
+                        <form action="/SalaryRecSystem/ProcessServlet" method="POST">
                             <input class="btn" type="submit" value="CrawlSkills" name="btnAction" />
                         </form>
-                        <form action="ProcessServlet" method="POST">
+                        <form action="/SalaryRecSystem/ProcessServlet" method="POST">
                             <input class="btn" type="submit" value="CrawlJobs" name="btnAction" />
                         </form>
-                        <form action="ProcessServlet" method="POST">
+                        <form action="/SalaryRecSystem/ProcessServlet" method="POST">
                             <input class="btn" type="submit" value="StopCrawl" name="btnAction" />
                         </form>
-                        <form action="ProcessServlet" method="POST">
+                        <form action="/SalaryRecSystem/ProcessServlet" method="POST">
                             <input class="btn" type="submit" value="Process" name="btnAction" />
                         </form>
-                        <form action="ProcessServlet" method="POST">
+                        <form action="/SalaryRecSystem/ProcessServlet" method="POST">
                             <input class="btn" type="submit" value="Test" name="btnAction" />
                         </form>
-                        <form action="PdfServlet" method="POST">
+                        <form action="/SalaryRecSystem/PdfServlet" method="POST">
                             <input class="btn" type="submit" value="GeneratePDF" name="btnAction" />
                         </form></td>
                 </tr>
@@ -93,6 +97,6 @@
             </tbody>
         </table>
 
-      
+
     </body>
 </html>

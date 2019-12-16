@@ -6,7 +6,7 @@
 package thucnh.entity;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.Collection;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -32,6 +32,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "TblCluster.findAll", query = "SELECT t FROM TblCluster t")
     , @NamedQuery(name = "TblCluster.findById", query = "SELECT t FROM TblCluster t WHERE t.id = :id")
     , @NamedQuery(name = "TblCluster.findByCentroid", query = "SELECT t FROM TblCluster t WHERE t.centroid = :centroid")
+    , @NamedQuery(name = "TblCluster.deleteAll", query = "DELETE FROM TblCluster")
     , @NamedQuery(name = "TblCluster.findByHash", query = "SELECT t FROM TblCluster t WHERE t.hash = :hash")})
 public class TblCluster implements Serializable {
 
@@ -42,12 +43,13 @@ public class TblCluster implements Serializable {
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "centroid")
     private Double centroid;
     @Column(name = "hash")
     private Integer hash;
     @OneToMany(mappedBy = "clusterId")
-    private List<TblJob> listJobs;
+    private Collection<TblJob> tblJobCollection;
 
     public TblCluster() {
     }
@@ -81,12 +83,12 @@ public class TblCluster implements Serializable {
     }
 
     @XmlTransient
-    public List<TblJob> geTblJobsList() {
-        return listJobs;
+    public Collection<TblJob> getTblJobCollection() {
+        return tblJobCollection;
     }
 
-    public void setTblJobsList(List<TblJob> list) {
-        this.listJobs = list;
+    public void setTblJobCollection(Collection<TblJob> tblJobCollection) {
+        this.tblJobCollection = tblJobCollection;
     }
 
     @Override
